@@ -88,7 +88,21 @@ source $HOME/.config/nvim/theme-config/theme_config.vim               " Theme st
 source $HOME/.config/nvim/plug-config/signify.vim                     " Git stuff
 " source $HOME/.config/nvim/SyntaxAttr.vim
  " coc extensions
-let g:coc_global_extensions = ['coc-tslint-plugin','coc-tsserver', 'coc-emmet', 'coc-css','coc-html','coc-json', 'coc-yank', 'coc-prettier','coc-tabnine','coc-snippets']
+let g:coc_global_extensions = [
+  \ 'coc-tslint-plugin',
+  \ 'coc-tsserver',
+  \ 'coc-emmet',
+  \ 'coc-css',
+  \ 'coc-html',
+  \ 'coc-json',
+  \ 'coc-yank',
+  \ 'coc-prettier',
+  \ 'coc-tabnine',
+  \ 'coc-snippets',
+  \ 'coc-pairs',
+  \ 'coc-eslint',
+  \ ]
+
 if has("nvim-0.5.0") || has("patch-8.1.1564")
   " Recently vim can merge signcolumn and number column into one
   set signcolumn=number
