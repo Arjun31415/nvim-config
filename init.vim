@@ -48,10 +48,11 @@ call plug#begin()
   " Nerd Tree stuff
   Plug 'scrooloose/nerdtree'
   Plug 'preservim/nerdcommenter'
+  Plug 'Xuyuanp/nerdtree-git-plugin'
+  " beautiful start page
   Plug 'mhinz/vim-startify'
   Plug 'junegunn/fzf'
   " linter
-  " Plug 'neomake/neomake'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   " Auto formatters
   Plug 'sbdchd/neoformat'
@@ -184,6 +185,25 @@ let g:rainbow#max_level = 16
 let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
 autocmd FileType * RainbowParentheses
 
+
+" j/k will move virtual lines (lines that wrap)
+noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+function! IsNERDTreeOpen()        
+  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
+endfunction
+
+" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
+" file, and we're not in vimdiff
+function! SyncTree()
+  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+    NERDTreeFind
+    wincmd p
+  endif
+endfunction
+
+" Highlight currently open buffer in NERDTree
+autocmd BufEnter * call SyncTree()
 " Stuff for themeing
 " adds to statusline
 " set laststatus=2
