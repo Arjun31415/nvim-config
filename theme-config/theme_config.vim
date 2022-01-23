@@ -10,11 +10,13 @@ if (empty($TMUX))
   endif
 endif
 " 4 PM
-if strftime("%H") < 11
-  set background=light
-  colorscheme one 
-else
+" if strftime("%H") < 11
+"   set background=light
+"   colorscheme one 
+" else
+"  colorscheme one
+"  set background=dark
+" endif
  colorscheme one
  set background=dark
-endif
 let g:one_allow_italics = 1 

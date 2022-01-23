@@ -4,7 +4,7 @@ inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
 " move split panes to left/bottom/top/right- alt +h/j/k/l
- nnoremap <A-h> <C-W>H
+ nnoremap <A-h> <C-W>H  
  nnoremap <A-j> <C-W>J
  nnoremap <A-k> <C-W>K
  nnoremap <A-l> <C-W>L

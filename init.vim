@@ -36,7 +36,6 @@ call plug#begin()
   " themes
   Plug 'dracula/vim'
   Plug 'rakr/vim-one'
-  Plug 'ryanoasis/vim-devicons'
 
   " snippets, for user snippets see coc-snippets
   Plug 'SirVer/ultisnips'
@@ -46,14 +45,18 @@ call plug#begin()
   Plug 'p00f/cphelper.nvim'
 
   " Nerd Tree stuff
-  Plug 'scrooloose/nerdtree'
+  Plug 'preservim/nerdtree' |
+            \ Plug 'Xuyuanp/nerdtree-git-plugin' |
+            \ Plug 'ryanoasis/vim-devicons'
+
+
   Plug 'preservim/nerdcommenter'
-  Plug 'Xuyuanp/nerdtree-git-plugin'
   " beautiful start page
   Plug 'mhinz/vim-startify'
   Plug 'junegunn/fzf'
   " linter
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'p00f/nvim-ts-rainbow'
   " Auto formatters
   Plug 'sbdchd/neoformat'
   " git stuff
@@ -70,7 +73,7 @@ call plug#begin()
   " Discord presence
   Plug 'andweeb/presence.nvim'
   " bracket coloriser
-  Plug 'junegunn/rainbow_parentheses.vim'
+  " Plug 'junegunn/rainbow_parentheses.vim'
   " line indent colorizer
   Plug 'Yggdroot/indentLine'
   " Plug 'Arjun31415/aura-theme', {'do':'./installVimTheme.sh'}
@@ -80,6 +83,18 @@ call plug#begin()
 
 
 call plug#end()
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+                \ 'Modified'  :'✹',
+                \ 'Staged'    :'✚',
+                \ 'Untracked' :'✭',
+                \ 'Renamed'   :'➜',
+                \ 'Unmerged'  :'═',
+                \ 'Deleted'   :'✖',
+                \ 'Dirty'     :'✗',
+                \ 'Ignored'   :'☒',
+                \ 'Clean'     :'✔︎',
+                \ 'Unknown'   :'?',
+                \ }
 
 source $HOME/.config/nvim/treesitter-syntax-highlighting/config.vim   " treesitter syntax highlighting
 source $HOME/.config/nvim/comments/config.vim                         " NERDCommenter config
@@ -187,10 +202,15 @@ endfunction
 " else
 "   call neomake#configure#automake('nw', 1000)
 " endif
-let g:rainbow#max_level = 16
-let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
-autocmd FileType * RainbowParentheses
 
+" let g:rainbow#max_level = 16
+" let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+" autocmd FileType * RainbowParentheses
+
+hi rainbowcol1 guifg=#FFD700
+hi rainbowcol2 guifg=#da70d6
+hi rainbowcol3 guifg=#87cefa
+hi rainbowcol4 guifg=#954d92
 
 " j/k will move virtual lines (lines that wrap)
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
