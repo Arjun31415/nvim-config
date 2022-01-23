@@ -36,13 +36,10 @@ call plug#begin()
   " themes
   Plug 'dracula/vim'
   Plug 'rakr/vim-one'
+  Plug 'norcalli/nvim-colorizer.lua'
 
   " snippets, for user snippets see coc-snippets
   Plug 'SirVer/ultisnips'
-
-  " CP helper
-  Plug 'nvim-lua/plenary.nvim'
-  Plug 'p00f/cphelper.nvim'
 
   " Nerd Tree stuff
   Plug 'preservim/nerdtree' |
@@ -72,17 +69,15 @@ call plug#begin()
   Plug 'epilande/vim-react-snippets'
   " Discord presence
   Plug 'andweeb/presence.nvim'
-  " bracket coloriser
-  " Plug 'junegunn/rainbow_parentheses.vim'
-  " line indent colorizer
+
   Plug 'Yggdroot/indentLine'
   " Plug 'Arjun31415/aura-theme', {'do':'./installVimTheme.sh'}
   " for auto tag complete
   Plug 'alvan/vim-closetag'
-  Plug 'chrisbra/sudoedit.vim'
-
+  " Plug 'chrisbra/sudoedit.vim'
 
 call plug#end()
+
 let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Modified'  :'✹',
                 \ 'Staged'    :'✚',
@@ -119,7 +114,7 @@ let g:coc_global_extensions = [
   \ 'coc-eslint',
   \ ]
   " if hidden is not set, TextEdit might fail.
-set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup " Better display for messages set cmdheight=2 " You will have bad experience for diagnostic messages when it's default 4000.
+" set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup " Better display for messages set cmdheight=2 " You will have bad experience for diagnostic messages when it's default 4000.
 
 
 if has("nvim-0.5.0") || has("patch-8.1.1564")
@@ -243,3 +238,4 @@ autocmd BufEnter * call SyncTree()
 
 " source /run/media/arjun/Shared/CODING/WebDev/Theme/AuraTheme/Vim/aura-dark-soft-text-color-theme.vim
 " inoremap <buffer> > ></<C-x><C-o><C-y><C-o>%<CR><C-o>O
+lua require'colorizer'.setup()
