@@ -23,3 +23,9 @@ vnoremap <A-k> :m '<-2<CR>gv=gv
 " Press f9 to toggle spell check
 nnoremap <silent> <F9> :set spell!<cr>
 inoremap <silent> <F9> <C-O>:set spell!<cr>
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
