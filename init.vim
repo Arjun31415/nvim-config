@@ -103,6 +103,9 @@ let g:coc_global_extensions = [
   \ 'coc-pairs',
   \ 'coc-eslint',
   \ ]
+  " if hidden is not set, TextEdit might fail.
+set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup " Better display for messages set cmdheight=2 " You will have bad experience for diagnostic messages when it's default 4000.
+
 
 if has("nvim-0.5.0") || has("patch-8.1.1564")
   " Recently vim can merge signcolumn and number column into one
@@ -155,6 +158,9 @@ let g:coc_snippet_next = '<tab>'
 " open new split panes to right and below
 set splitright
 set splitbelow
+
+let g:NERDTreeGitStatusWithFlags = 1
+let g:NERDTreeIgnore = ['^node_modules$']
 
 autocmd VimEnter * NERDTree | wincmd p
 " Vim jump to the last position when reopening a file
