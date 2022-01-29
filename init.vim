@@ -129,6 +129,9 @@ set signcolumn=number
 let g:neoformat_try_node_exe = 1
 autocmd BufWritePre *.js Neoformat
 autocmd BufWritePre,TextChanged,InsertLeave *.js Neoformat
+autocmd BufWritePre *.java Neoformat
+autocmd BufWritePre,TextChanged,InsertLeave *.java Neoformat
+" Enable trimmming of trailing whitespace
 " Enable trimmming of trailing whitespace
 let g:neoformat_basic_format_trim = 1
 let g:neoformat_cpp_clangformat = {
@@ -238,4 +241,14 @@ autocmd BufEnter * call SyncTree()
 
 " source /run/media/arjun/Shared/CODING/WebDev/Theme/AuraTheme/Vim/aura-dark-soft-text-color-theme.vim
 " inoremap <buffer> > ></<C-x><C-o><C-y><C-o>%<CR><C-o>O
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
 lua require'colorizer'.setup()
