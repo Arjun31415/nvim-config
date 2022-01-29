@@ -1,0 +1,1 @@
+vim.g.coc_node_path ='/home/arjun/.nvm/versions/node/v17.4.0/bin/node'
