@@ -34,28 +34,13 @@ require("packer").startup({
     use 'wbthomason/packer.nvim'
 
     use({"onsails/lspkind-nvim", event = "VimEnter"})
-    -- auto-completion engine
-    -- use {"hrsh7th/nvim-cmp", after = "lspkind-nvim", config = [[require('config.nvim-cmp')]]}
-
-    -- nvim-cmp completion sources
-    -- use {"hrsh7th/cmp-nvim-lsp", after = "nvim-cmp"}
-    -- use {"hrsh7th/cmp-nvim-lua", after = "nvim-cmp"}
-    -- use {"hrsh7th/cmp-path", after = "nvim-cmp"}
-    -- use {"hrsh7th/cmp-buffer", after = "nvim-cmp"}
-    -- use {"hrsh7th/cmp-cmdline", after = "nvim-cmp"}
-    -- use {"quangnguyen30192/cmp-nvim-ultisnips", after = {'nvim-cmp', 'ultisnips'}}
-    -- if vim.g.is_mac then
-    --   use {"hrsh7th/cmp-emoji", after = 'nvim-cmp'}
-    -- end
-
-    -- nvim-lsp configuration (it relies on cmp-nvim-lsp, so it should be loaded after cmp-nvim-lsp).
-    -- use({ "neovim/nvim-lspconfig", after = "cmp-nvim-lsp", config = [[require('config.lsp')]] })
+    
     -- TODO: Add config file for coc.nvim
     use {'neoclide/coc.nvim', branch = 'release', config=[[require('config.coc')]]}
     if vim.g.is_mac then
       use({ "nvim-treesitter/nvim-treesitter", event = 'BufEnter', run = ":TSUpdate", config = [[require('config.treesitter')]] })
     end
-    -- use({ "nvim-treesitter/nvim-treesitter", event = 'BufEnter', run = ":TSUpdate", config = [[require('config.treesitter')]] })
+    use({"nvim-treesitter/nvim-treesitter", event = 'BufEnter', run = ":TSUpdate", config = [[require('config.treesitter')]] })
     -- Nerdtree
     use({'preservim/nerdtree'})
 
@@ -73,7 +58,7 @@ require("packer").startup({
       -- use 'kovisoft/slimv'
       use({ "vlime/vlime", rtp = "vim/", ft = { "lisp" } })
     end
-
+    use { 'ray-x/lsp_signature.nvim', config = [[require('config.lsp_signature')]]}
     -- Super fast buffer jump
     use {
       'phaazon/hop.nvim',
@@ -357,6 +342,8 @@ require("packer").startup({
 
     -- show and trim trailing whitespaces
     use {'jdhao/whitespace.nvim', event = 'VimEnter'}
+    use({"ryanoasis/vim-devicons"})
+
   end,
   config = {
     max_jobs = 16,
@@ -365,6 +352,8 @@ require("packer").startup({
       default_url_format = plug_url_format,
     },
   },
+  -- Always load the vim-devicons as the very last one.
+
 })
 
 local status, _ = pcall(require, 'packer_compiled')
