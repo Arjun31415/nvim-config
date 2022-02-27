@@ -365,22 +365,20 @@ require("packer").startup({
         use({"cespare/vim-toml", ft = {"toml"}, branch = "main"})
 
         -- Edit text area in browser using nvim
-        if vim.g.is_win or vim.g.is_mac then
             use({
                 "glacambre/firenvim",
                 run = function() fn["firenvim#install"](0) end,
                 opt = true,
                 setup = [[vim.cmd('packadd firenvim')]]
             })
-        end
 
         -- Debugger plugin
         if vim.g.is_win or vim.g.is_linux then
             use({
                 "sakhnik/nvim-gdb",
                 run = {"bash install.sh"},
-                opt = true,
-                setup = [[vim.cmd('packadd nvim-gdb')]]
+                -- opt = true,
+                -- setup = [[vim.cmd('packadd nvim-gdb')]]
             })
         end
 
