@@ -1,3 +1,5 @@
+" The encoding displayed.
+set encoding=utf-8
 
 let g:config_files = [
       \ 'globals.vim',
