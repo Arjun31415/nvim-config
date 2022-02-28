@@ -207,3 +207,10 @@ function! utils#add_pack(name) abort
 
   return l:status
 endfunction
+
+function! utils#clearRegisters() abort
+  let regs=split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/-+"', '\zs')
+  for r in regs
+    call setreg(r, [])
+  endfor
+endfunction
