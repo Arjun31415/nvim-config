@@ -51,6 +51,18 @@ require("packer").startup({
             run = ":TSUpdate",
             config = [[require('config.treesitter')]]
         })
+        --         todo highlighter
+        use {
+            "folke/todo-comments.nvim",
+            requires = "nvim-lua/plenary.nvim",
+            config = function()
+                require("todo-comments").setup {
+                    -- your configuration comes here
+                    -- or leave it empty to use the default settings
+                    -- refer to the configuration section below
+                }
+            end
+        }
         -- Nerdtree
         use({'preservim/nerdtree'})
 
@@ -357,18 +369,18 @@ require("packer").startup({
         use({"cespare/vim-toml", ft = {"toml"}, branch = "main"})
 
         -- Edit text area in browser using nvim
-            use({
-                "glacambre/firenvim",
-                run = function() fn["firenvim#install"](0) end,
-                opt = true,
-                setup = [[vim.cmd('packadd firenvim')]]
-            })
+        use({
+            "glacambre/firenvim",
+            run = function() fn["firenvim#install"](0) end,
+            opt = true,
+            setup = [[vim.cmd('packadd firenvim')]]
+        })
 
         -- Debugger plugin
         if vim.g.is_win or vim.g.is_linux then
             use({
                 "sakhnik/nvim-gdb",
-                run = {"bash install.sh"},
+                run = {"bash install.sh"}
                 -- opt = true,
                 -- setup = [[vim.cmd('packadd nvim-gdb')]]
             })
