@@ -45,14 +45,6 @@ require("packer").startup({
             branch = 'release',
             config = [[require('config.coc')]]
         }
-        if vim.g.is_mac then
-            use({
-                "nvim-treesitter/nvim-treesitter",
-                event = 'BufEnter',
-                run = ":TSUpdate",
-                config = [[require('config.treesitter')]]
-            })
-        end
         use({
             "nvim-treesitter/nvim-treesitter",
             event = 'BufEnter',
@@ -71,10 +63,10 @@ require("packer").startup({
         use({"machakann/vim-swap", event = "VimEnter"})
 
         -- IDE for Lisp
-        if utils.executable("sbcl") then
-            -- use 'kovisoft/slimv'
-            use({"vlime/vlime", rtp = "vim/", ft = {"lisp"}})
-        end
+        -- if utils.executable("sbcl") then
+        --     -- use 'kovisoft/slimv'
+        --     use({"vlime/vlime", rtp = "vim/", ft = {"lisp"}})
+        -- end
         use {
             'ray-x/lsp_signature.nvim',
             config = [[require('config.lsp_signature')]]
