@@ -135,9 +135,10 @@ require("packer").startup({
 
         -- A grepping tool
         -- use {'mhinz/vim-grepper', cmd = {'Grepper', '<plug>(GrepperOperator)'}}
-
+-- Themes
         -- A list of colorscheme plugin you may want to try. Find what suits you.
         use({"rakr/vim-one", opt = true})
+        use ({'folke/tokyonight.nvim'})
         use({"sainnhe/sonokai", opt = true})
 
         -- Show git change (change, delete, add) signs in vim sign column
@@ -145,7 +146,6 @@ require("packer").startup({
         -- Another similar plugin
         -- use 'airblade/vim-gitgutter'
 
-        use {'kyazdani42/nvim-web-devicons', event = 'VimEnter'}
 
         use {
             'nvim-lualine/lualine.nvim',
@@ -413,6 +413,7 @@ require("packer").startup({
 
         -- show and trim trailing whitespaces
         use {'jdhao/whitespace.nvim', event = 'VimEnter'}
+        use {'kyazdani42/nvim-web-devicons', event = 'VimEnter'}
         use({"ryanoasis/vim-devicons"})
 
     end,

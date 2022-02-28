@@ -37,5 +37,6 @@
 "   let s:msg1 = "Currently loaded theme: " . s:theme
 "   call v:lua.vim.notify(s:msg1, 'info', {'title': 'nvim-config'})
 " endif
-set background=dark
-colorscheme one
+" set background=dark
+" colorscheme one
+colorscheme tokyonight
