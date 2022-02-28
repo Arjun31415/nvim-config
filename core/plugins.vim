@@ -418,3 +418,8 @@ function! s:wilder_init() abort
     echohl Error |echomsg "Wilder.nvim missing: run :PackerSync to fix."|echohl None
   endtry
 endfunction
+
+""""""""""""""""""""""""""""""coc.nvim settings""""""""""""""""""""""""""""""
+" For code actions
+xmap <leader>ca  <Plug>(coc-codeaction-selected)
+nmap <leader>ca  <Plug>(coc-codeaction-selected)w
