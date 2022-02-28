@@ -7,4 +7,6 @@ require('hop').setup({
   char2_fallback_key = '<CR>',
 })
 
-vim.api.nvim_set_keymap('n', 'f', "<cmd>lua require'hop'.hint_char2()<cr>", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>hw', "<cmd>lua require'hop'.hint_words()<cr>", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>hc1', "<cmd>lua require'hop'.hint_char1()<cr>", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>hc2', "<cmd>lua require'hop'.hint_char2()<cr>", {noremap = true})
