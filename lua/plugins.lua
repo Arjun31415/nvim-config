@@ -195,7 +195,8 @@ require("packer").startup({
         })
         use({
             'Arjun31415/BuildTask.nvim',
-            config = [[require('config.build_task')]]
+            config = [[require('config.build_task')]],
+            requires="rcarriga/nvim-notify"
         })
 
         -- For Windows and Mac, we can open an URL in the browser. For Linux, it may
@@ -296,7 +297,7 @@ require("packer").startup({
 
         -- Another markdown plugin
         use({"plasticboy/vim-markdown", ft = {"markdown"}})
-
+        use({'iamcco/markdown-preview.nvim',run='cd app && yarn install'})
         -- Faster footnote generation
         use({"vim-pandoc/vim-markdownfootnotes", ft = {"markdown"}})
 
