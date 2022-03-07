@@ -39,4 +39,19 @@
 " endif
 " set background=dark
 " colorscheme one
-colorscheme tokyonight
+syntax on
+"" Vim
+" let g:onedark_config = {
+"     \ 'style': 'darker',
+" \}
+colorscheme onedark" Or whatever colorscheme you make
+
+
+" checks if your terminal has 24-bit color support
+" if (has("termguicolors"))
+    " set termguicolors
+    " hi LineNr ctermbg=NONE guibg=NONE
+" endif
+
+
+" colorscheme tokyonight

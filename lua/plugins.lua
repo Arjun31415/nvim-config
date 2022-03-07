@@ -31,7 +31,7 @@ local util = require('packer.util')
 require("packer").startup({
     function(use)
         -- it is recommened to put impatient.nvim before any other plugins
-        use {'lewis6991/impatient.nvim', config = [[require('impatient')]]}
+        use ({'lewis6991/impatient.nvim', config = [[require('impatient')]]})
         use 'wbthomason/packer.nvim'
 
         use({"onsails/lspkind-nvim", event = "VimEnter"})
@@ -40,19 +40,25 @@ require("packer").startup({
             config = [[require('config.discordPresence')]]
         })
         -- TODO: Add config file for coc.nvim
-        use {
+        use ({
             'neoclide/coc.nvim',
             branch = 'release',
             config = [[require('config.coc')]]
-        }
+        })
         use({
             "nvim-treesitter/nvim-treesitter",
             event = 'BufEnter',
             run = ":TSUpdate",
             config = [[require('config.treesitter')]]
         })
+        use ({
+            'm-demare/hlargs.nvim',
+            requires = {'nvim-treesitter/nvim-treesitter'},
+            config = [[require('config.hlargs')]]
+        })
+        -- use({'nvim-treesitter/playground'})
         --         todo highlighter
-        use {
+        use({
             "folke/todo-comments.nvim",
             requires = "nvim-lua/plenary.nvim",
             config = function()
@@ -62,7 +68,7 @@ require("packer").startup({
                     -- refer to the configuration section below
                 }
             end
-        }
+        })
         -- Nerdtree
         use({'preservim/nerdtree'})
 
@@ -135,17 +141,19 @@ require("packer").startup({
 
         -- A grepping tool
         -- use {'mhinz/vim-grepper', cmd = {'Grepper', '<plug>(GrepperOperator)'}}
--- Themes
+        -- Themes
         -- A list of colorscheme plugin you may want to try. Find what suits you.
         use({"rakr/vim-one", opt = true})
-        use ({'folke/tokyonight.nvim'})
+        use({'folke/tokyonight.nvim'})
         use({"sainnhe/sonokai", opt = true})
+        use({'navarasu/onedark.nvim', config = [[require('config.onedark')]]})
 
         -- Show git change (change, delete, add) signs in vim sign column
         use({"mhinz/vim-signify", event = 'BufEnter'})
+        -- Git lens similar to vscode
+        use({"APZelos/blamer.nvim", event = 'BufEnter'})
         -- Another similar plugin
         -- use 'airblade/vim-gitgutter'
-
 
         use {
             'nvim-lualine/lualine.nvim',
@@ -185,6 +193,11 @@ require("packer").startup({
                 end, 2000)
             end
         })
+        -- use({
+        --     'Arjun31415/BuildTask.nvim',
+        --     requires = "rcarriga/nvim-notify",
+        --     config = [[require('config.build_task')]]
+        -- })
 
         -- For Windows and Mac, we can open an URL in the browser. For Linux, it may
         -- not be possible since we maybe in a server which disables GUI.
