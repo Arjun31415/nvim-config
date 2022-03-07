@@ -193,11 +193,10 @@ require("packer").startup({
                 end, 2000)
             end
         })
-        -- use({
-        --     'Arjun31415/BuildTask.nvim',
-        --     requires = "rcarriga/nvim-notify",
-        --     config = [[require('config.build_task')]]
-        -- })
+        use({
+            'Arjun31415/BuildTask.nvim',
+            config = [[require('config.build_task')]]
+        })
 
         -- For Windows and Mac, we can open an URL in the browser. For Linux, it may
         -- not be possible since we maybe in a server which disables GUI.
