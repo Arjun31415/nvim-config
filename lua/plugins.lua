@@ -54,7 +54,8 @@ require("packer").startup({
         use ({
             'm-demare/hlargs.nvim',
             requires = {'nvim-treesitter/nvim-treesitter'},
-            config = [[require('config.hlargs')]]
+            config = [[require('config.hlargs')]],
+            event = 'BufEnter'
         })
         -- use({'nvim-treesitter/playground'})
         --         todo highlighter
@@ -196,7 +197,8 @@ require("packer").startup({
         use({
             'Arjun31415/BuildTask.nvim',
             config = [[require('config.build_task')]],
-            requires="rcarriga/nvim-notify"
+            requires="rcarriga/nvim-notify",
+            event = "BufEnter"
         })
 
         -- For Windows and Mac, we can open an URL in the browser. For Linux, it may
