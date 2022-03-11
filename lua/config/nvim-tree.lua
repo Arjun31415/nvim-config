@@ -53,5 +53,5 @@ require'nvim-tree'.setup {
     },
     log = {enable = false, types = {all = false, config = false, git = false}}
 }
-utils.map("n", "<C-S-b>", ":NvimTreeToggle<CR>", {silent = true})
+utils.map("n", "<leader>tt", ":NvimTreeToggle<CR>", {silent = true})
 vim.g.nvim_tree_indent_markers = 1

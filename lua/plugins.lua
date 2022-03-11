@@ -33,6 +33,7 @@ require("packer").startup({
         -- it is recommened to put impatient.nvim before any other plugins
         use({'lewis6991/impatient.nvim', config = [[require('impatient')]]})
         use 'wbthomason/packer.nvim'
+        use {'nvim-lua/plenary.nvim'}
 
         use({"onsails/lspkind-nvim", event = "VimEnter"})
         use({
