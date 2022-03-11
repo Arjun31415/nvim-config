@@ -7,7 +7,10 @@ require'nvim-tree'.setup {
         enable = true,
         icons = {hint = "", info = "", warning = "", error = ""}
     },
-    update_focused_file = {enable = false, update_cwd = false, ignore_list = {}},
+    hijack_cursor = true,
+
+    hijack_unnamed_buffer_when_opening = true,
+    update_focused_file = {enable = true, update_cwd = false, ignore_list = {}},
     system_open = {cmd = nil, args = {}},
     filters = {dotfiles = true, custom = {}},
     git = {enable = true, ignore = false, timeout = 500},
@@ -51,3 +54,4 @@ require'nvim-tree'.setup {
     log = {enable = false, types = {all = false, config = false, git = false}}
 }
 utils.map("n", "<C-S-b>", ":NvimTreeToggle<CR>", {silent = true})
+vim.g.nvim_tree_indent_markers = 1
