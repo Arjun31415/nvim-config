@@ -31,7 +31,7 @@ local util = require('packer.util')
 require("packer").startup({
     function(use)
         -- it is recommened to put impatient.nvim before any other plugins
-        use ({'lewis6991/impatient.nvim', config = [[require('impatient')]]})
+        use({'lewis6991/impatient.nvim', config = [[require('impatient')]]})
         use 'wbthomason/packer.nvim'
 
         use({"onsails/lspkind-nvim", event = "VimEnter"})
@@ -40,7 +40,7 @@ require("packer").startup({
             config = [[require('config.discordPresence')]]
         })
         -- TODO: Add config file for coc.nvim
-        use ({
+        use({
             'neoclide/coc.nvim',
             branch = 'release',
             config = [[require('config.coc')]]
@@ -51,7 +51,7 @@ require("packer").startup({
             run = ":TSUpdate",
             config = [[require('config.treesitter')]]
         })
-        use ({
+        use({
             'm-demare/hlargs.nvim',
             requires = {'nvim-treesitter/nvim-treesitter'},
             config = [[require('config.hlargs')]],
@@ -71,7 +71,8 @@ require("packer").startup({
             end
         })
         -- Nerdtree
-        use({'preservim/nerdtree'})
+        -- use({'preservim/nerdtree'})
+        -- nvim-tree.lua
 
         -- Python indent (follows the PEP8 style)
         use({"Vimjas/vim-python-pep8-indent", ft = {"python"}})
@@ -162,12 +163,6 @@ require("packer").startup({
             config = [[require('config.statusline')]]
         }
 
-        use({
-            "akinsho/bufferline.nvim",
-            event = "VimEnter",
-            config = [[require('config.bufferline')]]
-        })
-
         -- fancy start screen
         use {
             'goolord/alpha-nvim',
@@ -197,7 +192,7 @@ require("packer").startup({
         use({
             'Arjun31415/BuildTask.nvim',
             config = [[require('config.build_task')]],
-            requires="rcarriga/nvim-notify",
+            requires = "rcarriga/nvim-notify",
             event = "BufEnter"
         })
 
@@ -299,7 +294,7 @@ require("packer").startup({
 
         -- Another markdown plugin
         use({"plasticboy/vim-markdown", ft = {"markdown"}})
-        use({'iamcco/markdown-preview.nvim',run='cd app && yarn install'})
+        use({'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'})
         -- Faster footnote generation
         use({"vim-pandoc/vim-markdownfootnotes", ft = {"markdown"}})
 
@@ -430,6 +425,19 @@ require("packer").startup({
         use {'jdhao/whitespace.nvim', event = 'VimEnter'}
         use {'kyazdani42/nvim-web-devicons', event = 'VimEnter'}
         use({"ryanoasis/vim-devicons"})
+        use({
+            "akinsho/bufferline.nvim",
+            event = "VimEnter",
+            requires = 'kyazdani42/nvim-web-devicons',
+            config = [[require('config.bufferline')]]
+        })
+        use {
+            'kyazdani42/nvim-tree.lua',
+            requires = {
+                'kyazdani42/nvim-web-devicons' -- optional, for file icon
+            },
+            config = [[require('config.nvim-tree')]]
+        }
 
     end,
     config = {

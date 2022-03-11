@@ -73,7 +73,7 @@ set wildmode=list:longest
 set scrolloff=3
 
 " Use mouse to select and resize windows, etc.
-set mouse=nic  " Enable mouse in several mode
+set mouse=a  " Enable mouse in several mode
 set mousemodel=popup  " Set the behaviour of mouse
 
 " Disable showing current mode on command line since statusline plugins can show it.
