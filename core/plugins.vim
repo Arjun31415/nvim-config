@@ -11,7 +11,7 @@ call utils#Cabbrev('pi', 'PackerInstall')
 call utils#Cabbrev('pud', 'PackerUpdate')
 call utils#Cabbrev('pc', 'PackerClean')
 call utils#Cabbrev('ps', 'PackerSync')
-set guifont=FiraCode_Nerd_Font:h14
+set guifont=FiraCode_Nerd_Font:h12
 """""""""""""""""""""""""UltiSnips settings"""""""""""""""""""
 " Trigger configuration. Do not use <tab> if you use YouCompleteMe
 " let g:UltiSnipsExpandTrigger='<c-j>'
@@ -369,6 +369,26 @@ endif
 "     autocmd BufEnter *.txt setlocal filetype=markdown laststatus=0 nonumber noshowcmd noruler showtabline=1
 "   augroup END
 " endif
+let g:firenvim_config = { 
+    \ 'globalSettings': {
+        \ 'alt': 'all',
+    \  },
+    \ 'localSettings': {
+        \ '.*': {
+            \ 'cmdline': 'neovim',
+            \ 'content': 'text',
+            \ 'priority': 0,
+            \ 'selector': 'textarea',
+            \ 'takeover': 'never',
+        \ },
+    \ }
+\ }
+let fc = g:firenvim_config['localSettings']
+"  let fc['https://mail.google.com/*'] = { 'takeover': 'never', 'priority': 1 }
+"  let fc['https://web.whatsapp.com/*'] = { 'takeover': 'never', 'priority':1}
+let fc['https://github.com/*'] = { 'takeover': 'always', 'priority':1}
+
+au BufEnter github.com_*.txt set filetype=markdown
 
 """"""""""""""""""""""""""""""nvim-gdb settings""""""""""""""""""""""""""""""
 nnoremap <leader>dp :<C-U>GdbStartPDB python -m pdb %<CR>
