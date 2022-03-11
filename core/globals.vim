@@ -22,7 +22,7 @@ let g:mapleader = ','
 let g:vimsyn_embed = 'l'
 " I speak english thank you
 language en_US.utf-8
-" I dont want netrw i use nerdTREE cause that is what cool ppl do
+" I dont want netrw i use nvim-tree.lua cause that is what cool ppl do
 let g:loaded_netrw       = 0
 let g:loaded_netrwPlugin = 0
 
