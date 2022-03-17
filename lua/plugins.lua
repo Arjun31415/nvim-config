@@ -52,6 +52,11 @@ require("packer").startup({
             run = ":TSUpdate",
             config = [[require('config.treesitter')]]
         })
+        -- use {
+        --     'p00f/nvim-ts-rainbow',
+        --     event = 'BufEnter',
+        --     requires = "nvim-treesitter/nvim-treesitter"
+        -- }
         use({
             'm-demare/hlargs.nvim',
             requires = {'nvim-treesitter/nvim-treesitter'},
@@ -421,6 +426,11 @@ require("packer").startup({
                 end, 2000)
             end
         }
+        use({
+            "jbyuki/instant.nvim",
+            event = "BufEnter",
+            config = [[require('config.instant-nvim')]]
+        })
 
         -- show and trim trailing whitespaces
         use {'jdhao/whitespace.nvim', event = 'VimEnter'}
