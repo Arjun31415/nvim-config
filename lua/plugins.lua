@@ -52,11 +52,11 @@ require("packer").startup({
             run = ":TSUpdate",
             config = [[require('config.treesitter')]]
         })
-        -- use {
-        --     'p00f/nvim-ts-rainbow',
-        --     event = 'BufEnter',
-        --     requires = "nvim-treesitter/nvim-treesitter"
-        -- }
+        use {
+            'p00f/nvim-ts-rainbow',
+            event = 'BufEnter',
+            requires = "nvim-treesitter/nvim-treesitter"
+        }
         use({
             'm-demare/hlargs.nvim',
             requires = {'nvim-treesitter/nvim-treesitter'},
