@@ -13,9 +13,28 @@ let g:config_files = [
 for s:fname in g:config_files
   execute printf('source %s/core/%s', stdpath('config'), s:fname)
 endfor
+
+" let g:rainbow_conf = {
+" \	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+" \	'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+" \	'guis': [''],
+" \	'cterms': [''],
+" \	'operators': '_,_',
+" \	'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+" \	'separately': {
+" \		'*': {},
+" \		'markdown': {
+" \			'parentheses_options': 'containedin=markdownCode contained', 
+" \		},
+" \		'vim': {
+" \			'parentheses_options': 'containedin=vimFuncBody', 
+" \		},
+" \		'css': 0, 
+" \	}
+" \}
 " let g:NERDTreeGitStatusWithFlags = 1
 " let g:NERDTreeIgnore = ['^node_modules$']
-" function! IsNERDTreeOpen()        
+" function! IsNERDTreeOpen()
 "   return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
 " endfunction
 
