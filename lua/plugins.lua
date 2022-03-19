@@ -40,6 +40,12 @@ require("packer").startup({
             'andweeb/presence.nvim',
             config = [[require('config.discordPresence')]]
         })
+        -- Highlight colors inline 
+        use({
+            'norcalli/nvim-colorizer.lua',
+            event = "BufEnter",
+            config = [[require('config.nvim-colorizer')]]
+        })
         -- TODO: Add config file for coc.nvim
         use({
             'neoclide/coc.nvim',
@@ -151,10 +157,11 @@ require("packer").startup({
         -- use {'mhinz/vim-grepper', cmd = {'Grepper', '<plug>(GrepperOperator)'}}
         -- Themes
         -- A list of colorscheme plugin you may want to try. Find what suits you.
-        use({"rakr/vim-one", opt = true})
-        use({'folke/tokyonight.nvim'})
-        use({"sainnhe/sonokai", opt = true})
+        -- use({"rakr/vim-one", opt = true})
+        -- use({'folke/tokyonight.nvim'})
+        -- use({"sainnhe/sonokai", opt = true})
         use({'navarasu/onedark.nvim', config = [[require('config.onedark')]]})
+        -- use {'catppuccin/nvim', as = "catppuccin"}
 
         -- Show git change (change, delete, add) signs in vim sign column
         use({"mhinz/vim-signify", event = 'BufEnter'})
