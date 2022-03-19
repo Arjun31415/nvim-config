@@ -52,6 +52,7 @@ require("packer").startup({
             branch = 'release',
             config = [[require('config.coc')]]
         })
+        use({'stsewd/spotify.nvim', run = ":UpdateRemotePlugins",config = [[require('config.nvim-spotify')]]})
         use({
             "nvim-treesitter/nvim-treesitter",
             event = 'BufEnter',

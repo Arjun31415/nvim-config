@@ -189,7 +189,7 @@ function! s:restore_cursor() abort
 endfunction
 
 " Press i to enter insert mode, and ii to exit insert mode.
-:inoremap ii <Esc>
+" :inoremap ii <Esc>
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
