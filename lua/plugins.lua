@@ -52,10 +52,14 @@ require("packer").startup({
             branch = 'release',
             config = [[require('config.coc')]]
         })
-        use({'stsewd/spotify.nvim', run = ":UpdateRemotePlugins",config = [[require('config.nvim-spotify')]]})
+        use({
+            'stsewd/spotify.nvim',
+            run = ":UpdateRemotePlugins",
+            config = [[require('config.nvim-spotify')]]
+        })
         use({
             "nvim-treesitter/nvim-treesitter",
-            event = 'BufEnter',
+            -- event = 'BufEnter',
             run = ":TSUpdate",
             config = [[require('config.treesitter')]]
         })
@@ -162,6 +166,7 @@ require("packer").startup({
         -- use({'folke/tokyonight.nvim'})
         -- use({"sainnhe/sonokai", opt = true})
         use({'navarasu/onedark.nvim', config = [[require('config.onedark')]]})
+        -- use {'Arjun31415/zephyr-nvim'}
         -- use {'catppuccin/nvim', as = "catppuccin"}
 
         -- Show git change (change, delete, add) signs in vim sign column

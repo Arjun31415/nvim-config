@@ -44,4 +44,6 @@ syntax on
 " let g:onedark_config = {
 "     \ 'style': 'darker',
 " \}
-colorscheme onedark" Or whatever colorscheme you make
+ colorscheme onedark" Or whatever colorscheme you make
+" colorscheme zephyr
+
