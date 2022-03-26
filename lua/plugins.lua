@@ -87,10 +87,6 @@ require("packer").startup({
                 }
             end
         })
-        -- Nerdtree
-        -- use({'preservim/nerdtree'})
-        -- nvim-tree.lua
-
         -- Python indent (follows the PEP8 style)
         use({"Vimjas/vim-python-pep8-indent", ft = {"python"}})
 
@@ -455,12 +451,21 @@ require("packer").startup({
             requires = 'kyazdani42/nvim-web-devicons',
             config = [[require('config.bufferline')]]
         })
+        -- use {
+        --     'kyazdani42/nvim-tree.lua',
+        --     requires = {
+        --         'kyazdani42/nvim-web-devicons' -- optional, for file icon
+        --     },
+        --     config = [[require('config.nvim-tree')]]
+
         use {
-            'kyazdani42/nvim-tree.lua',
+            'nvim-neo-tree/neo-tree.nvim',
+            branch = "v2.x",
             requires = {
-                'kyazdani42/nvim-web-devicons' -- optional, for file icon
+                "nvim-lua/plenary.nvim", "kyazdani42/nvim-web-devicons",
+                "MunifTanjim/nui.nvim"
             },
-            config = [[require('config.nvim-tree')]]
+            config = [[require('config.neo-tree')]]
         }
 
     end,
