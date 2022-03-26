@@ -22,9 +22,6 @@ if fn.glob(packer_install_dir) == "" then
     vim.cmd(install_cmd)
 end
 
--- Load packer.nvim
--- Only required if you have packer configured as `opt`
--- vim.cmd("packadd packer.nvim")
 
 local util = require('packer.util')
 
@@ -95,11 +92,6 @@ require("packer").startup({
 
         use({"machakann/vim-swap", event = "VimEnter"})
 
-        -- IDE for Lisp
-        -- if utils.executable("sbcl") then
-        --     -- use 'kovisoft/slimv'
-        --     use({"vlime/vlime", rtp = "vim/", ft = {"lisp"}})
-        -- end
         use {
             'ray-x/lsp_signature.nvim',
             config = [[require('config.lsp_signature')]]
@@ -280,7 +272,6 @@ require("packer").startup({
 
         -- Auto format tools
         use({"sbdchd/neoformat", cmd = {"Neoformat"}})
-        -- use 'Chiel92/vim-autoformat'
 
         -- Git command inside vim
         use({"tpope/vim-fugitive", event = "User InGitRepo"})
@@ -300,7 +291,6 @@ require("packer").startup({
             config = [[require('config.bqf')]]
         })
 
-        -- Better git commit experience
         use({
             "rhysd/committia.vim",
             opt = true,
@@ -355,8 +345,6 @@ require("packer").startup({
         if vim.g.is_win or vim.g.is_mac and utils.executable("latex") then
             use({"lervag/vimtex", ft = {"tex"}})
 
-            -- use {'matze/vim-tex-fold', ft = {'tex', }}
-            -- use 'Konfekt/FastFold'
         end
 
         -- Since tmux is only available on Linux and Mac, we only enable these plugins
@@ -451,12 +439,6 @@ require("packer").startup({
             requires = 'kyazdani42/nvim-web-devicons',
             config = [[require('config.bufferline')]]
         })
-        -- use {
-        --     'kyazdani42/nvim-tree.lua',
-        --     requires = {
-        --         'kyazdani42/nvim-web-devicons' -- optional, for file icon
-        --     },
-        --     config = [[require('config.nvim-tree')]]
 
         use {
             'nvim-neo-tree/neo-tree.nvim',
