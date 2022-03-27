@@ -50,7 +50,7 @@ require("neo-tree").setup({
         }
 
     },
-    hijack_netrw_behavior = "disabled",
+    hijack_netrw_behavior = "open_current",
     filesystem = {
         filtered_items = {
             visible = false, -- when true, they will just be displayed differently than normal items
