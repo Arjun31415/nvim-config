@@ -22,7 +22,6 @@ if fn.glob(packer_install_dir) == "" then
     vim.cmd(install_cmd)
 end
 
-
 local util = require('packer.util')
 
 require("packer").startup({
@@ -96,6 +95,7 @@ require("packer").startup({
             'ray-x/lsp_signature.nvim',
             config = [[require('config.lsp_signature')]]
         }
+        use {'github/copilot.vim'}
         -- Super fast buffer jump
         use {
             'phaazon/hop.nvim',
