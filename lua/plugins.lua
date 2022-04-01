@@ -88,7 +88,7 @@ require("packer").startup({
 
         -- Python-related text object
         use({"jeetsukumaran/vim-pythonsense", ft = {"python"}})
-
+        use { 'searleser97/cpbooster.vim' }
         use({"machakann/vim-swap", event = "VimEnter"})
 
         use {
