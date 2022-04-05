@@ -61,7 +61,6 @@ require("packer").startup({
         --         vim.schedule(function() require("copilot") end)
         --     end
         -- }
-
         -- use {"zbirenbaum/copilot-cmp", after = {"copilot.lua", "nvim-cmp"}}
 
         use({
@@ -404,6 +403,7 @@ require("packer").startup({
             opt = true,
             setup = [[vim.cmd('packadd firenvim')]]
         })
+
         -- Debugger plugin
         if vim.g.is_win or vim.g.is_linux then
             use({
