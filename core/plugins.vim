@@ -397,7 +397,8 @@ nnoremap <leader>dp :<C-U>GdbStartPDB python -m pdb %<CR>
 augroup wilder_init
   autocmd!
   " CursorHold is suggested here: https://github.com/gelguy/wilder.nvim/issues/89#issuecomment-934465957.
-  autocmd CursorHold * ++once call s:wilder_init()
+  " autocmd CursorHold * ++once call s:wilder_init()
+  autocmd CmdlineEnter * ++once call s:wilder_init()
 augroup END
 
 function! s:wilder_init() abort
@@ -424,7 +425,15 @@ function! s:wilder_init() abort
           \ ])
 
     let l:hl = wilder#make_hl('WilderAccent', 'Pmenu', [{}, {}, {'foreground': '#f4468f'}])
-    call wilder#set_option('renderer', wilder#popupmenu_renderer({
+    " let s:scale = ['#f4468f', '#fd4a85', '#ff507a', '#ff566f', '#ff5e63',
+    "   \ '#ff6658', '#ff704e', '#ff7a45', '#ff843d', '#ff9036',
+    "   \ '#f89b31', '#efa72f', '#e6b32e', '#dcbe30', '#d2c934',
+    "   \ '#c8d43a', '#bfde43', '#b6e84e', '#aff05b']
+    " let s:gradient = map(s:scale, {i, fg -> wilder#make_hl(
+    "   \ 'WilderGradient' . i, 'Pmenu', [{}, {}, {'foreground': fg}]
+    "   \ )})
+    call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
+          \ 'border': 'rounded',
           \ 'highlighter': wilder#basic_highlighter(),
           \ 'max_height': 15,
           \ 'highlights': {
@@ -433,7 +442,22 @@ function! s:wilder_init() abort
           \ 'left': [' ', wilder#popupmenu_devicons(),],
           \ 'right': [' ', wilder#popupmenu_scrollbar(),],
           \ 'apply_incsearch_fix': 0,
-          \ }))
+          \ })))
+     " call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
+     "      \ 'border': 'rounded',
+     "               \ 'max_height': 15,
+     "      \ 'highlights': {
+     "      \   'gradient': s:gradient,
+     "      \ },
+     "  \ 'highlighter': wilder#highlighter_with_gradient([
+     "      \    wilder#basic_highlighter(),
+     "      \ ]),
+
+     "      \ 'left': [' ', wilder#popupmenu_devicons(),],
+     "      \ 'right': [' ', wilder#popupmenu_scrollbar(),],
+     "      \ 'apply_incsearch_fix': 0,
+     "      \ })))
+
   catch /^Vim\%((\a\+)\)\=:E117/
     echohl Error |echomsg "Wilder.nvim missing: run :PackerSync to fix."|echohl None
   endtry

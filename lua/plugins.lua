@@ -48,6 +48,22 @@ require("packer").startup({
             branch = 'release',
             config = [[require('config.coc')]]
         })
+        -- use {'hrsh7th/cmp-nvim-lsp'}
+        -- use {'hrsh7th/cmp-buffer'}
+        -- use {'hrsh7th/cmp-path'}
+        -- use {'hrsh7th/cmp-cmdline'}
+        -- use {'hrsh7th/nvim-cmp'}
+        -- use {'quangnguyen30192/cmp-nvim-ultisnips'}
+        -- use {
+        --     "zbirenbaum/copilot.lua",
+        --     event = "InsertEnter",
+        --     config = function()
+        --         vim.schedule(function() require("copilot") end)
+        --     end
+        -- }
+
+        -- use {"zbirenbaum/copilot-cmp", after = {"copilot.lua", "nvim-cmp"}}
+
         use({
             'stsewd/spotify.nvim',
             run = ":UpdateRemotePlugins",
@@ -388,7 +404,6 @@ require("packer").startup({
             opt = true,
             setup = [[vim.cmd('packadd firenvim')]]
         })
-
         -- Debugger plugin
         if vim.g.is_win or vim.g.is_linux then
             use({
@@ -398,7 +413,6 @@ require("packer").startup({
                 -- setup = [[vim.cmd('packadd nvim-gdb')]]
             })
         end
-
         -- Session management plugin
         use({"tpope/vim-obsession", cmd = 'Obsession'})
 
@@ -409,8 +423,9 @@ require("packer").startup({
         -- The missing auto-completion for cmdline!
         use({
             "gelguy/wilder.nvim",
-            opt = true,
-            setup = [[vim.cmd('packadd wilder.nvim')]]
+            -- opt = true,
+            -- setup = [[vim.cmd('packadd wilder.nvim')]],
+            config = [[require('config.wilder')]]
         })
 
         -- showing keybindings
