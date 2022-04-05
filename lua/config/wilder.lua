@@ -1,0 +1,30 @@
+-- local wilder = require('wilder')
+-- local highlighters = {wilder.basic_highlighter()}
+-- wilder.setup({modes = {':', '/', '?'}})
+-- wilder.set_option('renderer', wilder.popupmenu_renderer({
+--     highlighter = highlighters,
+--     left = {' ', wilder.popupmenu_devicons()},
+--     right = {' ', wilder.popupmenu_scrollbar()},
+--     max_height = 15,
+--     highlights = {accent = 'l:hl'}
+-- }))
+
+-- wilder.set_option('renderer',
+--                   wilder.popupmenu_renderer(
+--                       wilder.popupmenu_border_theme({
+--         highlights = {
+--             border = 'Normal' -- highlight to use for the border
+--         },
+--         -- 'single', 'double', 'rounded' or 'solid'
+--         -- can also be a list of 8 characters, see :h wilder#popupmenu_border_theme() for more details
+--         border = 'rounded'
+--     })))
+-- wilder.set_option('pipeline', {
+--     wilder.branch(wilder.cmdline_pipeline({
+--         language = 'python',
+--         fuzzy = 1,
+--         sorter = wilder.python_difflib_sorter,
+--         engine = 're',
+--         debounce = 30
+--     }))
+-- })
