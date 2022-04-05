@@ -88,14 +88,14 @@ require("packer").startup({
 
         -- Python-related text object
         use({"jeetsukumaran/vim-pythonsense", ft = {"python"}})
-        use { 'searleser97/cpbooster.vim' }
+        use {'searleser97/cpbooster.vim'}
         use({"machakann/vim-swap", event = "VimEnter"})
 
         use {
             'ray-x/lsp_signature.nvim',
             config = [[require('config.lsp_signature')]]
         }
-        use {'github/copilot.vim'}
+        -- use {'github/copilot.vim'}
         -- Super fast buffer jump
         use {
             'phaazon/hop.nvim',
