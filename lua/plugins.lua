@@ -43,13 +43,7 @@ require("packer").startup({
             event = "BufEnter",
             config = [[require('config.nvim-colorizer')]]
         })
-        -- TODO: Add config file for coc.nvim
-        -- use({
-        --     'neoclide/coc.nvim',
-        --     branch = 'release',
-        --     config = [[require('config.coc')]]
-        -- })
-        use ({"tamago324/nlsp-settings.nvim" })-- language server settings defined in json for jsonls
+        use({"tamago324/nlsp-settings.nvim"}) -- language server settings defined in json for jsonls
 
         use({
             "onsails/lspkind-nvim",
@@ -238,14 +232,6 @@ require("packer").startup({
             event = "BufEnter"
         })
 
-        -- For Windows and Mac, we can open an URL in the browser. For Linux, it may
-        -- not be possible since we maybe in a server which disables GUI.
-        -- if vim.g.is_win or vim.g.is_mac then
-        --   -- open URL in browser
-        --   use({"tyru/open-browser.vim", event = "VimEnter"})
-        -- end
-
-        -- hehe do it anyways
         use({"tyru/open-browser.vim", event = "VimEnter"})
 
         -- Only install these plugins if ctags are installed on the system
