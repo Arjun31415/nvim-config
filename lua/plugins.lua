@@ -30,38 +30,58 @@ require("packer").startup({
         use({'lewis6991/impatient.nvim', config = [[require('impatient')]]})
         use 'wbthomason/packer.nvim'
         use {'nvim-lua/plenary.nvim'}
+        use {'neovim/nvim-lspconfig'}
+        use {'williamboman/nvim-lsp-installer'}
 
-        use({"onsails/lspkind-nvim", event = "VimEnter"})
         use({
             'andweeb/presence.nvim',
             config = [[require('config.discordPresence')]]
         })
-        -- Highlight colors inline 
+        -- Highlight colors inline
         use({
             'norcalli/nvim-colorizer.lua',
             event = "BufEnter",
             config = [[require('config.nvim-colorizer')]]
         })
         -- TODO: Add config file for coc.nvim
+        -- use({
+        --     'neoclide/coc.nvim',
+        --     branch = 'release',
+        --     config = [[require('config.coc')]]
+        -- })
+        use ({"tamago324/nlsp-settings.nvim" })-- language server settings defined in json for jsonls
+
         use({
-            'neoclide/coc.nvim',
-            branch = 'release',
-            config = [[require('config.coc')]]
+            "onsails/lspkind-nvim",
+            event = "VimEnter",
+            config = [[require('config.lspkind')]]
         })
-        -- use {'hrsh7th/cmp-nvim-lsp'}
-        -- use {'hrsh7th/cmp-buffer'}
-        -- use {'hrsh7th/cmp-path'}
-        -- use {'hrsh7th/cmp-cmdline'}
-        -- use {'hrsh7th/nvim-cmp'}
-        -- use {'quangnguyen30192/cmp-nvim-ultisnips'}
-        -- use {
-        --     "zbirenbaum/copilot.lua",
-        --     event = "InsertEnter",
-        --     config = function()
-        --         vim.schedule(function() require("copilot") end)
-        --     end
-        -- }
-        -- use {"zbirenbaum/copilot-cmp", after = {"copilot.lua", "nvim-cmp"}}
+        use {'hrsh7th/cmp-nvim-lsp'}
+        use {'hrsh7th/cmp-buffer'}
+        use {'hrsh7th/cmp-path'}
+        use {'hrsh7th/cmp-cmdline'}
+        use {
+            'hrsh7th/nvim-cmp',
+            branch = "dev",
+            config = [[require('config.nvim-cmp')]],
+            event = "VimEnter"
+        }
+        use {'quangnguyen30192/cmp-nvim-ultisnips'}
+        use {
+            "zbirenbaum/copilot.lua",
+            event = "InsertEnter",
+            config = function()
+                vim.schedule(function() require("copilot") end)
+            end
+        }
+        use {"zbirenbaum/copilot-cmp", after = {"copilot.lua", "nvim-cmp"}}
+        use {
+            'tzachar/cmp-tabnine',
+            run = './install.sh',
+            requires = 'hrsh7th/nvim-cmp',
+            config = [[require('config.nvim-cmp-tabnine')]],
+            event = "VimEnter"
+        }
 
         use({
             'stsewd/spotify.nvim',
@@ -413,6 +433,7 @@ require("packer").startup({
                 -- setup = [[vim.cmd('packadd nvim-gdb')]]
             })
         end
+
         -- Session management plugin
         use({"tpope/vim-obsession", cmd = 'Obsession'})
 
@@ -422,10 +443,10 @@ require("packer").startup({
 
         -- The missing auto-completion for cmdline!
         use({
-            "gelguy/wilder.nvim",
+            "gelguy/wilder.nvim"
             -- opt = true,
             -- setup = [[vim.cmd('packadd wilder.nvim')]],
-            config = [[require('config.wilder')]]
+            --            config = [[require('config.wilder')]]
         })
 
         -- showing keybindings
