@@ -465,5 +465,5 @@ endfunction
 
 """"""""""""""""""""""""""""""coc.nvim settings""""""""""""""""""""""""""""""
 " For code actions
-xmap <leader>ca  <Plug>(coc-codeaction-selected)
-nmap <leader>ca  <Plug>(coc-codeaction-selected)w
+" xmap <leader>ca  <Plug>(coc-codeaction-selected)
+" nmap <leader>ca  <Plug>(coc-codeaction-selected)w
