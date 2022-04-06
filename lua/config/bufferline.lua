@@ -1,3 +1,4 @@
+---@diagnostic disable: unused-local
 local map = require("utils").map
 require("bufferline").setup({
     options = {
