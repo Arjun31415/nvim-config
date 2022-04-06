@@ -191,8 +191,8 @@ endfunction
 " Press i to enter insert mode, and ii to exit insert mode.
 " :inoremap ii <Esc>
 " Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+" nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gr <Plug>(coc-references)
 nnoremap <silent> <leader>rc <Cmd>call utils#clearRegisters()<CR>
