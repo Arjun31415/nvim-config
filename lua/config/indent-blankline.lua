@@ -4,11 +4,13 @@ require("indent_blankline").setup({
     char = "▏",
     show_end_of_line = false,
     disable_with_nolist = true,
-    buftype_exclude = { "terminal" },
-    filetype_exclude = { "help", "git", "markdown", "snippets", "text", "gitconfig", "alpha" },
-  })
-  
-  vim.cmd([[
+    buftype_exclude = {"terminal"},
+    filetype_exclude = {
+        "help", "git", "markdown", "snippets", "text", "gitconfig", "alpha"
+    }
+})
+
+vim.cmd([[
   function! Should_activate_indentblankline() abort
     if index(g:indent_blankline_filetype_exclude, &filetype) == -1
       IndentBlanklineEnable
