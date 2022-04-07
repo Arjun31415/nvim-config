@@ -70,6 +70,7 @@ end
 local empty = require('lualine.component'):extend()
 
 -- Put proper separators and gaps between components in sections
+---@diagnostic disable-next-line: unused-function, unused-local
 local function process_sections(sections)
     for name, section in pairs(sections) do
         local left = name:sub(9, 10) < 'x'
@@ -93,27 +94,27 @@ require("lualine").setup({
     options = {
         icons_enabled = true,
         theme = "dracula",
-        -- component_separators = { left = "", right = "" },
-        -- section_separators = { left = "", right = "" },
-        section_separators = {left = '', right = ''},
-        component_separators = "",
+        component_separators = {left = "", right = ""},
+        section_separators = {left = "", right = ""},
+        -- section_separators = {left = '', right = ''},
+        -- component_separators = "",
         disabled_filetypes = {},
         always_divide_middle = true,
         globalstatus = true
     },
-    sections =process_sections{
+    sections = {
         lualine_a = {"mode"},
         lualine_b = {
             "branch", "diff", {
                 'diagnostics',
-                source = {'nvim'},
+                source = {'nvim', 'nvim_lsp'},
                 sections = {'error'},
                 diagnostics_color = {
                     error = {bg = colors.red, fg = colors.white}
                 }
             }, {
                 'diagnostics',
-                source = {'nvim'},
+                source = {'nvim', "nvim_lsp"},
                 sections = {'warn'},
                 diagnostics_color = {
                     warn = {bg = colors.orange, fg = colors.white}
