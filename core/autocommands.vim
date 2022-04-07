@@ -5,6 +5,7 @@
 
 augroup dynamic_smartcase
   autocmd!
+  echo "Hii"
   autocmd CmdLineEnter : set nosmartcase
   autocmd CmdLineLeave : set smartcase
 augroup END
