@@ -3,6 +3,15 @@ local function spell()
 
     return ""
 end
+local colors = {
+    red = '#ca1243',
+    grey = '#a0a1a7',
+    black = '#383a42',
+    white = '#f3f3f3',
+    light_green = '#83a598',
+    orange = '#fe8019',
+    green = '#8ec07c'
+}
 
 local function ime_state()
     if vim.g.is_mac then
@@ -58,22 +67,59 @@ local function mixed_indent()
         return 'MI:' .. space_indent
     end
 end
+local empty = require('lualine.component'):extend()
 
+-- Put proper separators and gaps between components in sections
+local function process_sections(sections)
+    for name, section in pairs(sections) do
+        local left = name:sub(9, 10) < 'x'
+        for pos = 1, name ~= 'lualine_z' and #section or #section - 1 do
+            table.insert(section, pos * 2, {
+                empty,
+                color = {fg = colors.white, bg = colors.white}
+            })
+        end
+        for id, comp in ipairs(section) do
+            if type(comp) ~= 'table' then
+                comp = {comp}
+                section[id] = comp
+            end
+            comp.separator = left and {right = ''} or {left = ''}
+        end
+    end
+    return sections
+end
 require("lualine").setup({
     options = {
         icons_enabled = true,
-        theme = "auto",
+        theme = "dracula",
         -- component_separators = { left = "", right = "" },
         -- section_separators = { left = "", right = "" },
-        section_separators = "",
+        section_separators = {left = '', right = ''},
         component_separators = "",
         disabled_filetypes = {},
         always_divide_middle = true,
         globalstatus = true
     },
-    sections = {
+    sections =process_sections{
         lualine_a = {"mode"},
-        lualine_b = {"branch", "diff"},
+        lualine_b = {
+            "branch", "diff", {
+                'diagnostics',
+                source = {'nvim'},
+                sections = {'error'},
+                diagnostics_color = {
+                    error = {bg = colors.red, fg = colors.white}
+                }
+            }, {
+                'diagnostics',
+                source = {'nvim'},
+                sections = {'warn'},
+                diagnostics_color = {
+                    warn = {bg = colors.orange, fg = colors.white}
+                }
+            }
+        },
         lualine_c = {
             "filename", {ime_state, color = {fg = 'black', bg = '#f46868'}},
             {spell, color = {fg = 'black', bg = '#a7c080'}}
@@ -85,8 +131,7 @@ require("lualine").setup({
         },
         lualine_y = {"progress"},
         lualine_z = {
-            "location", {"diagnostics", sources = {"nvim_diagnostic"}},
-            {trailing_space, color = "WarningMsg"},
+            "location", {trailing_space, color = "WarningMsg"},
             {mixed_indent, color = "WarningMsg"}
         }
     },
