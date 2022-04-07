@@ -6,10 +6,7 @@ local folderOfThisFile = (...):match("(.-)[^%.]+$") -- returns 'lib.foo.'
 local lspkind = require(folderOfThisFile .. 'lspkind')
 require("config.lsp")
 cmp.setup({
-    snippet = {
-        -- REQUIRED - you must specify a snippet engine
-        expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end
-    },
+    snippet = {expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end},
     style = {winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder"},
     formatting = {
         format = lspkind.cmp_format({with_text = false, maxwidth = 50})
@@ -91,7 +88,7 @@ vim.cmd([[ set pumheight=10 ]])
 
 cmp.setup.cmdline('/', {sources = {{name = 'buffer'}}})
 local highlights = {
-    CmpItemKindText = {fg = "LightGrey"},
+    CmpItemKindText = {fg = "Grey"},
     CmpItemKindFunction = {fg = "#C586C0"},
     CmpItemKindClass = {fg = "Orange"},
     CmpItemKindKeyword = {fg = "#f90c71"},
@@ -109,7 +106,4 @@ local highlights = {
 }
 vim.api.nvim_set_hl(0, "CmpBorderedWindow_FloatBorder", {fg = "#565c64"})
 for group, hl in pairs(highlights) do vim.api.nvim_set_hl(0, group, hl) end
--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
--- cmp.setup.cmdline(':', {
---     sources = cmp.config.sources({{name = 'path'}}, {{name = 'cmdline'}})
--- })
+
