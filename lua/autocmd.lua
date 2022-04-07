@@ -1,9 +1,10 @@
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
--- Do not use smart case in command line mode, extracted from https://vi.stackexchange.com/a/16511/15292.
+-- Do not use smart case in command line mode, extracted from
+-- https://vi.stackexchange.com/a/16511/15292.
 -- You can dynamically toggle smartcase using autocmds,
 -- so when in a : command line, it is off
--- and when in a <Leader> command line it is on:
+-- and when in a <Leader> command line it is on
 local _id = augroup("dynamic_smartcase", {clear = true})
 autocmd({"CmdLineEnter"}, {
     command = "set nosmartcase",
