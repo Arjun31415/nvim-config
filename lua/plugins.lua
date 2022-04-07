@@ -61,6 +61,7 @@ require("packer").startup({
             event = "VimEnter"
         }
         use {'quangnguyen30192/cmp-nvim-ultisnips'}
+        use {"github/copilot.vim"}
         use {
             "zbirenbaum/copilot.lua",
             event = "InsertEnter",
