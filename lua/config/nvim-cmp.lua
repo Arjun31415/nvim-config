@@ -86,7 +86,7 @@ cmp.setup.filetype('gitcommit', {
 
 vim.cmd([[ set pumheight=10 ]])
 
-cmp.setup.cmdline('/', {sources = {{name = 'buffer'}}})
+-- cmp.setup.cmdline('/', {sources = {{name = 'buffer'}}})
 local highlights = {
     CmpItemKindText = {fg = "Grey"},
     CmpItemKindFunction = {fg = "#C586C0"},
