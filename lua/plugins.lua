@@ -56,7 +56,7 @@ require("packer").startup({
         use {'hrsh7th/cmp-cmdline'}
         use {
             'hrsh7th/nvim-cmp',
-            branch = "dev",
+            branch = "main",
             config = [[require('config.nvim-cmp')]],
             event = "VimEnter"
         }
@@ -226,12 +226,12 @@ require("packer").startup({
                 end, 2000)
             end
         })
-        use({
-            'Arjun31415/BuildTask.nvim',
-            config = [[require('config.build_task')]],
-            requires = "rcarriga/nvim-notify",
-            event = "BufEnter"
-        })
+        -- use({
+        --     'Arjun31415/BuildTask.nvim',
+        --     config = [[require('config.build_task')]],
+        --     requires = "rcarriga/nvim-notify",
+        --     event = "BufEnter"
+        -- })
 
         use({"tyru/open-browser.vim", event = "VimEnter"})
 
