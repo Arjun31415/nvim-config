@@ -13,18 +13,17 @@ using namespace std;
 #define all(a) a.begin(), a.end()
 #define REP(i, a, b) for (ll i = a; i < b; i++)
 #define REPI(i, a, b) for (ll i = b - 1; i >= a; i--)
+#define each(a, b) for (auto &a : b)
+#define amax(a, b) a = max(a, b)
+#define amin(a, b) a = min(a, b)
 #define ff first
 #define ss second
 #define pb push_back
+#define sz(x) (int)(x).size()
 #define mp make_pair
 #define mt make_tuple
 #define lc(x) (x << 1)
 #define rc(x) ((x << 1) | 1)
-#define pii pair<int, int>
-#define vi vector<int>
-#define mii map<int, int>
-#define pqb priority_queue<int>
-#define pqs priority_queue<int, vi, greater<int>>
 #define setbits(x) __builtin_popcountll(x)
 #define mod 1000000007
 #define inf 1e18
@@ -44,87 +43,188 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 #define epsilon 1e-9
 #define sign(x) (x > 0) - (x < 0)
 #define is_poweroftwo(n) (n && !(n & (n - 1)))
-typedef long long ll;
-typedef unsigned long long ull;
-typedef long double ld;
+template <class Ty, std::size_t N>
+using ar = array<Ty, N>;
+using pii = pair<int, int>;
+using vi = vector<int>;
+using vb = vector<bool>;
+using vvi = vector<vi>;
+using mii = map<int, int>;
+using pqb = priority_queue<int>;
+using pqs = priority_queue<int, vi, greater<int>>;
+using ll = long long;
+using ull = unsigned long long;
+using ld = long double;
 template <typename T>
 #define ordered_set(T) = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 void nothing();
 
-template <class T1, class T2> ostream &operator<<(ostream &os, const pair<T1, T2> &p) {
+template <class T1, class T2>
+ostream &operator<<(ostream &os, const pair<T1, T2> &p)
+{
     os << '{' << p.first << ", " << p.second << '}';
     return os;
 }
 
 template <typename C,
-              typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
-              typename std::enable_if<!std::is_same<C, std::string>::value>::type * = nullptr>
-    ostream &operator<<(ostream &os, const C &container)
+          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+          typename std::enable_if<!std::is_same<C, std::string>::value>::type * = nullptr>
+ostream &operator<<(ostream &os, const C &container)
+{
+    bool first = true;
+    stringstream ss;
+    ss << '[';
+    for (const auto &x : container)
     {
-        bool first = true;
-        stringstream ss;
-        ss << '[';
-        for (const auto &x : container)
+        if (!first)
         {
-            if (!first)
-            {
-                ss << ", ";
-            }
-            first = false;
-            ss << x;
+            ss << ", ";
         }
-        ss << ']';
-        return os << ss.str();
+        first = false;
+        ss << x;
     }
+    ss << ']';
+    return os << ss.str();
+}
 
-#ifndef debugging
-#define debug(...) __f(#__VA_ARGS__, __VA_ARGS__)
-    template <typename Arg1>
-    void __f(const char *name, Arg1 &&arg1)
+inline namespace Strings
+{
+    string to_string(int x) { return std::to_string(x); }
+    string to_string(ll x) { return std::to_string(x); }
+    string to_string(float x) { return std::to_string(x); }
+    string to_string(double x) { return std::to_string(x); }
+    string to_string(char c) { return string(1, c); }
+    string to_string(bool b) { return b ? "true" : "false"; }
+    string to_string(const char *s) { return string(s); }
+    string to_string(string s) { return s; }
+    string to_string(vb v)
     {
-        cerr << name << " : " << arg1 << '\n';
+        string res;
+        for (int i = 0; i < sz(v); i++)
+            res += char('0' + v[i]);
+        return res;
     }
-    template <typename Arg1, typename... Args>
-    void __f(const char *names, Arg1 &&arg1, Args &&...args)
+    template <size_t S>
+    string to_string(bitset<S> b)
     {
-        const char *comma = strchr(names + 1, ',');
-        cerr.write(names, comma - names) << " : " << arg1 << " | ";
-        __f(comma + 1, args...);
+        string res;
+        for (int i = 0; i < sz(b); i++)
+            res += char('0' + b[i]);
+        return res;
     }
+    template <class H, class T>
+    string to_string(pair<H, T> v) { return Strings::to_string(v.ff) + " " + Strings::to_string(v.ss); }
+    template <class T>
+    string to_string(T v)
+    {
+        bool f = 1;
+        string res;
+        each(x, v)
+        {
+            if (!f)
+                res += ' ';
+            f = 0;
+            res += Strings::to_string(x);
+        }
+        return res;
+    }
+    template <class H, class T>
+    string to_string(unordered_map<H, T> v)
+    {
+        bool f = 1;
+        string res;
+        each(x, v)
+        {
+            if (!f)
+                res += ',';
+            f = 0;
+            res += " (" + Strings::to_string(x.ff) + "->" + Strings::to_string(x.ss) + ")";
+        }
+        return res;
+    }
+    template <class H, class T>
+    string to_string(map<H, T> v)
+    {
+        bool f = 1;
+        string res;
+        each(x, v)
+        {
+            if (!f)
+                res += ',';
+            f = 0;
+            res += "(" + Strings::to_string(x.ff) + "->" + Strings::to_string(x.ss) + ")";
+        }
+        return res;
+    }
+}
+inline namespace IO
+{
+    template <class A>
+    void read(vector<A> &v);
+    template <class A, size_t S>
+    void read(ar<A, S> &a);
+    template <class T>
+    void read(T &x) { cin >> x; }
+    void read(double &d)
+    {
+        string t;
+        read(t);
+        d = stod(t);
+    }
+    void read(long double &d)
+    {
+        string t;
+        read(t);
+        d = stold(t);
+    }
+    template <class H, class... T>
+    void read(H &h, T &...t)
+    {
+        read(h);
+        read(t...);
+    }
+    template <class A>
+    void read(vector<A> &x) { each(a, x) read(a); }
+    template <class A, size_t S>
+    void read(array<A, S> &x) { each(a, x) read(a); }
+    template <class A>
+    void write(A x) { cout << Strings::to_string(x); }
+    template <class H, class... T>
+    void write(const H &h, const T &...t)
+    {
+        write(h);
+        write(t...);
+    }
+    void print() { write("\n"); }
+    template <class H, class... T>
+    void print(const H &h, const T &...t)
+    {
+        write(h);
+        if (sizeof...(t))
+            write(' ');
+        print(t...);
+    }
+}
+#define debugging
+#ifdef debugging
+#define debug(...)                                                \
+    std::cerr << "\e[91m" << __func__ << ":" << __LINE__ << "\t"; \
+    __f(#__VA_ARGS__, __VA_ARGS__)
+template <typename Arg1>
+void __f(const char *name, Arg1 &&arg1)
+{
+    std::cerr << name << " : " << arg1 << "\e[39m" << '\n';
+}
+template <typename Arg1, typename... Args>
+void __f(const char *names, Arg1 &&arg1, Args &&...args)
+{
+    const char *comma = strchr(names + 1, ',');
+    std::cerr.write(names, comma - names) << " : " << arg1 << " | ";
+    __f(comma + 1, args...);
+}
 #else
 #define debug(...) ;
 #endif
-
-template <typename T>
-void print(vector<T> a, int l, int u, string separator = " ")
-{
-    for (int i = l; i < u; i++)
-    {
-        cout << a[i] << separator;
-    }
-    cout << "\n";
-}
-template <typename T>
-void print(vector<T> a, string separator = " ")
-{
-
-    print(a, 0, a.size(), separator);
-}
-template <typename T>
-void printl(vector<T> a, int l, string separator = " ")
-{
-    print(a, l, a.size(), separator);
-}
-template <typename T>
-void printu(vector<T> a, int u, string separator = " ")
-{
-    print(a, 0, u, separator);
-}
-template <typename T1, typename T2>
-void print(pair<T1, T2> a)
-{
-    cout << "{" << a.ff << ", " << a.ss << "}";
-}
 long long binpow(long long a, long long b)
 {
     long long res = 1;
@@ -187,14 +287,14 @@ int leftbit(long long n)
 {
 
     (((((n |= n >> 1) |= n >> 2) |= n >> 4) |= n >> 8) |= n >> 16);
-    //n |= n >> 1;
-    // n |= n >> 2;
-    // n |= n >> 4;
-    // n |= n >> 8;
-    // n |= n >> 16;
+    // n |= n >> 1;
+    //  n |= n >> 2;
+    //  n |= n >> 4;
+    //  n |= n >> 8;
+    //  n |= n >> 16;
     n = n + 1;
     // return the nearest power of 2
-    //return (n >> 1);
+    // return (n >> 1);
     // return the left bit
     return (log2(n >> 1));
 }
@@ -227,6 +327,7 @@ struct custom_hash
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+void calc() {}
 signed main()
 {
 #ifndef ONLINE_JUDGE
@@ -237,10 +338,8 @@ signed main()
     FIO;
     w(T)
     {
-        ${0}
+        ${0:calc();}
     }
-
-
 #ifndef ONLINE_JUDGE
 #ifndef CPH
     auto t2 = std::chrono::high_resolution_clock::now();
