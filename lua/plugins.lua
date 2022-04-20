@@ -22,7 +22,7 @@ if fn.glob(packer_install_dir) == "" then
     vim.cmd(install_cmd)
 end
 
-local util = require('packer.util')
+local packer_util = require('packer.util')
 
 require("packer").startup({
     function(use)
@@ -47,7 +47,7 @@ require("packer").startup({
 
         use({
             "onsails/lspkind-nvim",
-            event = "VimEnter",
+            -- event = "VimEnter",
             config = [[require('config.lspkind')]]
         })
         use {'hrsh7th/cmp-nvim-lsp'}
@@ -476,7 +476,7 @@ require("packer").startup({
     end,
     config = {
         max_jobs = 16,
-        compile_path = util.join_paths(vim.fn.stdpath('config'), 'lua',
+        compile_path = packer_util.join_paths(vim.fn.stdpath('config'), 'lua',
                                        'packer_compiled.lua'),
         git = {default_url_format = plug_url_format}
     }
