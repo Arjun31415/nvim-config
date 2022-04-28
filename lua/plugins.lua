@@ -22,7 +22,7 @@ if fn.glob(packer_install_dir) == "" then
     vim.cmd(install_cmd)
 end
 
-local util = require('packer.util')
+local packer_util = require('packer.util')
 
 require("packer").startup({
     function(use)
@@ -30,38 +30,53 @@ require("packer").startup({
         use({'lewis6991/impatient.nvim', config = [[require('impatient')]]})
         use 'wbthomason/packer.nvim'
         use {'nvim-lua/plenary.nvim'}
+        use {'neovim/nvim-lspconfig'}
+        use {'williamboman/nvim-lsp-installer'}
 
-        use({"onsails/lspkind-nvim", event = "VimEnter"})
         use({
             'andweeb/presence.nvim',
             config = [[require('config.discordPresence')]]
         })
-        -- Highlight colors inline 
+        -- Highlight colors inline
         use({
             'norcalli/nvim-colorizer.lua',
             event = "BufEnter",
             config = [[require('config.nvim-colorizer')]]
         })
-        -- TODO: Add config file for coc.nvim
+        use({"tamago324/nlsp-settings.nvim"}) -- language server settings defined in json for jsonls
+
         use({
-            'neoclide/coc.nvim',
-            branch = 'release',
-            config = [[require('config.coc')]]
+            "onsails/lspkind-nvim",
+            -- event = "VimEnter",
+            config = [[require('config.lspkind')]]
         })
-        -- use {'hrsh7th/cmp-nvim-lsp'}
-        -- use {'hrsh7th/cmp-buffer'}
-        -- use {'hrsh7th/cmp-path'}
-        -- use {'hrsh7th/cmp-cmdline'}
-        -- use {'hrsh7th/nvim-cmp'}
-        -- use {'quangnguyen30192/cmp-nvim-ultisnips'}
-        -- use {
-        --     "zbirenbaum/copilot.lua",
-        --     event = "InsertEnter",
-        --     config = function()
-        --         vim.schedule(function() require("copilot") end)
-        --     end
-        -- }
-        -- use {"zbirenbaum/copilot-cmp", after = {"copilot.lua", "nvim-cmp"}}
+        use {'hrsh7th/cmp-nvim-lsp'}
+        use {'hrsh7th/cmp-buffer'}
+        use {'hrsh7th/cmp-path'}
+        use {'hrsh7th/cmp-cmdline'}
+        use {
+            'hrsh7th/nvim-cmp',
+            branch = "main",
+            config = [[require('config.nvim-cmp')]],
+            event = "VimEnter"
+        }
+        use {'quangnguyen30192/cmp-nvim-ultisnips'}
+        use {"github/copilot.vim"}
+        use {
+            "zbirenbaum/copilot.lua",
+            event = "InsertEnter",
+            config = function()
+                vim.schedule(function() require("copilot") end)
+            end
+        }
+        use {"zbirenbaum/copilot-cmp", after = {"copilot.lua", "nvim-cmp"}}
+        use {
+            'tzachar/cmp-tabnine',
+            run = './install.sh',
+            requires = 'hrsh7th/nvim-cmp',
+            config = [[require('config.nvim-cmp-tabnine')]],
+            event = "VimEnter"
+        }
 
         use({
             'stsewd/spotify.nvim',
@@ -149,11 +164,14 @@ require("packer").startup({
 
         use {
             'nvim-telescope/telescope.nvim',
-            cmd = 'Telescope',
-            requires = {{'nvim-lua/plenary.nvim'}}
+            -- cmd = 'Telescope',
+            requires = {{'nvim-lua/plenary.nvim'}},
+            config = [[require('config.telescope-nvim')]]
         }
+        use {'nvim-telescope/telescope-ui-select.nvim',after='telescope.nvim' }
         -- search emoji and other symbols
-        use {'nvim-telescope/telescope-symbols.nvim', after = 'telescope.nvim'}
+        use {'nvim-telescope/telescope-symbols.nvim', after = 'telescope.nvim', config = [[require('config.telescope-nvim')]]
+}
 
         -- Another similar plugin is command-t
         -- use 'wincent/command-t'
@@ -211,21 +229,13 @@ require("packer").startup({
                 end, 2000)
             end
         })
-        use({
-            'Arjun31415/BuildTask.nvim',
-            config = [[require('config.build_task')]],
-            requires = "rcarriga/nvim-notify",
-            event = "BufEnter"
-        })
+        -- use({
+        --     'Arjun31415/BuildTask.nvim',
+        --     config = [[require('config.build_task')]],
+        --     requires = "rcarriga/nvim-notify",
+        --     event = "BufEnter"
+        -- })
 
-        -- For Windows and Mac, we can open an URL in the browser. For Linux, it may
-        -- not be possible since we maybe in a server which disables GUI.
-        -- if vim.g.is_win or vim.g.is_mac then
-        --   -- open URL in browser
-        --   use({"tyru/open-browser.vim", event = "VimEnter"})
-        -- end
-
-        -- hehe do it anyways
         use({"tyru/open-browser.vim", event = "VimEnter"})
 
         -- Only install these plugins if ctags are installed on the system
@@ -413,6 +423,7 @@ require("packer").startup({
                 -- setup = [[vim.cmd('packadd nvim-gdb')]]
             })
         end
+
         -- Session management plugin
         use({"tpope/vim-obsession", cmd = 'Obsession'})
 
@@ -422,10 +433,10 @@ require("packer").startup({
 
         -- The missing auto-completion for cmdline!
         use({
-            "gelguy/wilder.nvim",
+            "gelguy/wilder.nvim"
             -- opt = true,
             -- setup = [[vim.cmd('packadd wilder.nvim')]],
-            config = [[require('config.wilder')]]
+            --            config = [[require('config.wilder')]]
         })
 
         -- showing keybindings
@@ -468,7 +479,7 @@ require("packer").startup({
     end,
     config = {
         max_jobs = 16,
-        compile_path = util.join_paths(vim.fn.stdpath('config'), 'lua',
+        compile_path = packer_util.join_paths(vim.fn.stdpath('config'), 'lua',
                                        'packer_compiled.lua'),
         git = {default_url_format = plug_url_format}
     }

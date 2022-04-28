@@ -1,28 +1,3 @@
-" Do not use smart case in command line mode, extracted from https://vi.stackexchange.com/a/16511/15292.
-" You can dynamically toggle smartcase using autocmds,
-" so when in a : command line, it is off
-" and when in a <Leader> command line it is on:
-
-augroup dynamic_smartcase
-  autocmd!
-  autocmd CmdLineEnter : set nosmartcase
-  autocmd CmdLineLeave : set smartcase
-augroup END
-
-augroup term_settings
-  autocmd!
-  " Do not use number and relative number for terminal inside nvim
-  autocmd TermOpen * setlocal norelativenumber nonumber
-  " Go to insert mode by default to start typing command
-  autocmd TermOpen * startinsert
-augroup END
-
-" More accurate syntax highlighting? (see `:h syn-sync`)
-augroup accurate_syn_highlight
-  autocmd!
-  autocmd BufEnter * :syntax sync fromstart
-augroup END
-
 " Return to last cursor position when opening a file
 augroup resume_cursor_position
   autocmd!
@@ -124,7 +99,3 @@ augroup packer_auto_compile
   autocmd BufWritePost */nvim/lua/plugins.lua source <afile> | PackerCompile
 augroup END
 
-augroup auto_create_dir
-  autocmd!
-  autocmd BufWritePre * lua require('utils').may_create_dir()
-augroup END
