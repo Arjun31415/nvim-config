@@ -87,7 +87,7 @@ ostream &operator<<(ostream &os, const C &container)
     return os << ss.str();
 }
 
-inline namespace Strings
+inline namespace Stringify
 {
     string to_string(int x) { return std::to_string(x); }
     string to_string(ll x) { return std::to_string(x); }
@@ -113,7 +113,7 @@ inline namespace Strings
         return res;
     }
     template <class H, class T>
-    string to_string(pair<H, T> v) { return Strings::to_string(v.ff) + " " + Strings::to_string(v.ss); }
+    string to_string(pair<H, T> v) { return Stringify::to_string(v.ff) + " " + Stringify::to_string(v.ss); }
     template <class T>
     string to_string(T v)
     {
@@ -124,7 +124,7 @@ inline namespace Strings
             if (!f)
                 res += ' ';
             f = 0;
-            res += Strings::to_string(x);
+            res += Stringify::to_string(x);
         }
         return res;
     }
@@ -138,7 +138,7 @@ inline namespace Strings
             if (!f)
                 res += ',';
             f = 0;
-            res += " (" + Strings::to_string(x.ff) + "->" + Strings::to_string(x.ss) + ")";
+            res += " (" + Stringify::to_string(x.ff) + "->" + Stringify::to_string(x.ss) + ")";
         }
         return res;
     }
@@ -152,7 +152,7 @@ inline namespace Strings
             if (!f)
                 res += ',';
             f = 0;
-            res += "(" + Strings::to_string(x.ff) + "->" + Strings::to_string(x.ss) + ")";
+            res += "(" + Stringify::to_string(x.ff) + "->" + Stringify::to_string(x.ss) + ")";
         }
         return res;
     }
@@ -188,7 +188,7 @@ inline namespace IO
     template <class A, size_t S>
     void read(array<A, S> &x) { each(a, x) read(a); }
     template <class A>
-    void write(A x) { cout << Strings::to_string(x); }
+    void write(A x) { cout << Stringify::to_string(x); }
     template <class H, class... T>
     void write(const H &h, const T &...t)
     {
