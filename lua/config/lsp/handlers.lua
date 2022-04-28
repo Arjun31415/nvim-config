@@ -72,8 +72,7 @@ local function lsp_keymaps(bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "gr",
                                 "<cmd>lua vim.lsp.buf.references()<CR>", opts)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca",
-                                [[<cmd>lua require('telescope.builtin').lsp_code_actions(require('telescope.themes').get_cursor())<CR>]],
-                                opts)
+                                [[<cmd>lua vim.lsp.buf.code_action()<CR>]], opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>fit", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "[d",
                                 '<cmd>lua vim.diagnostic.goto_prev({ border = "rounded" })<CR>',

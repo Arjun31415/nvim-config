@@ -164,11 +164,14 @@ require("packer").startup({
 
         use {
             'nvim-telescope/telescope.nvim',
-            cmd = 'Telescope',
-            requires = {{'nvim-lua/plenary.nvim'}}
+            -- cmd = 'Telescope',
+            requires = {{'nvim-lua/plenary.nvim'}},
+            config = [[require('config.telescope-nvim')]]
         }
+        use {'nvim-telescope/telescope-ui-select.nvim',after='telescope.nvim' }
         -- search emoji and other symbols
-        use {'nvim-telescope/telescope-symbols.nvim', after = 'telescope.nvim'}
+        use {'nvim-telescope/telescope-symbols.nvim', after = 'telescope.nvim', config = [[require('config.telescope-nvim')]]
+}
 
         -- Another similar plugin is command-t
         -- use 'wincent/command-t'
