@@ -165,13 +165,16 @@ require("packer").startup({
         use {
             'nvim-telescope/telescope.nvim',
             -- cmd = 'Telescope',
-            requires = {{'nvim-lua/plenary.nvim'}},
+            requires = {{'nvim-lua/plenary.nvim'}}
+            --            config = [[require('config.telescope-nvim')]]
+        }
+        use {
+            'nvim-telescope/telescope-ui-select.nvim',
+            after = 'telescope.nvim',
             config = [[require('config.telescope-nvim')]]
         }
-        use {'nvim-telescope/telescope-ui-select.nvim',after='telescope.nvim' }
         -- search emoji and other symbols
-        use {'nvim-telescope/telescope-symbols.nvim', after = 'telescope.nvim', config = [[require('config.telescope-nvim')]]
-}
+        use {'nvim-telescope/telescope-symbols.nvim', after = 'telescope.nvim'}
 
         -- Another similar plugin is command-t
         -- use 'wincent/command-t'
@@ -480,7 +483,7 @@ require("packer").startup({
     config = {
         max_jobs = 16,
         compile_path = packer_util.join_paths(vim.fn.stdpath('config'), 'lua',
-                                       'packer_compiled.lua'),
+                                              'packer_compiled.lua'),
         git = {default_url_format = plug_url_format}
     }
     -- Always load the vim-devicons as the very last one.
