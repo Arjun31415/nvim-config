@@ -50,17 +50,17 @@ require("packer").startup({
             -- event = "VimEnter",
             config = [[require('config.lspkind')]]
         })
-        use {'hrsh7th/cmp-nvim-lsp'}
-        use {'hrsh7th/cmp-buffer'}
-        use {'hrsh7th/cmp-path'}
-        use {'hrsh7th/cmp-cmdline'}
+        use {'hrsh7th/cmp-nvim-lsp', event ="VimEnter"}
+        use {'hrsh7th/cmp-buffer',event="VimEnter"}
+        use {'hrsh7th/cmp-path', event="VimEnter"}
+        use {'hrsh7th/cmp-cmdline', event="VimEnter"}
         use {
             'hrsh7th/nvim-cmp',
             branch = "main",
             config = [[require('config.nvim-cmp')]],
             event = "VimEnter"
         }
-        use {'quangnguyen30192/cmp-nvim-ultisnips'}
+        use {'quangnguyen30192/cmp-nvim-ultisnips', event="VimEnter"}
         use {"github/copilot.vim"}
         use {
             "zbirenbaum/copilot.lua",
