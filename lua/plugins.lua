@@ -50,17 +50,17 @@ require("packer").startup({
             -- event = "VimEnter",
             config = [[require('config.lspkind')]]
         })
-        use {'hrsh7th/cmp-nvim-lsp', event ="VimEnter"}
-        use {'hrsh7th/cmp-buffer',event="VimEnter"}
-        use {'hrsh7th/cmp-path', event="VimEnter"}
-        use {'hrsh7th/cmp-cmdline', event="VimEnter"}
+        use {'hrsh7th/cmp-nvim-lsp', event = "BufEnter"}
+        use {'hrsh7th/cmp-buffer', event = "BufEnter"}
+        use {'hrsh7th/cmp-path', event = "BufEnter"}
+        use {'hrsh7th/cmp-cmdline', event = "BufEnter"}
         use {
             'hrsh7th/nvim-cmp',
             branch = "main",
             config = [[require('config.nvim-cmp')]],
-            event = "VimEnter"
+            event = "BufEnter"
         }
-        use {'quangnguyen30192/cmp-nvim-ultisnips', event="VimEnter"}
+        use {'quangnguyen30192/cmp-nvim-ultisnips', event = "BufEnter"}
         use {"github/copilot.vim"}
         use {
             "zbirenbaum/copilot.lua",
@@ -75,11 +75,12 @@ require("packer").startup({
             run = './install.sh',
             requires = 'hrsh7th/nvim-cmp',
             config = [[require('config.nvim-cmp-tabnine')]],
-            event = "VimEnter"
+            event = "BufEnter"
         }
 
         use({
             'stsewd/spotify.nvim',
+            event = "BufEnter",
             run = ":UpdateRemotePlugins",
             config = [[require('config.nvim-spotify')]]
         })
@@ -189,7 +190,11 @@ require("packer").startup({
         -- use({"rakr/vim-one", opt = true})
         -- use({'folke/tokyonight.nvim'})
         -- use({"sainnhe/sonokai", opt = true})
-        use({'navarasu/onedark.nvim', config = [[require('config.onedark')]]})
+        -- use({'navarasu/onedark.nvim', config = [[require('config.onedark')]]})
+        use {
+            'olimorris/onedarkpro.nvim',
+            config = [[require('config.onedarkpro')]]
+        }
         -- use {'Arjun31415/zephyr-nvim'}
         -- use {'catppuccin/nvim', as = "catppuccin"}
 
