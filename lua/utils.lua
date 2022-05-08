@@ -1,8 +1,7 @@
 -- inspect something
 -- Taken from https://github.com/jamestthompson3/vimConfig/blob/eeef4a8eeb5a24938f8a0969a35f69c78643fb66/lua/tt/nvim_utils.lua#L106
-function inspect(item) print(vim.inspect(item)) end
-
 local M = {}
+function M.inspect(item) print(vim.inspect(item)) end
 
 function M.executable(name)
     if vim.fn.executable(name) > 0 then return true end
@@ -18,10 +17,8 @@ function M.may_create_dir()
     if res == 0 then vim.fn.mkdir(parent_dir, 'p') end
 end
 function M.map(mode, lhs, rhs, opts)
-    local options = { noremap = true }
-    if opts then
-        options = vim.tbl_extend("force", options, opts)
-    end
+    local options = {noremap = true}
+    if opts then options = vim.tbl_extend("force", options, opts) end
     vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 return M
