@@ -257,7 +257,12 @@ require("packer").startup({
         use({"honza/vim-snippets", after = 'ultisnips'})
 
         -- Automatic insertion and deletion of a pair of characters
-        use({"Raimondi/delimitMate", event = "InsertEnter"})
+        -- use({"Raimondi/delimitMate", event = "InsertEnter"})
+        use({
+            'windwp/nvim-autopairs',
+            event = 'BufEnter',
+            config = [[require('config.autopairs')]]
+        })
 
         -- Comment plugin
         use({"tpope/vim-commentary", event = "VimEnter"})
