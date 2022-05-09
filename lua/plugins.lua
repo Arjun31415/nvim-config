@@ -32,10 +32,15 @@ require("packer").startup({
         use {'nvim-lua/plenary.nvim'}
         use {'neovim/nvim-lspconfig'}
         use {'williamboman/nvim-lsp-installer'}
-        use {"folke/trouble.nvim", requires = "kyazdani42/nvim-web-devicons"}
+        use {
+            "folke/trouble.nvim",
+            requires = "kyazdani42/nvim-web-devicons",
+            event = 'BufEnter'
+        }
         use({
             'andweeb/presence.nvim',
-            config = [[require('config.discordPresence')]]
+            config = [[require('config.discordPresence')]],
+            event = 'BufEnter'
         })
         -- Highlight colors inline
         use({
@@ -45,9 +50,10 @@ require("packer").startup({
         })
         use({"tamago324/nlsp-settings.nvim"}) -- language server settings defined in json for jsonls
 
+        -- add vscode like symbols to neovim's lsp menu
         use({
             "onsails/lspkind-nvim",
-            -- event = "VimEnter",
+            -- event = "BufEnter",
             config = [[require('config.lspkind')]]
         })
         use {'hrsh7th/cmp-nvim-lsp', event = "BufEnter"}
