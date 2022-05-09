@@ -210,7 +210,15 @@ require("packer").startup({
         use({"APZelos/blamer.nvim", event = 'BufEnter'})
         -- Another similar plugin
         -- use 'airblade/vim-gitgutter'
-        use({'ldelossa/gh.nvim', event = 'BufEnter'})
+        use({
+            'ldelossa/gh.nvim',
+            event = 'InsertEnter',
+            requires = 'ldelossa/litee.nvim',
+            config = function()
+                require('litee.lib').setup()
+                require('litee.gh').setup()
+            end
+        })
         use {
             'nvim-lualine/lualine.nvim',
             event = 'VimEnter',
