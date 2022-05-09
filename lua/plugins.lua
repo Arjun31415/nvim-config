@@ -500,7 +500,11 @@ require("packer").startup({
         max_jobs = 16,
         compile_path = packer_util.join_paths(vim.fn.stdpath('config'), 'lua',
                                               'packer_compiled.lua'),
-        git = {default_url_format = plug_url_format}
+        git = {default_url_format = plug_url_format},
+        profile = {
+            enable = true,
+            threshold = 1 -- the amount in ms that a plugins load time must be over for it to be included in the profile
+        }
     }
     -- Always load the vim-devicons as the very last one.
 
