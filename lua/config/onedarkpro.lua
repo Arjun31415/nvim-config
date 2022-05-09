@@ -13,7 +13,7 @@ onedarkpro.setup({
             return config.light_theme
         end
     end,
-    -- colors = {}, -- Override default colors by specifying colors for 'onelight' or 'onedark' themes
+    colors = {onedark = {bg = '#27292d'}}, -- Override default colors by specifying colors for 'onelight' or 'onedark' themes
     -- hlgroups = {}, -- Override default highlight groups
     -- filetype_hlgroups = {}, -- Override default highlight groups for specific filetypes
     -- styles = {
@@ -32,7 +32,7 @@ onedarkpro.setup({
         cursorline = true, -- Use cursorline highlighting?
         transparency = false, -- Use a transparent background?
         terminal_colors = false, -- Use the theme's colors for Neovim's :terminal?
-        window_unfocussed_color = true -- When the window is out of focus, change the normal background?
+        window_unfocussed_color = false -- When the window is out of focus, change the normal background?
     }
 })
 require('onedarkpro').load()
