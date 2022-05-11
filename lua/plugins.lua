@@ -212,6 +212,7 @@ require("packer").startup({
         -- use 'airblade/vim-gitgutter'
         use({
             'ldelossa/gh.nvim',
+            branch="useability/https-remote-flag",
             event = 'InsertEnter',
             requires = 'ldelossa/litee.nvim',
             config = function()
