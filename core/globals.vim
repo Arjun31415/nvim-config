@@ -20,7 +20,7 @@ endif
 let g:mapleader = ','
 " Enable syntax highlighting for lua in vim
 let g:vimsyn_embed = 'l'
-" I speak english thank you
+" I speak english thank you.
 language en_IN.UTF-8
 " I dont want netrw i use nvim-tree.lua cause that is what cool ppl do
 let g:loaded_netrw       = 0
