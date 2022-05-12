@@ -26,7 +26,7 @@ language en_IN.UTF-8
 let g:loaded_netrw       = 0
 let g:loaded_netrwPlugin = 0
 
-" FIXME: Do i want this?
+" FIXME: Do I want this?
 " Do not load tohtml.vim
 let g:loaded_2html_plugin = 1
 " Do not load zipPlugin.vim, gzip.vim and tarPlugin.vim (all these plugins are
