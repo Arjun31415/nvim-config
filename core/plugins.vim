@@ -164,14 +164,15 @@ let g:better_escape_interval = 200
 let g:XkbSwitchEnabled = 1
 
 """""""""""""""""""""""""""""" neoformat settings """""""""""""""""""""""
+
 let g:neoformat_enabled_python = ['black', 'yapf']
 let g:neoformat_cpp_clangformat = {
       \ 'exe': 'clang-format',
-      \ 'args': ['--style="{IndentWidth: 4, BreakBeforeBraces: Allman} "']
+      \ 'args': ['--style="{IndentWidth: 4, BreakBeforeBraces: Allman, NamespaceIndentation: All, UseTab: Always,TabWidth: 4, AllowShortIfStatementsOnASingleLine: AllIfsAndElse } "']
       \ }
 let g:neoformat_c_clangformat = {
       \ 'exe': 'clang-format',
-        \ 'args': ['--style="{IndentWidth: 4, BreakBeforeBraces: Allman} "']
+        \ 'args': ['--style="{IndentWidth: 4, BreakBeforeBraces: Allman,AllowShortIfStatementsOnASingleLine: AllIfsAndElse,UseTab: Always,TabWidth: 4} "']
       \ }
 
 let g:neoformat_enabled_cpp = ['clangformat']

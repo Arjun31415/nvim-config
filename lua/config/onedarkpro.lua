@@ -6,14 +6,14 @@ onedarkpro.setup({
     dark_theme = "onedark_vivid", -- The default dark theme
     light_theme = "onelight", -- The default light theme
     -- Theme can be overwritten with 'onedark' or 'onelight' as a string
-    theme = function()
-        if vim.o.background == "dark" then
-            return config.dark_theme
-        else
-            return config.light_theme
-        end
-    end,
-    colors = {onedark = {bg = '#27292d'}}, -- Override default colors by specifying colors for 'onelight' or 'onedark' themes
+    --    theme = function()
+    --      if vim.o.background == "dark" then
+    --        return config.dark_theme
+    --  else
+    --    return config.light_theme
+    --      end
+    --  end,
+    colors = {onedark_vivid = {bg = '#27292d'}}, -- Override default colors by specifying colors for 'onelight' or 'onedark' themes
     -- hlgroups = {}, -- Override default highlight groups
     -- filetype_hlgroups = {}, -- Override default highlight groups for specific filetypes
     -- styles = {
@@ -30,8 +30,8 @@ onedarkpro.setup({
         underline = false, -- Use the themes opinionated underline styles?
         undercurl = false, -- Use the themes opinionated undercurl styles?
         cursorline = true, -- Use cursorline highlighting?
-        transparency = false, -- Use a transparent background?
-        terminal_colors = false, -- Use the theme's colors for Neovim's :terminal?
+        transparency = true, -- Use a transparent background?
+        terminal_colors = true, -- Use the theme's colors for Neovim's :terminal?
         window_unfocussed_color = false -- When the window is out of focus, change the normal background?
     }
 })
