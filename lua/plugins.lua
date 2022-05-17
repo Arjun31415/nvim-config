@@ -3,7 +3,6 @@ local fn = vim.fn
 
 vim.g.package_home = fn.stdpath("data") .. "/site/pack/packer/"
 local packer_install_dir = vim.g.package_home .. "opt/packer.nvim"
-
 local plug_url_format = ""
 -- if vim.g.is_linux then
 --   plug_url_format = "https://hub.fastgit.org/%s"
@@ -11,7 +10,6 @@ local plug_url_format = ""
 --   plug_url_format = "https://github.com/%s"
 -- end
 plug_url_format = "https://github.com/%s"
-
 local packer_repo = string.format(plug_url_format, 'wbthomason/packer.nvim')
 local install_cmd = string.format("10split |term git clone --depth=1 %s %s",
                                   packer_repo, packer_install_dir)
@@ -72,7 +70,9 @@ require("packer").startup({
             "zbirenbaum/copilot.lua",
             event = "InsertEnter",
             config = function()
-                vim.schedule(function() require("copilot") end)
+                vim.schedule(function()
+                    require("copilot").setup()
+                end)
             end
         }
         use {"zbirenbaum/copilot-cmp", after = {"copilot.lua", "nvim-cmp"}}
@@ -95,6 +95,10 @@ require("packer").startup({
             -- event = 'BufEnter',
             run = ":TSUpdate",
             config = [[require('config.treesitter')]]
+        })
+        use({
+            "zbirenbaum/neodim",
+            config = function() require("neodim").setup() end
         })
         use {
             'p00f/nvim-ts-rainbow',
@@ -522,3 +526,14 @@ local status, _ = pcall(require, 'packer_compiled')
 if not status then
     vim.notify("Error requiring packer_compiled.lua: run PackerSync to fix!")
 end
+vim.diagnostic.config({
+    virtual_text = {
+        prefix = ""
+        -- format = function(diagnostic)
+        --     return require("dim").ignore_vtext(diagnostic)
+        -- end
+    },
+    signs = true,
+    underline = false,
+    update_in_insert = false
+})

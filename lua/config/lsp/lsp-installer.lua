@@ -38,6 +38,8 @@ lspconfig.pyright.setup({on_attach = configFunctions.on_attach})
 lspconfig.pylsp.setup({on_attach = configFunctions.on_attach})
 -- tssserver
 lspconfig.tsserver.setup({on_attach = configFunctions.on_attach})
+-- eslint server
+lspconfig.eslint.setup({on_attach = configFunctions.on_attach})
 -- css server
 lspconfig.cssmodules_ls.setup({on_attach = configFunctions.on_attach})
 -- tailwindcss
