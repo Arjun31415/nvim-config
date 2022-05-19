@@ -2,8 +2,8 @@ local ok, lsp_installer = pcall(require, "nvim-lsp-installer")
 
 if not ok then return end
 local servers = {
-    "bashls", "asm_lsp", "pyright", "pylsp", "jsonls", "sumneko_lua", "clangd",
-    "tsserver", "cmake", "vimls", "tailwindcss", "cssmodules_ls"
+    "bashls", "asm_lsp", "pyright", "pylsp", "jsonls", "clangd", "tsserver",
+    "cmake", "vimls", "tailwindcss", "cssmodules_ls"
 }
 local configFunctions = require("config.lsp.handlers")
 local lspconfig = require("lspconfig")
@@ -46,7 +46,8 @@ lspconfig.cssmodules_ls.setup({on_attach = configFunctions.on_attach})
 lspconfig.tailwindcss.setup({on_attach = configFunctions.on_attach})
 -- vim
 lspconfig.vimls.setup({on_attach = configFunctions.on_attach})
-
+-- rust_analyzer
+lspconfig.rust_analyzer.setup({on_attach = configFunctions.on_attach})
 for _, name in pairs(servers) do
     local server_is_found, server = lsp_installer.get_server(name)
     if server_is_found and not server:is_installed() then
