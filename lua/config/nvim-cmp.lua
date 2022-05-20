@@ -3,7 +3,7 @@ local present, cmp = pcall(require, "cmp")
 if not present then return end
 
 local folderOfThisFile = (...):match("(.-)[^%.]+$") -- returns 'lib.foo.'
-local lspkind = require(folderOfThisFile .. 'lspkind')
+local lspkind = require('config.lspkind')
 require("config.lsp")
 cmp.setup({
     snippet = {expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end},

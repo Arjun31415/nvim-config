@@ -54,17 +54,19 @@ require("packer").startup({
             -- event = "BufEnter",
             config = [[require('config.lspkind')]]
         })
-        use {'hrsh7th/cmp-nvim-lsp', event = "BufEnter"}
-        use {'hrsh7th/cmp-buffer', event = "BufEnter"}
-        use {'hrsh7th/cmp-path', event = "BufEnter"}
-        use {'hrsh7th/cmp-cmdline', event = "BufEnter"}
+
         use {
             'hrsh7th/nvim-cmp',
             branch = "main",
             config = [[require('config.nvim-cmp')]],
             event = "BufEnter"
         }
-        use {'quangnguyen30192/cmp-nvim-ultisnips', event = "BufEnter"}
+
+        use {'hrsh7th/cmp-nvim-lsp', event = "BufEnter", after = "nvim-cmp"}
+        use {'hrsh7th/cmp-buffer', event = "BufEnter", after = "nvim-cmp"}
+        use {'hrsh7th/cmp-path', event = "BufEnter", after = "nvim-cmp"}
+        use {'hrsh7th/cmp-cmdline', event = "BufEnter", after = "nvim-cmp"}
+        use {'quangnguyen30192/cmp-nvim-ultisnips', after = "nvim-cmp"}
         use {"github/copilot.vim"}
         use {
             "zbirenbaum/copilot.lua",
@@ -81,7 +83,8 @@ require("packer").startup({
             run = './install.sh',
             requires = 'hrsh7th/nvim-cmp',
             config = [[require('config.nvim-cmp-tabnine')]],
-            event = "BufEnter"
+            event = "BufEnter",
+            after = "nvim-cmp"
         }
 
         use({
