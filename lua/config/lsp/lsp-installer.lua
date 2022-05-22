@@ -31,7 +31,12 @@ lspconfig.bashls.setup({on_attach = configFunctions.on_attach})
 -- cmake setup
 lspconfig.cmake.setup({on_attach = configFunctions.on_attach})
 -- clangd setup
-lspconfig.clangd.setup({on_attach = configFunctions.on_attach})
+local clangd_capabilities = configFunctions.capabilities;
+clangd_capabilities.offsetEncoding = "utf-8";
+lspconfig.clangd.setup({
+    capabilities = clangd_capabilities,
+    on_attach = configFunctions.on_attach
+})
 -- pyright setup
 lspconfig.pyright.setup({on_attach = configFunctions.on_attach})
 -- pylsp
