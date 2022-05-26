@@ -58,8 +58,8 @@ require("packer").startup({
         use {
             'hrsh7th/nvim-cmp',
             branch = "main",
-            config = [[require('config.nvim-cmp')]],
-            event = "BufEnter"
+            config = [[require('config.nvim-cmp')]]
+            -- event = "BufEnter"
         }
 
         use {'hrsh7th/cmp-nvim-lsp', event = "BufEnter", after = "nvim-cmp"}
@@ -86,6 +86,7 @@ require("packer").startup({
             event = "BufEnter",
             after = "nvim-cmp"
         }
+        use {'lervag/vimtex', ft = "tex", event = "BufEnter"}
 
         use({
             'stsewd/spotify.nvim',

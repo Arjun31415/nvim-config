@@ -53,6 +53,8 @@ lspconfig.tailwindcss.setup({on_attach = configFunctions.on_attach})
 lspconfig.vimls.setup({on_attach = configFunctions.on_attach})
 -- rust_analyzer
 lspconfig.rust_analyzer.setup({on_attach = configFunctions.on_attach})
+-- latex server
+lspconfig.texlab.setup({on_attach = configFunctions.on_attach})
 for _, name in pairs(servers) do
     local server_is_found, server = lsp_installer.get_server(name)
     if server_is_found and not server:is_installed() then
