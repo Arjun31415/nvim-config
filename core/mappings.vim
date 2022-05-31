@@ -178,6 +178,7 @@ inoremap <A-;> <ESC>miA;<ESC>`ii
 nnoremap y myy
 xnoremap y myy
 
+nnoremap <leader>ar :AngryReviewer<cr>
 augroup restore_after_yank
   autocmd!
   autocmd TextYankPost *  call s:restore_cursor()

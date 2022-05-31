@@ -86,7 +86,19 @@ require("packer").startup({
             event = "BufEnter",
             after = "nvim-cmp"
         }
-        use {'lervag/vimtex', ft = "tex", event = "BufEnter"}
+        use {
+            'lervag/vimtex',
+            ft = "tex",
+            event = "BufEnter",
+            config = function()
+                vim.g.tex_flavor = 'latex';
+                vim.g.vimtex_fold_enable = 0;
+                vim.g.vimtex_indent_enable = 1;
+                vim.g.vimtex_view_method = "zathura"
+                vim.g.vimtex_latexmk_continuous = 1;
+
+            end
+        }
 
         use({
             'stsewd/spotify.nvim',
@@ -128,6 +140,14 @@ require("packer").startup({
                 }
             end
         })
+        use {
+            'anufrievroman/vim-angry-reviewer',
+            ft = {"tex", "md"},
+            config = function()
+                vim.g.AngryReviewerEnglish = 'american'
+            end
+        }
+
         -- Python indent (follows the PEP8 style)
         use({"Vimjas/vim-python-pep8-indent", ft = {"python"}})
 
