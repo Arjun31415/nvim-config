@@ -4,11 +4,6 @@ local fn = vim.fn
 vim.g.package_home = fn.stdpath("data") .. "/site/pack/packer/"
 local packer_install_dir = vim.g.package_home .. "opt/packer.nvim"
 local plug_url_format = ""
--- if vim.g.is_linux then
---   plug_url_format = "https://hub.fastgit.org/%s"
--- else
---   plug_url_format = "https://github.com/%s"
--- end
 plug_url_format = "https://github.com/%s"
 local packer_repo = string.format(plug_url_format, 'wbthomason/packer.nvim')
 local install_cmd = string.format("10split |term git clone --depth=1 %s %s",
@@ -47,7 +42,22 @@ require("packer").startup({
             config = [[require('config.nvim-colorizer')]]
         })
         use({"tamago324/nlsp-settings.nvim"}) -- language server settings defined in json for jsonls
-
+        -- Refactoring plugins
+        use {
+            "ThePrimeagen/refactoring.nvim",
+            requires = {
+                {"nvim-lua/plenary.nvim"}, {"nvim-treesitter/nvim-treesitter"}
+            },
+            event = "BufEnter",
+            config = [[require('config.refactoring')]]
+        }
+        use {
+            'filipdutescu/renamer.nvim',
+            branch = 'master',
+            event = "BufEnter",
+            requires = {{'nvim-lua/plenary.nvim'}},
+            config = [[require('config.renamer')]]
+        }
         -- add vscode like symbols to neovim's lsp menu
         use({
             "onsails/lspkind-nvim",
