@@ -122,6 +122,7 @@ require("packer").startup({
             run = ":TSUpdate",
             config = [[require('config.treesitter')]]
         })
+        use {"SmiteshP/nvim-gps", requires = "nvim-treesitter/nvim-treesitter", config = [[require('config.nvim-gps')]]}
         use({
             "zbirenbaum/neodim",
             config = function() require("neodim").setup() end
@@ -522,7 +523,7 @@ require("packer").startup({
 
         -- show and trim trailing whitespaces
         use {'jdhao/whitespace.nvim', event = 'VimEnter'}
-        use {'kyazdani42/nvim-web-devicons', event = 'VimEnter'}
+        use {'kyazdani42/nvim-web-devicons'}
         use({"ryanoasis/vim-devicons"})
         use({
             "akinsho/bufferline.nvim",

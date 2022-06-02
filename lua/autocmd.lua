@@ -1,5 +1,6 @@
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
+local utils = require("utils")
 -- Do not use smart case in command line mode, extracted from
 -- https://vi.stackexchange.com/a/16511/15292.
 -- You can dynamically toggle smartcase using autocmds,
@@ -42,4 +43,19 @@ autocmd({"BufWritePre"}, {
     callback = require('utils').may_create_dir,
     group = _id
 })
+autocmd({
+    "CursorMoved", "BufWinEnter", "BufFilePost", "InsertEnter", "BufWritePost"
+}, {callback = function() require("config.winbar").get_winbar() end})
 
+-- autocmd({"CursorMoved", "BufWinEnter", "BufFilePost"}, {
+--     callback = function()
+--         local winbar_filetype_exclude = {
+--             "help", "startify", "dashboard", "neogitstatus", "packer",
+--             "NvimTree", "Trouble", "alpha", "lir", "Outline", "spectre_panel"
+--         }
+--         if utils.has_value(winbar_filetype_exclude, vim.bo.filetype) then
+--             vim.opt_local.winbar = nil
+--             return
+--         end
+--     end
+-- })
