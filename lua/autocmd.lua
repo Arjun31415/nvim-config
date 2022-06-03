@@ -46,16 +46,9 @@ autocmd({"BufWritePre"}, {
 autocmd({
     "CursorMoved", "BufWinEnter", "BufFilePost", "InsertEnter", "BufWritePost"
 }, {callback = function() require("config.winbar").get_winbar() end})
-
--- autocmd({"CursorMoved", "BufWinEnter", "BufFilePost"}, {
---     callback = function()
---         local winbar_filetype_exclude = {
---             "help", "startify", "dashboard", "neogitstatus", "packer",
---             "NvimTree", "Trouble", "alpha", "lir", "Outline", "spectre_panel"
---         }
---         if utils.has_value(winbar_filetype_exclude, vim.bo.filetype) then
---             vim.opt_local.winbar = nil
---             return
---         end
---     end
+-- FIXME: this does not work
+-- _id = augroup("open_neotree_after_session_load", {clear = true})
+-- autocmd({"SessionLoadPost"}, {
+--     group = _id,
+--     callback = function() vim.cmd([[Neotree position=left]]) end
 -- })
