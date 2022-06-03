@@ -852,10 +852,10 @@ time([[Defining lazy-load commands]], false)
 
 -- Keymap lazy-loads
 time([[Defining lazy-load keymaps]], true)
-vim.cmd [[nnoremap <silent> N <cmd>lua require("packer.load")({'nvim-hlslens'}, { keys = "N", prefix = "" }, _G.packer_plugins)<cr>]]
-vim.cmd [[nnoremap <silent> n <cmd>lua require("packer.load")({'nvim-hlslens'}, { keys = "n", prefix = "" }, _G.packer_plugins)<cr>]]
-vim.cmd [[nnoremap <silent> * <cmd>lua require("packer.load")({'nvim-hlslens'}, { keys = "*", prefix = "" }, _G.packer_plugins)<cr>]]
 vim.cmd [[nnoremap <silent> # <cmd>lua require("packer.load")({'nvim-hlslens'}, { keys = "#", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[nnoremap <silent> N <cmd>lua require("packer.load")({'nvim-hlslens'}, { keys = "N", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[nnoremap <silent> * <cmd>lua require("packer.load")({'nvim-hlslens'}, { keys = "*", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[nnoremap <silent> n <cmd>lua require("packer.load")({'nvim-hlslens'}, { keys = "n", prefix = "" }, _G.packer_plugins)<cr>]]
 time([[Defining lazy-load keymaps]], false)
 
 vim.cmd [[augroup packer_load_aucmds]]
@@ -874,8 +874,8 @@ time([[Defining lazy-load event autocommands]], true)
 vim.cmd [[au BufEnter * ++once lua require("packer.load")({'nvim-notify', 'cmp-buffer', 'nvim-ts-rainbow', 'cmp-cmdline', 'cmp-nvim-lsp', 'presence.nvim', 'cmp-path', 'refactoring.nvim', 'cmp-tabnine', 'renamer.nvim', 'trouble.nvim', 'hlargs.nvim', 'blamer.nvim', 'instant.nvim', 'vim-signify', 'nvim-autopairs', 'vimtex', 'nvim-colorizer.lua', 'spotify.nvim'}, { event = "BufEnter *" }, _G.packer_plugins)]]
 vim.cmd [[au InsertEnter * ++once lua require("packer.load")({'better-escape.vim', 'copilot.lua', 'ultisnips', 'gh.nvim'}, { event = "InsertEnter *" }, _G.packer_plugins)]]
 vim.cmd [[au FileType qf ++once lua require("packer.load")({'nvim-bqf'}, { event = "FileType qf" }, _G.packer_plugins)]]
-vim.cmd [[au User InGitRepo ++once lua require("packer.load")({'vim-fugitive'}, { event = "User InGitRepo" }, _G.packer_plugins)]]
 vim.cmd [[au VimEnter * ++once lua require("packer.load")({'alpha-nvim', 'bufferline.nvim', 'targets.vim', 'open-browser.vim', 'lualine.nvim', 'unicode.vim', 'AutoSave.nvim', 'indent-blankline.nvim', 'hop.nvim', 'vim-asterisk', 'vim-commentary', 'vim-repeat', 'vim-sandwich', 'vim-highlighturl', 'neoscroll.nvim', 'vim-indent-object', 'vim-swap', 'vim-matchup', 'which-key.nvim', 'whitespace.nvim'}, { event = "VimEnter *" }, _G.packer_plugins)]]
+vim.cmd [[au User InGitRepo ++once lua require("packer.load")({'vim-fugitive'}, { event = "User InGitRepo" }, _G.packer_plugins)]]
 time([[Defining lazy-load event autocommands]], false)
 vim.cmd("augroup END")
 vim.cmd [[augroup filetypedetect]]
