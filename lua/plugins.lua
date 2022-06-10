@@ -60,6 +60,7 @@ require("packer").startup({
         }
         -- add vscode like symbols to neovim's lsp menu
         use({
+
             "onsails/lspkind-nvim",
             -- event = "BufEnter",
             config = [[require('config.lspkind')]]
@@ -122,6 +123,7 @@ require("packer").startup({
             run = ":TSUpdate",
             config = [[require('config.treesitter')]]
         })
+        use {'fladson/vim-kitty', event = "BufEnter"}
         use {
             "SmiteshP/nvim-gps",
             requires = "nvim-treesitter/nvim-treesitter",
@@ -214,7 +216,8 @@ require("packer").startup({
 
         use {
             'nvim-telescope/telescope.nvim',
-            -- cmd = 'Telescope',
+            cmd = 'Telescope',
+            opt = true,
             requires = {{'nvim-lua/plenary.nvim'}}
             --            config = [[require('config.telescope-nvim')]]
         }
@@ -495,7 +498,7 @@ require("packer").startup({
         end
 
         -- Session management plugin
-                use {
+        use {
             'Shatur/neovim-session-manager',
             requires = {'nvim-lua/plenary.nvim'},
             config = [[require('config.session-manager')]]
