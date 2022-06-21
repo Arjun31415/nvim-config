@@ -1,8 +1,6 @@
 -- see https://stackoverflow.com/a/9146653
 local present, cmp = pcall(require, "cmp")
 if not present then return end
-
-local folderOfThisFile = (...):match("(.-)[^%.]+$") -- returns 'lib.foo.'
 local lspkind = require('config.lspkind')
 require("config.lsp")
 cmp.setup({

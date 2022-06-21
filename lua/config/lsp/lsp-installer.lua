@@ -2,7 +2,7 @@ local ok, lsp_installer = pcall(require, "nvim-lsp-installer")
 
 if not ok then return end
 local servers = {
-    "bashls", "asm_lsp", "pyright", "pylsp", "jsonls", "clangd", "tsserver",
+    "bashls", "asm_lsp", "pyright", "jsonls", "clangd", "tsserver",
     "cmake", "vimls", "tailwindcss", "cssmodules_ls"
 }
 local configFunctions = require("config.lsp.handlers")
@@ -40,7 +40,7 @@ lspconfig.clangd.setup({
 -- pyright setup
 lspconfig.pyright.setup({on_attach = configFunctions.on_attach})
 -- pylsp
-lspconfig.pylsp.setup({on_attach = configFunctions.on_attach})
+-- lspconfig.pylsp.setup({on_attach = configFunctions.on_attach})
 -- tssserver
 lspconfig.tsserver.setup({on_attach = configFunctions.on_attach})
 -- eslint server
