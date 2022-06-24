@@ -397,7 +397,12 @@ require("packer").startup({
 
         -- Another markdown plugin
         use({"plasticboy/vim-markdown", ft = {"markdown"}})
-        use({'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'})
+        use({
+            "iamcco/markdown-preview.nvim",
+            run = "cd app && yarn install",
+            setup = function() vim.g.mkdp_filetypes = {"markdown"} end,
+            ft = {"markdown"}
+        })
         -- Faster footnote generation
         use({"vim-pandoc/vim-markdownfootnotes", ft = {"markdown"}})
 
@@ -406,15 +411,6 @@ require("packer").startup({
 
         -- Markdown JSON header highlight plugin
         use({"elzr/vim-json", ft = {"json", "markdown"}})
-
-        -- Markdown previewing (only for Mac and Windows)
-        if vim.g.is_win or vim.g.is_mac then
-            use({
-                "iamcco/markdown-preview.nvim",
-                run = function() fn["mkdp#util#install"]() end,
-                ft = {"markdown"}
-            })
-        end
 
         use({
             'folke/zen-mode.nvim',
