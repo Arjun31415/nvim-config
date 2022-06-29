@@ -25,6 +25,8 @@ require("packer").startup({
         use {'nvim-lua/plenary.nvim'}
         use {'neovim/nvim-lspconfig'}
         use {'williamboman/nvim-lsp-installer'}
+        -- Lisp parinf 
+        use {'eraserhd/parinfer-rust', run = "cd app && cargo build --release"}
         use {
             "folke/trouble.nvim",
             requires = "kyazdani42/nvim-web-devicons",
