@@ -1,0 +1,2 @@
+require('hlargs').setup()
+
