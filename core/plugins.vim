@@ -11,7 +11,7 @@ call utils#Cabbrev('pi', 'PackerInstall')
 call utils#Cabbrev('pud', 'PackerUpdate')
 call utils#Cabbrev('pc', 'PackerClean')
 call utils#Cabbrev('ps', 'PackerSync')
-set guifont=FiraCode_Nerd_Font:h12
+set guifont=VictorMono_Nerd_Font:h14
 """""""""""""""""""""""""UltiSnips settings"""""""""""""""""""
 " Trigger configuration. Do not use <tab> if you use YouCompleteMe
 " let g:UltiSnipsExpandTrigger='<c-j>'

@@ -25,8 +25,16 @@ require("packer").startup({
         use {'nvim-lua/plenary.nvim'}
         use {'neovim/nvim-lspconfig'}
         use {'williamboman/nvim-lsp-installer'}
-        -- Lisp parinf 
-        use {'eraserhd/parinfer-rust', run = "cd app && cargo build --release"}
+        -- use({
+        --     "glepnir/lspsaga.nvim",
+        --     branch = "main",
+        --     config = function()
+        --         local saga = require("lspsaga")
+        --         saga.init_lsp_saga({
+        --             -- your configuration
+        --         })
+        --     end
+        -- })
         use {
             "folke/trouble.nvim",
             requires = "kyazdani42/nvim-web-devicons",
@@ -125,11 +133,12 @@ require("packer").startup({
             run = ":TSUpdate",
             config = [[require('config.treesitter')]]
         })
+        use {'elkowar/yuck.vim', ft = 'yuck'}
         use {'fladson/vim-kitty', event = "BufEnter"}
         use {
-            "SmiteshP/nvim-gps",
-            requires = "nvim-treesitter/nvim-treesitter",
-            config = [[require('config.nvim-gps')]]
+            "SmiteshP/nvim-navic",
+            requires = "neovim/nvim-lspconfig"
+            -- config = [[require('config.nvim-navic')]]
         }
         use({
             "zbirenbaum/neodim",
@@ -407,6 +416,8 @@ require("packer").startup({
         })
         -- Faster footnote generation
         use({"vim-pandoc/vim-markdownfootnotes", ft = {"markdown"}})
+        use {'vim-pandoc/vim-pandoc'}
+        use {'vim-pandoc/vim-pandoc-syntax'}
 
         -- Vim tabular plugin for manipulate tabular, required by markdown plugins
         use({"godlygeek/tabular", cmd = {"Tabularize"}})

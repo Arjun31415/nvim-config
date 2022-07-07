@@ -34,13 +34,13 @@ if vim.fn.has "mac" == 1 or vim.g.use_nerd_icons then
             Constant = "",
             Struct = "",
             Event = "",
-            Operator = "",
+            Operator = " ",
             TypeParameter = ""
         },
         type = {
             Array = "",
-            Number = "",
-            String = "",
+            Number = " ",
+            String = " ",
             Boolean = "蘒",
             Object = ""
         },

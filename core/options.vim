@@ -52,7 +52,7 @@ set expandtab       " expand tab to spaces so that tabs are spaces
 " Set matching pairs of characters and highlight matching brackets
 set matchpairs+=<:>,「:」,『:』,【:】,“:”,‘:’,《:》
 
-" set number relativenumber  " Show line number and relative line number
+set number relativenumber  " Show line number and relative line number
 set number 
 " Ignore case in general, but become case-sensitive when uppercase is present
 set ignorecase smartcase

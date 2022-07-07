@@ -3,3 +3,4 @@ require 'utils'
 require 'autocmd'
 -- plugin installation
 require 'plugins'
+require 'config.neovide'

@@ -1,5 +1,5 @@
 local M = {}
-
+local navic_attach = require("config.lsp.settings.nvim-navic").navic_attach
 M.setup = function()
     local signs = {
         {name = "DiagnosticSignError", text = ""},
@@ -94,6 +94,7 @@ M.on_attach = function(client, bufnr)
     end
     lsp_keymaps(bufnr)
     lsp_highlight_document(client)
+    navic_attach(client, bufnr)
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
