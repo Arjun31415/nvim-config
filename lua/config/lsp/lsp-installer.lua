@@ -2,7 +2,7 @@ local ok, lsp_installer = pcall(require, "nvim-lsp-installer")
 
 if not ok then return end
 local servers = {
-    "bashls", "asm_lsp","pyright", "pylsp", "jsonls", "clangd", "tsserver",
+    "bashls", "asm_lsp", "pyright", "pylsp", "jsonls", "clangd", "tsserver",
     "cmake", "vimls", "tailwindcss", "cssmodules_ls"
 }
 local configFunctions = require("config.lsp.handlers")
@@ -45,6 +45,10 @@ lspconfig.pylsp.setup({on_attach = configFunctions.on_attach})
 lspconfig.tsserver.setup({on_attach = configFunctions.on_attach})
 -- eslint server
 lspconfig.eslint.setup({on_attach = configFunctions.on_attach})
+-- html server
+lspconfig.html.setup({on_attach = configFunctions.on_attach})
+-- svelete config
+lspconfig.svelte.setup({on_attach = configFunctions.on_attach})
 -- css server
 lspconfig.cssmodules_ls.setup({on_attach = configFunctions.on_attach})
 -- tailwindcss

@@ -89,12 +89,15 @@ local function lsp_keymaps(bufnr)
 end
 
 M.on_attach = function(client, bufnr)
+    vim.pretty_print(client.server_capabilities)
     if client.name == "tsserver" then
         client.server_capabilities.documentHighlightProvider = false
     end
     lsp_keymaps(bufnr)
     lsp_highlight_document(client)
-    navic_attach(client, bufnr)
+    if client.server_capabilities.documentSymbolProvider and client.name ~= "html" then
+        navic_attach(client, bufnr)
+    end
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
