@@ -23,7 +23,8 @@ local jsonls_opts = require("config.lsp.settings.jsonls")
 opts = vim.tbl_deep_extend("force", jsonls_opts, opts)
 opts.on_attach = configFunctions.on_attach
 lspconfig.jsonls.setup(opts)
-
+-- r language server
+lspconfig.r_language_server.setup({on_attach = configFunctions.on_attach})
 -- asm_lsp
 lspconfig.asm_lsp.setup({on_attach = configFunctions.on_attach})
 -- bash
