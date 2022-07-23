@@ -16,6 +16,7 @@ M.setup = function()
     local config = {
         -- disable virtual text
         virtual_text = false,
+        virtual_lines = true,
         -- show signs
         signs = {active = signs},
         update_in_insert = false,
@@ -95,9 +96,8 @@ M.on_attach = function(client, bufnr)
     end
     lsp_keymaps(bufnr)
     lsp_highlight_document(client)
-    if client.server_capabilities.documentSymbolProvider and client.name ~= "html" then
-        navic_attach(client, bufnr)
-    end
+    if client.server_capabilities.documentSymbolProvider and client.name ~=
+        "html" then navic_attach(client, bufnr) end
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()

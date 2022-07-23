@@ -47,9 +47,8 @@ require("packer").startup({
         })
         -- Highlight colors inline
         use({
-            'norcalli/nvim-colorizer.lua',
-            event = "BufEnter",
-            config = [[require('config.nvim-colorizer')]]
+            "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+            config = function() require("lsp_lines").setup() end
         })
         use({"tamago324/nlsp-settings.nvim"}) -- language server settings defined in json for jsonls
         -- Refactoring plugins
@@ -581,7 +580,7 @@ local status, _ = pcall(require, 'packer_compiled')
 if not status then
     vim.notify("Error requiring packer_compiled.lua: run PackerSync to fix!")
 end
-vim.diagnostic.config({
+--[[ vim.diagnostic.config({
     virtual_text = {
         prefix = ""
         -- format = function(diagnostic)
@@ -591,4 +590,4 @@ vim.diagnostic.config({
     signs = true,
     underline = false,
     update_in_insert = false
-})
+}) ]]
