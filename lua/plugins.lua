@@ -336,8 +336,8 @@ require("packer").startup({
         })
 
         -- Comment plugin
-        use({"tpope/vim-commentary", event = "VimEnter"})
-
+        -- use({"tpope/vim-commentary", event = "VimEnter"})
+        use {'b3nj5m1n/kommentary', event = "VimEnter"}
         -- Multiple cursor plugin like Sublime Text?
         -- use 'mg979/vim-visual-multi'
 
@@ -518,12 +518,12 @@ require("packer").startup({
         end
 
         -- The missing auto-completion for cmdline!
-        use({
-            "gelguy/wilder.nvim"
-            -- opt = true,
-            -- setup = [[vim.cmd('packadd wilder.nvim')]],
-            --            config = [[require('config.wilder')]]
-        })
+        -- use({
+        --     "gelguy/wilder.nvim"
+        --     -- opt = true,
+        --     -- setup = [[vim.cmd('packadd wilder.nvim')]],
+        --     --            config = [[require('config.wilder')]]
+        -- })
 
         -- showing keybindings
         use {
