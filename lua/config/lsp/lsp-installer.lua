@@ -1,13 +1,30 @@
-local ok, lsp_installer = pcall(require, "nvim-lsp-installer")
+local ok, lsp_installer = pcall(require, "mason")
+local ok2, mason_lspconfig = pcall(require, "mason-lspconfig")
 
-if not ok then return end
+if not ok or not ok2 then return end
 local servers = {
     "bashls", "asm_lsp", "pyright", "pylsp", "jsonls", "clangd", "tsserver",
     "cmake", "vimls", "tailwindcss", "cssmodules_ls"
 }
+mason_lspconfig.setup({ensure_installed = servers})
+local lsp_server_names = {
+    "bash-language-server", "asm-lsp", "pyright", "python-lsp-server",
+    "json-lsp", "clangd", "typescript-language-server", "cmake-language-server",
+    "vim-language-server", "tailwindcss-language-server",
+    "cssmodules-language-server"
+}
+
 local configFunctions = require("config.lsp.handlers")
 local lspconfig = require("lspconfig")
-lsp_installer.setup({})
+lsp_installer.setup({
+    ui = {
+        icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗"
+        }
+    }
+})
 
 -- lua language server setup
 local sumneko_opts = require("config.lsp.settings.sumneko_lua")
@@ -60,10 +77,9 @@ lspconfig.vimls.setup({on_attach = configFunctions.on_attach})
 lspconfig.rust_analyzer.setup({on_attach = configFunctions.on_attach})
 -- latex server
 lspconfig.texlab.setup({on_attach = configFunctions.on_attach})
-for _, name in pairs(servers) do
-    local server_is_found, server = lsp_installer.get_server(name)
-    if server_is_found and not server:is_installed() then
-        print("Installing " .. name)
-        server:install()
+vim.api.nvim_create_user_command("MasonInstallAll", function()
+    for _, name in pairs(lsp_server_names) do
+        vim.cmd("MasonInstall " .. name)
     end
-end
+
+end, {})
