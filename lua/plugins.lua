@@ -24,17 +24,9 @@ require("packer").startup({
         use 'wbthomason/packer.nvim'
         use {'nvim-lua/plenary.nvim'}
         use {'neovim/nvim-lspconfig'}
-        use {'williamboman/nvim-lsp-installer'}
-        -- use({
-        --     "glepnir/lspsaga.nvim",
-        --     branch = "main",
-        --     config = function()
-        --         local saga = require("lspsaga")
-        --         saga.init_lsp_saga({
-        --             -- your configuration
-        --         })
-        --     end
-        -- })
+        -- use {'williamboman/nvim-lsp-installer'}
+        use {"williamboman/mason.nvim"}
+        use {"williamboman/mason-lspconfig.nvim"}
         use {
             "folke/trouble.nvim",
             requires = "kyazdani42/nvim-web-devicons",
