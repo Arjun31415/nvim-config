@@ -90,7 +90,7 @@ local function lsp_keymaps(bufnr)
 end
 
 M.on_attach = function(client, bufnr)
-    vim.pretty_print(client.server_capabilities)
+    -- vim.pretty_print(client.server_capabilities)
     if client.name == "tsserver" then
         client.server_capabilities.documentHighlightProvider = false
     end
