@@ -370,97 +370,23 @@ endif
 "     autocmd BufEnter *.txt setlocal filetype=markdown laststatus=0 nonumber noshowcmd noruler showtabline=1
 "   augroup END
 " endif
-let g:firenvim_config = { 
-    \ 'globalSettings': {
-        \ 'alt': 'all',
-    \  },
-    \ 'localSettings': {
-        \ '.*': {
-            \ 'cmdline': 'neovim',
-            \ 'content': 'text',
-            \ 'priority': 0,
-            \ 'selector': 'textarea',
-            \ 'takeover': 'never',
-        \ },
-    \ }
-\ }
-let fc = g:firenvim_config['localSettings']
-"  let fc['https://mail.google.com/*'] = { 'takeover': 'never', 'priority': 1 }
-"  let fc['https://web.whatsapp.com/*'] = { 'takeover': 'never', 'priority':1}
-let fc['https://github.com/*'] = { 'takeover': 'always', 'priority':1}
+" let g:firenvim_config = { 
+"     \ 'globalSettings': {
+"         \ 'alt': 'all',
+"     \  },
+"     \ 'localSettings': {
+"         \ '.*': {
+"             \ 'cmdline': 'neovim',
+"             \ 'content': 'text',
+"             \ 'priority': 0,
+"             \ 'selector': 'textarea',
+"             \ 'takeover': 'never',
+"         \ },
+"     \ }
+" \ }
+" let fc = g:firenvim_config['localSettings']
+" "  let fc['https://mail.google.com/*'] = { 'takeover': 'never', 'priority': 1 }
+" "  let fc['https://web.whatsapp.com/*'] = { 'takeover': 'never', 'priority':1}
+" let fc['https://github.com/*'] = { 'takeover': 'always', 'priority':1}
 
 au BufEnter github.com_*.txt set filetype=markdown
-
-""""""""""""""""""""""""""""""nvim-gdb settings""""""""""""""""""""""""""""""
-nnoremap <leader>dp :<C-U>GdbStartPDB python -m pdb %<CR>
-
-""""""""""""""""""""""""""""""wilder.nvim settings""""""""""""""""""""""""""""""
-augroup wilder_init
-  autocmd!
-  " CursorHold is suggested here: https://github.com/gelguy/wilder.nvim/issues/89#issuecomment-934465957.
-  " autocmd CursorHold * ++once call s:wilder_init()
-  autocmd CmdlineEnter * ++once call s:wilder_init()
-augroup END
-
-function! s:wilder_init() abort
-  try
-    call wilder#setup({
-          \ 'modes': [':', '/', '?'],
-          \ })
-
-    call wilder#set_option('pipeline', [
-          \   wilder#branch(
-          \     wilder#cmdline_pipeline({
-          \       'language': 'python',
-          \       'fuzzy': 1,
-          \       'sorter': wilder#python_difflib_sorter(),
-          \       'debounce': 30,
-          \     }),
-          \     wilder#python_search_pipeline({
-          \       'pattern': wilder#python_fuzzy_pattern(),
-          \       'sorter': wilder#python_difflib_sorter(),
-          \       'engine': 're',
-          \       'debounce': 30,
-          \     }),
-          \   ),
-          \ ])
-
-    let l:hl = wilder#make_hl('WilderAccent', 'Pmenu', [{}, {}, {'foreground': '#f4468f'}])
-    " let s:scale = ['#f4468f', '#fd4a85', '#ff507a', '#ff566f', '#ff5e63',
-    "   \ '#ff6658', '#ff704e', '#ff7a45', '#ff843d', '#ff9036',
-    "   \ '#f89b31', '#efa72f', '#e6b32e', '#dcbe30', '#d2c934',
-    "   \ '#c8d43a', '#bfde43', '#b6e84e', '#aff05b']
-    " let s:gradient = map(s:scale, {i, fg -> wilder#make_hl(
-    "   \ 'WilderGradient' . i, 'Pmenu', [{}, {}, {'foreground': fg}]
-    "   \ )})
-    call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
-          \ 'border': 'rounded',
-          \ 'highlighter': wilder#basic_highlighter(),
-          \ 'max_height': 15,
-          \ 'highlights': {
-          \   'accent': l:hl,
-          \ },
-          \ 'left': [' ', wilder#popupmenu_devicons(),],
-          \ 'right': [' ', wilder#popupmenu_scrollbar(),],
-          \ 'apply_incsearch_fix': 0,
-          \ })))
-     " call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
-     "      \ 'border': 'rounded',
-     "               \ 'max_height': 15,
-     "      \ 'highlights': {
-     "      \   'gradient': s:gradient,
-     "      \ },
-     "  \ 'highlighter': wilder#highlighter_with_gradient([
-     "      \    wilder#basic_highlighter(),
-     "      \ ]),
-
-     "      \ 'left': [' ', wilder#popupmenu_devicons(),],
-     "      \ 'right': [' ', wilder#popupmenu_scrollbar(),],
-     "      \ 'apply_incsearch_fix': 0,
-     "      \ })))
-
-  catch /^Vim\%((\a\+)\)\=:E117/
-    echohl Error |echomsg "Wilder.nvim missing: run :PackerSync to fix."|echohl None
-  endtry
-endfunction
-
