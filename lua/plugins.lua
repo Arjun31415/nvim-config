@@ -16,7 +16,6 @@ if fn.glob(packer_install_dir) == "" then
 end
 
 local packer_util = require('packer.util')
-
 require("packer").startup({
     function(use)
         -- it is recommened to put impatient.nvim before any other plugins
@@ -32,12 +31,21 @@ require("packer").startup({
             requires = "kyazdani42/nvim-web-devicons",
             event = 'BufEnter'
         }
+        use {
+            'mfussenegger/nvim-dap',
+            event = "VimEnter",
+            config = [[require('config.Dap')]]
+        }
+        use {
+            'rrethy/vim-hexokinase',
+            run = "make hexokinase",
+            event = 'VimEnter'
+        }
         use({
             'andweeb/presence.nvim',
             config = [[require('config.discordPresence')]],
             event = 'BufEnter'
         })
-        -- Highlight colors inline
         use({
             "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
             config = function() require("lsp_lines").setup() end
@@ -159,14 +167,6 @@ require("packer").startup({
                 }
             end
         })
-        use {
-            'anufrievroman/vim-angry-reviewer',
-            ft = {"tex", "md"},
-            config = function()
-                vim.g.AngryReviewerEnglish = 'american'
-            end
-        }
-
         -- Python indent (follows the PEP8 style)
         use({"Vimjas/vim-python-pep8-indent", ft = {"python"}})
 
@@ -258,7 +258,7 @@ require("packer").startup({
         use({"APZelos/blamer.nvim", event = 'BufEnter'})
         -- Another similar plugin
         -- use 'airblade/vim-gitgutter'
-        use({
+        --[[ use({
             'ldelossa/gh.nvim',
             event = 'InsertEnter',
             requires = 'ldelossa/litee.nvim',
@@ -266,7 +266,7 @@ require("packer").startup({
                 require('litee.lib').setup()
                 require('litee.gh').setup()
             end
-        })
+        }) ]]
         use {
             'nvim-lualine/lualine.nvim',
             event = 'VimEnter',
@@ -327,7 +327,6 @@ require("packer").startup({
         })
 
         -- Comment plugin
-        -- use({"tpope/vim-commentary", event = "VimEnter"})
         use {'b3nj5m1n/kommentary', event = "VimEnter"}
         -- Multiple cursor plugin like Sublime Text?
         -- use 'mg979/vim-visual-multi'
@@ -407,8 +406,8 @@ require("packer").startup({
         })
         -- Faster footnote generation
         use({"vim-pandoc/vim-markdownfootnotes", ft = {"markdown"}})
-        use {'vim-pandoc/vim-pandoc'}
-        use {'vim-pandoc/vim-pandoc-syntax'}
+        -- use {'vim-pandoc/vim-pandoc'}
+        -- use {'vim-pandoc/vim-pandoc-syntax'}
 
         -- Vim tabular plugin for manipulate tabular, required by markdown plugins
         use({"godlygeek/tabular", cmd = {"Tabularize"}})
@@ -416,15 +415,11 @@ require("packer").startup({
         -- Markdown JSON header highlight plugin
         use({"elzr/vim-json", ft = {"json", "markdown"}})
 
-        use({
-            'folke/zen-mode.nvim',
-            cmd = 'ZenMode',
-            config = [[require('config.zen-mode')]]
-        })
-
-        if vim.g.is_mac then
-            use({"rhysd/vim-grammarous", ft = {"markdown"}})
-        end
+        -- use({
+        -- 'folke/zen-mode.nvim',
+        -- cmd = 'ZenMode',
+        -- config = [[require('config.zen-mode')]]
+        -- })
 
         use({"chrisbra/unicode.vim", event = "VimEnter"})
 
@@ -480,23 +475,12 @@ require("packer").startup({
         use({"cespare/vim-toml", ft = {"toml"}, branch = "main"})
 
         -- Edit text area in browser using nvim
-        use({
-            "glacambre/firenvim",
-            run = function() fn["firenvim#install"](0) end,
-            opt = true,
-            setup = [[vim.cmd('packadd firenvim')]]
-        })
-
-        -- Debugger plugin
-        if vim.g.is_win or vim.g.is_linux then
-            use({
-                "sakhnik/nvim-gdb",
-                run = {"bash install.sh"}
-                -- opt = true,
-                -- setup = [[vim.cmd('packadd nvim-gdb')]]
-            })
-        end
-
+        -- use({
+        -- "glacambre/firenvim",
+        -- run = function() fn["firenvim#install"](0) end,
+        -- opt = true,
+        -- setup = [[vim.cmd('packadd firenvim')]]
+        -- })
         -- Session management plugin
         use {
             'Shatur/neovim-session-manager',
@@ -507,14 +491,6 @@ require("packer").startup({
         if vim.g.is_linux then
             use({"ojroques/vim-oscyank", cmd = {'OSCYank', 'OSCYankReg'}})
         end
-
-        -- The missing auto-completion for cmdline!
-        -- use({
-        --     "gelguy/wilder.nvim"
-        --     -- opt = true,
-        --     -- setup = [[vim.cmd('packadd wilder.nvim')]],
-        --     --            config = [[require('config.wilder')]]
-        -- })
 
         -- showing keybindings
         use {
