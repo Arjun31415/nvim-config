@@ -38,8 +38,9 @@ require("packer").startup({
         }
         use {
             'rrethy/vim-hexokinase',
-            run = "make hexokinase",
+            run = "cd ~/.local/share/nvim/site/pack/packer/start/vim-hexokinase && make hexokinase",
             event = 'VimEnter'
+
         }
         use({
             'andweeb/presence.nvim',
@@ -333,7 +334,7 @@ require("packer").startup({
 
         -- Autosave files on certain events
         use({
-            "Pocco81/AutoSave.nvim",
+            "Pocco81/auto-save.nvim",
             event = "VimEnter",
             config = function()
                 vim.defer_fn(function()
