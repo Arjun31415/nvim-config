@@ -390,3 +390,5 @@ endif
 " let fc['https://github.com/*'] = { 'takeover': 'always', 'priority':1}
 
 au BufEnter github.com_*.txt set filetype=markdown
+
+let g:Hexokinase_highlighters = ['backgroundfull']
