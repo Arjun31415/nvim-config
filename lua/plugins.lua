@@ -23,6 +23,7 @@ require("packer").startup({
         use 'wbthomason/packer.nvim'
         use {'nvim-lua/plenary.nvim'}
         use {'neovim/nvim-lspconfig'}
+        use { 'simrat39/rust-tools.nvim' }
         -- use {'williamboman/nvim-lsp-installer'}
         use {"williamboman/mason.nvim"}
         use {"williamboman/mason-lspconfig.nvim"}

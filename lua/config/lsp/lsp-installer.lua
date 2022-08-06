@@ -11,7 +11,7 @@ local lsp_server_names = {
     "bash-language-server", "asm-lsp", "pyright", "python-lsp-server",
     "json-lsp", "clangd", "typescript-language-server", "cmake-language-server",
     "vim-language-server", "tailwindcss-language-server",
-    "cssmodules-language-server"
+    "cssmodules-language-server", "rust_analyzer"
 }
 
 local configFunctions = require("config.lsp.handlers")
@@ -74,7 +74,8 @@ lspconfig.tailwindcss.setup({on_attach = configFunctions.on_attach})
 -- vim
 lspconfig.vimls.setup({on_attach = configFunctions.on_attach})
 -- rust_analyzer
-lspconfig.rust_analyzer.setup({on_attach = configFunctions.on_attach})
+require("config.lsp.settings.rust")
+-- lspconfig.rust_analyzer.setup({on_attach = configFunctions.on_attach})
 -- latex server
 lspconfig.texlab.setup({on_attach = configFunctions.on_attach})
 vim.api.nvim_create_user_command("MasonInstallAll", function()
