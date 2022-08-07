@@ -39,7 +39,7 @@ require("packer").startup({
         }
         use {
             'rrethy/vim-hexokinase',
-            run = "cd ~/.local/share/nvim/site/pack/packer/start/vim-hexokinase && make hexokinase",
+            run = "cd ~/.local/share/nvim/site/pack/packer/opt/vim-hexokinase && make hexokinase",
             event = 'VimEnter'
 
         }
