@@ -23,7 +23,7 @@ require("packer").startup({
         use 'wbthomason/packer.nvim'
         use {'nvim-lua/plenary.nvim'}
         use {'neovim/nvim-lspconfig'}
-        use { 'simrat39/rust-tools.nvim' }
+        use {'simrat39/rust-tools.nvim'}
         -- use {'williamboman/nvim-lsp-installer'}
         use {"williamboman/mason.nvim"}
         use {"williamboman/mason-lspconfig.nvim"}
@@ -247,10 +247,11 @@ require("packer").startup({
         -- use({'folke/tokyonight.nvim'})
         -- use({"sainnhe/sonokai", opt = true})
         -- use({'navarasu/onedark.nvim', config = [[require('config.onedark')]]})
-        use {
-            'olimorris/onedarkpro.nvim',
-            config = [[require('config.onedarkpro')]]
-        }
+        -- use {
+        --  'olimorris/onedarkpro.nvim',
+        -- config = [[require('config.onedarkpro')]]
+        -- }
+        use {'sainnhe/edge', config=[[require('config.edge-theme')]]}
         -- use {'Arjun31415/zephyr-nvim'}
         -- use {'catppuccin/nvim', as = "catppuccin"}
 
