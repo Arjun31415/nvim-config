@@ -24,7 +24,6 @@ require("packer").startup({
         use {'nvim-lua/plenary.nvim'}
         use {'neovim/nvim-lspconfig'}
         use {'simrat39/rust-tools.nvim'}
-        -- use {'williamboman/nvim-lsp-installer'}
         use {"williamboman/mason.nvim"}
         use {"williamboman/mason-lspconfig.nvim"}
         use {
@@ -73,7 +72,6 @@ require("packer").startup({
         use({
 
             "onsails/lspkind-nvim",
-            -- event = "BufEnter",
             config = [[require('config.lspkind')]]
         })
 
@@ -81,7 +79,6 @@ require("packer").startup({
             'hrsh7th/nvim-cmp',
             branch = "main",
             config = [[require('config.nvim-cmp')]]
-            -- event = "BufEnter"
         }
 
         use {'hrsh7th/cmp-nvim-lsp', event = "BufEnter", after = "nvim-cmp"}
@@ -236,23 +233,17 @@ require("packer").startup({
         -- Another similar plugin is command-t
         -- use 'wincent/command-t'
 
-        -- Another grep tool (similar to Sublime Text Ctrl+Shift+F)
-        -- use 'dyng/ctrlsf.vim'
-
         -- A grepping tool
         -- use {'mhinz/vim-grepper', cmd = {'Grepper', '<plug>(GrepperOperator)'}}
         -- Themes
         -- A list of colorscheme plugin you may want to try. Find what suits you.
-        -- use({"rakr/vim-one", opt = true})
         -- use({'folke/tokyonight.nvim'})
-        -- use({"sainnhe/sonokai", opt = true})
         -- use({'navarasu/onedark.nvim', config = [[require('config.onedark')]]})
         -- use {
         --  'olimorris/onedarkpro.nvim',
         -- config = [[require('config.onedarkpro')]]
         -- }
-        use {'sainnhe/edge', config=[[require('config.edge-theme')]]}
-        -- use {'Arjun31415/zephyr-nvim'}
+        use {'sainnhe/edge', config = [[require('config.edge-theme')]]}
         -- use {'catppuccin/nvim', as = "catppuccin"}
 
         -- Show git change (change, delete, add) signs in vim sign column

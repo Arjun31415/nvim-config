@@ -43,9 +43,9 @@ autocmd({"BufWritePre"}, {
     callback = require('utils').may_create_dir,
     group = _id
 })
--- autocmd({
---    "CursorMoved", "BufWinEnter", "BufFilePost", "InsertEnter", "BufWritePost"
--- }, {callback = function() require("config.winbar").get_winbar() end})
+autocmd({
+    "CursorMoved", "BufWinEnter", "BufFilePost", "InsertEnter", "BufWritePost"
+}, {callback = function() require("config.winbar").get_winbar() end})
 -- FIXME: this does not work
 -- _id = augroup("open_neotree_after_session_load", {clear = true})
 -- autocmd({"SessionLoadPost"}, {
