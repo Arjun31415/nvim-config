@@ -218,6 +218,12 @@ require("packer").startup({
             requires = {{'nvim-lua/plenary.nvim'}}
         }
         use {
+            'nvim-telescope/telescope-fzf-native.nvim',
+            run = 'make',
+            after = "telescope.nvim"
+        }
+
+        use {
             'nvim-telescope/telescope-ui-select.nvim',
             after = 'telescope.nvim',
             config = [[require('config.telescope-nvim')]]
@@ -288,13 +294,6 @@ require("packer").startup({
                 end, 2000)
             end
         })
-        -- use({
-        --     'Arjun31415/BuildTask.nvim',
-        --     config = [[require('config.build_task')]],
-        --     requires = "rcarriga/nvim-notify",
-        --     event = "BufEnter"
-        -- })
-
         use({"tyru/open-browser.vim", event = "VimEnter"})
 
         -- Only install these plugins if ctags are installed on the system
