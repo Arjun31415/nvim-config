@@ -69,11 +69,7 @@ require("packer").startup({
             config = [[require('config.renamer')]]
         }
         -- add vscode like symbols to neovim's lsp menu
-        use({
-
-            "onsails/lspkind-nvim",
-            config = [[require('config.lspkind')]]
-        })
+        use({"onsails/lspkind-nvim", config = [[require('config.lspkind')]]})
 
         use {
             'hrsh7th/nvim-cmp',
@@ -220,7 +216,6 @@ require("packer").startup({
             cmd = 'Telescope',
             opt = true,
             requires = {{'nvim-lua/plenary.nvim'}}
-            --            config = [[require('config.telescope-nvim')]]
         }
         use {
             'nvim-telescope/telescope-ui-select.nvim',
