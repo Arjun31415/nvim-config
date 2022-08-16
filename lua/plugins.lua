@@ -240,10 +240,10 @@ require("packer").startup({
         -- A list of colorscheme plugin you may want to try. Find what suits you.
         -- use({'folke/tokyonight.nvim'})
         -- use({'navarasu/onedark.nvim', config = [[require('config.onedark')]]})
-        -- use {
-        --  'olimorris/onedarkpro.nvim',
-        -- config = [[require('config.onedarkpro')]]
-        -- }
+        use {
+            'olimorris/onedarkpro.nvim',
+            config = [[require('config.onedarkpro')]]
+        }
         use {'sainnhe/edge', config = [[require('config.edge-theme')]]}
         -- use {'catppuccin/nvim', as = "catppuccin"}
 
