@@ -14,6 +14,7 @@ if fn.glob(packer_install_dir) == "" then
     vim.api.nvim_echo({{"Installing packer.nvim", "Type"}}, true, {})
     vim.cmd(install_cmd)
 end
+vim.cmd [[packadd packer.nvim]]
 
 local packer_util = require('packer.util')
 require("packer").startup({
