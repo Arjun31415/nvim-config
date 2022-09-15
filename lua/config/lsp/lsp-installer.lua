@@ -6,7 +6,6 @@ if not ok or not ok2 then
 end
 local servers = {
 	"bashls",
-	"asm_lsp",
 	"pyright",
 	"pylsp",
 	"jsonls",
@@ -62,7 +61,7 @@ lspconfig.jsonls.setup(opts)
 -- r language server
 lspconfig.r_language_server.setup({ on_attach = configFunctions.on_attach })
 -- asm_lsp
-lspconfig.asm_lsp.setup({ on_attach = configFunctions.on_attach })
+-- lspconfig.asm_lsp.setup({ on_attach = configFunctions.on_attach })
 -- bash
 lspconfig.bashls.setup({ on_attach = configFunctions.on_attach })
 -- cmake setup
