@@ -1,9 +1,7 @@
 local status_ok, gps = pcall(require, "nvim-gps")
-if not status_ok then
-  return
-end
+if not status_ok then return end
 
-local icons = require "config.icons"
+local icons = require("config.icons")
 
 -- vim.api.nvim_set_hl(0, "WinBarSeparator", { fg = "#111fff" })
 -- local fg = vim.api.nvim_get_hl_by_name('DiffAdd', 0).background
@@ -12,7 +10,7 @@ local icons = require "config.icons"
 local space = " "
 
 -- Customized config
-gps.setup {
+gps.setup({
 
   disable_icons = false, -- Setting it to true will disable all icons
 
@@ -92,4 +90,4 @@ gps.setup {
   -- indicator used when context is hits depth limit
   depth_limit_indicator = "..",
   text_hl = "LineNr",
-}
+})

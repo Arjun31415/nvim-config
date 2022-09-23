@@ -1,47 +1,45 @@
 local ok, lsp_installer = pcall(require, "mason")
 local ok2, mason_lspconfig = pcall(require, "mason-lspconfig")
 
-if not ok or not ok2 then
-	return
-end
+if not ok or not ok2 then return end
 local servers = {
-	"bashls",
-	"pyright",
-	"pylsp",
-	"jsonls",
-	"clangd",
-	"tsserver",
-	"cmake",
-	"vimls",
-	"tailwindcss",
-	"cssmodules_ls",
-	"rust_analyzer",
+  "bashls",
+  "pyright",
+  "pylsp",
+  "jsonls",
+  "clangd",
+  "tsserver",
+  "cmake",
+  "vimls",
+  "tailwindcss",
+  "cssmodules_ls",
+  "rust_analyzer",
 }
 mason_lspconfig.setup({ ensure_installed = servers })
 local lsp_server_names = {
-	"bash-language-server",
-	"pyright",
-	"python-lsp-server",
-	"json-lsp",
-	"clangd",
-	"typescript-language-server",
-	"cmake-language-server",
-	"vim-language-server",
-	"tailwindcss-language-server",
-	"cssmodules-language-server",
-	"rust_analyzer",
+  "bash-language-server",
+  "pyright",
+  "python-lsp-server",
+  "json-lsp",
+  "clangd",
+  "typescript-language-server",
+  "cmake-language-server",
+  "vim-language-server",
+  "tailwindcss-language-server",
+  "cssmodules-language-server",
+  "rust_analyzer",
 }
 
 local configFunctions = require("config.lsp.handlers")
 local lspconfig = require("lspconfig")
 lsp_installer.setup({
-	ui = {
-		icons = {
-			package_installed = "✓",
-			package_pending = "➜",
-			package_uninstalled = "✗",
-		},
-	},
+  ui = {
+    icons = {
+      package_installed = "✓",
+      package_pending = "➜",
+      package_uninstalled = "✗",
+    },
+  },
 })
 
 -- lua language server setup
@@ -70,8 +68,8 @@ lspconfig.cmake.setup({ on_attach = configFunctions.on_attach })
 local clangd_capabilities = configFunctions.capabilities
 clangd_capabilities.offsetEncoding = "utf-8"
 lspconfig.clangd.setup({
-	capabilities = clangd_capabilities,
-	on_attach = configFunctions.on_attach,
+  capabilities = clangd_capabilities,
+  on_attach = configFunctions.on_attach,
 })
 -- pyright setup
 lspconfig.pyright.setup({ on_attach = configFunctions.on_attach })
@@ -97,7 +95,7 @@ require("config.lsp.settings.rust")
 -- latex server
 lspconfig.texlab.setup({ on_attach = configFunctions.on_attach })
 vim.api.nvim_create_user_command("MasonInstallAll", function()
-	for _, name in pairs(lsp_server_names) do
-		vim.cmd("MasonInstall " .. name)
-	end
+  for _, name in pairs(lsp_server_names) do
+    vim.cmd("MasonInstall " .. name)
+  end
 end, {})
