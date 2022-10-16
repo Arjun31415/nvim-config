@@ -91,6 +91,8 @@ lspconfig.tailwindcss.setup({ on_attach = configFunctions.on_attach })
 lspconfig.vimls.setup({ on_attach = configFunctions.on_attach })
 -- rust_analyzer
 require("config.lsp.settings.rust")
+-- java server setup
+lspconfig.jdtls.setup({ on_attach = configFunctions.on_attach})
 -- lspconfig.rust_analyzer.setup({on_attach = configFunctions.on_attach})
 -- latex server
 lspconfig.texlab.setup({ on_attach = configFunctions.on_attach })
