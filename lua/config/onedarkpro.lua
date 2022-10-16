@@ -13,10 +13,10 @@ onedarkpro.setup({
   --  end,
   colors = { onedark_vivid = { bg = "#27292d" } }, -- Override default colors by specifying colors for 'onelight' or 'onedark' themes
   -- hlgroups = {}, -- Override default highlight groups
-  ft_highlights = {
+  highlights = {
     -- Use the filetype as per the `set filetype?` command
-    yaml = { TSField = { fg = "${red}" } },
-    python = { TSConstructor = { fg = "${bg}", bg = "${red}" } },
+    ["@field.yaml"] = { TSField = { fg = "${red}" } },
+    ["@field.python"] = { TSConstructor = { fg = "${bg}", bg = "${red}" } },
   },
   options = {
     bold = false, -- Use the themes opinionated bold styles?
