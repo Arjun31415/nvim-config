@@ -180,7 +180,11 @@ require("packer").startup({
         vim.defer_fn(function() require("config.nvim_hop") end, 2000)
       end,
     })
-
+    use({
+      "ThePrimeagen/harpoon",
+      requires = { { "nvim-lua/plenary.nvim" } },
+      config = [[require('config.harpoon')]],
+    })
     -- Clear highlight search automatically for you
     -- use({"romainl/vim-cool", event = "VimEnter"})
 
@@ -480,12 +484,12 @@ require("packer").startup({
     use({ "jdhao/whitespace.nvim", event = "VimEnter" })
     use({ "kyazdani42/nvim-web-devicons" })
     use({ "ryanoasis/vim-devicons" })
-    use({
-      "akinsho/bufferline.nvim",
-      event = "VimEnter",
-      requires = "kyazdani42/nvim-web-devicons",
-      config = [[require('config.bufferline')]],
-    })
+    -- use({
+    -- "akinsho/bufferline.nvim",
+    -- event = "VimEnter",
+    -- requires = "kyazdani42/nvim-web-devicons",
+    -- config = [[require('config.bufferline')]],
+    -- })
 
     use({
       "nvim-neo-tree/neo-tree.nvim",
