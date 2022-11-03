@@ -1,3 +1,5 @@
+local harpoon_component = require("config.harpoon-line").component
+local is_buffer_present = require("config.harpoon-line").cond
 local function spell()
   if vim.o.spell then return string.format("[SPELL]") end
 
@@ -146,6 +148,6 @@ require("lualine").setup({
     lualine_y = {},
     lualine_z = {},
   },
-  tabline = {},
+  tabline = { lualine_a = { harpoon_component } },
   extensions = { "quickfix", "fugitive" },
 })
