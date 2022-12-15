@@ -7,7 +7,7 @@ local function has_marks()
 end
 
 -- TODO: create proper lualine extension (see lualine/components/buffer)
-local mark_keys = { "f", "d", "s", "a", "j", "k", "l", ";" } -- or use asdfg, 12345 or whatever.
+local mark_keys = { "1", "2", "3", "4", "5", "6", "7", "8" } -- or use asdfg, 12345 or whatever.
 local harpoon_component = function() --{{{
   local marks = harpoon.get_mark_config().marks
   local current_mark_idx = harpoon_mark.get_current_index()
