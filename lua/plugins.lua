@@ -171,7 +171,6 @@ require("packer").startup({
       "ray-x/lsp_signature.nvim",
       config = [[require('config.lsp_signature')]],
     })
-    -- use {'github/copilot.vim'}
     -- Super fast buffer jump
     use({
       "phaazon/hop.nvim",
@@ -238,14 +237,21 @@ require("packer").startup({
     -- Themes
     -- A list of colorscheme plugin you may want to try. Find what suits you.
     -- use({'folke/tokyonight.nvim'})
-    -- use({'navarasu/onedark.nvim', config = [[require('config.onedark')]]})
+    use({ "navarasu/onedark.nvim", config = [[require('config.onedark')]] })
     use({
       "olimorris/onedarkpro.nvim",
       config = [[require('config.onedarkpro')]],
     })
-    use({ "sainnhe/edge", config = [[require('config.edge-theme')]] })
+    --[[ use({
+      "rose-pine/neovim",
+      as = "rose-pine",
+      config = function()
+        require("rose-pine").setup({ dark_variant = "main" })
+        vim.cmd("colorscheme rose-pine")
+      end,
+    }) ]]
+    -- use({ "sainnhe/edge", config = [[require('config.edge-theme')]] })
     -- use {'catppuccin/nvim', as = "catppuccin"}
-
     -- Show git change (change, delete, add) signs in vim sign column
     use({ "mhinz/vim-signify", event = "BufEnter" })
     -- Git lens similar to vscode
@@ -303,8 +309,6 @@ require("packer").startup({
     use({ "SirVer/ultisnips", event = "InsertEnter" })
     use({ "honza/vim-snippets", after = "ultisnips" })
 
-    -- Automatic insertion and deletion of a pair of characters
-    -- use({"Raimondi/delimitMate", event = "InsertEnter"})
     use({
       "windwp/nvim-autopairs",
       event = "BufEnter",
@@ -313,8 +317,6 @@ require("packer").startup({
 
     -- Comment plugin
     use({ "b3nj5m1n/kommentary", event = "VimEnter" })
-    -- Multiple cursor plugin like Sublime Text?
-    -- use 'mg979/vim-visual-multi'
 
     -- Autosave files on certain events
     use({
@@ -387,8 +389,6 @@ require("packer").startup({
     })
     -- Faster footnote generation
     use({ "vim-pandoc/vim-markdownfootnotes", ft = { "markdown" } })
-    -- use {'vim-pandoc/vim-pandoc'}
-    -- use {'vim-pandoc/vim-pandoc-syntax'}
 
     -- Vim tabular plugin for manipulate tabular, required by markdown plugins
     use({ "godlygeek/tabular", cmd = { "Tabularize" } })

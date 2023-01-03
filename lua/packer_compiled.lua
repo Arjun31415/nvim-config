@@ -208,12 +208,6 @@ _G.packer_plugins = {
     path = "/home/arjun/.local/share/nvim/site/pack/packer/start/cpbooster.vim",
     url = "https://github.com/searleser97/cpbooster.vim"
   },
-  edge = {
-    config = { "require('config.edge-theme')" },
-    loaded = true,
-    path = "/home/arjun/.local/share/nvim/site/pack/packer/start/edge",
-    url = "https://github.com/sainnhe/edge"
-  },
   harpoon = {
     config = { "require('config.harpoon')" },
     loaded = true,
@@ -369,7 +363,7 @@ _G.packer_plugins = {
     url = "https://github.com/kevinhwang91/nvim-bqf"
   },
   ["nvim-cmp"] = {
-    after = { "cmp-buffer", "cmp-cmdline", "cmp-nvim-lsp", "cmp-nvim-ultisnips", "cmp-path", "cmp-tabnine", "copilot-cmp" },
+    after = { "copilot-cmp", "cmp-nvim-lsp", "cmp-buffer", "cmp-nvim-ultisnips", "cmp-tabnine", "cmp-cmdline", "cmp-path" },
     config = { "require('config.nvim-cmp')" },
     loaded = true,
     only_config = true,
@@ -428,6 +422,12 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/arjun/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
     url = "https://github.com/kyazdani42/nvim-web-devicons"
+  },
+  ["onedark.nvim"] = {
+    config = { "require('config.onedark')" },
+    loaded = true,
+    path = "/home/arjun/.local/share/nvim/site/pack/packer/start/onedark.nvim",
+    url = "https://github.com/navarasu/onedark.nvim"
   },
   ["onedarkpro.nvim"] = {
     config = { "require('config.onedarkpro')" },
@@ -534,7 +534,7 @@ _G.packer_plugins = {
     url = "https://github.com/nvim-telescope/telescope-ui-select.nvim"
   },
   ["telescope.nvim"] = {
-    after = { "telescope-ui-select.nvim", "telescope-symbols.nvim", "telescope-fzf-native.nvim" },
+    after = { "telescope-fzf-native.nvim", "telescope-symbols.nvim", "telescope-ui-select.nvim" },
     commands = { "Telescope" },
     loaded = false,
     needs_bufread = true,
@@ -786,66 +786,66 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
--- Setup for: committia.vim
-time([[Setup for committia.vim]], true)
-vim.cmd('packadd committia.vim')
-time([[Setup for committia.vim]], false)
 -- Setup for: markdown-preview.nvim
 time([[Setup for markdown-preview.nvim]], true)
 try_loadstring("\27LJ\2\n=\0\0\2\0\4\0\0056\0\0\0009\0\1\0005\1\3\0=\1\2\0K\0\1\0\1\2\0\0\rmarkdown\19mkdp_filetypes\6g\bvim\0", "setup", "markdown-preview.nvim")
 time([[Setup for markdown-preview.nvim]], false)
--- Config for: neodim
-time([[Config for neodim]], true)
-try_loadstring("\27LJ\2\n4\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\vneodim\frequire\0", "config", "neodim")
-time([[Config for neodim]], false)
--- Config for: onedarkpro.nvim
-time([[Config for onedarkpro.nvim]], true)
-require('config.onedarkpro')
-time([[Config for onedarkpro.nvim]], false)
+-- Setup for: committia.vim
+time([[Setup for committia.vim]], true)
+vim.cmd('packadd committia.vim')
+time([[Setup for committia.vim]], false)
 -- Config for: harpoon
 time([[Config for harpoon]], true)
 require('config.harpoon')
 time([[Config for harpoon]], false)
--- Config for: neovim-session-manager
-time([[Config for neovim-session-manager]], true)
-require('config.session-manager')
-time([[Config for neovim-session-manager]], false)
--- Config for: nvim-treesitter
-time([[Config for nvim-treesitter]], true)
-require('config.treesitter')
-time([[Config for nvim-treesitter]], false)
--- Config for: lsp_lines.nvim
-time([[Config for lsp_lines.nvim]], true)
-try_loadstring("\27LJ\2\n7\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\14lsp_lines\frequire\0", "config", "lsp_lines.nvim")
-time([[Config for lsp_lines.nvim]], false)
--- Config for: neo-tree.nvim
-time([[Config for neo-tree.nvim]], true)
-require('config.neo-tree')
-time([[Config for neo-tree.nvim]], false)
+-- Config for: neodim
+time([[Config for neodim]], true)
+try_loadstring("\27LJ\2\n4\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\vneodim\frequire\0", "config", "neodim")
+time([[Config for neodim]], false)
 -- Config for: todo-comments.nvim
 time([[Config for todo-comments.nvim]], true)
 try_loadstring("\27LJ\2\n?\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\18todo-comments\frequire\0", "config", "todo-comments.nvim")
 time([[Config for todo-comments.nvim]], false)
--- Config for: lsp_signature.nvim
-time([[Config for lsp_signature.nvim]], true)
-require('config.lsp_signature')
-time([[Config for lsp_signature.nvim]], false)
+-- Config for: lsp_lines.nvim
+time([[Config for lsp_lines.nvim]], true)
+try_loadstring("\27LJ\2\n7\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\14lsp_lines\frequire\0", "config", "lsp_lines.nvim")
+time([[Config for lsp_lines.nvim]], false)
+-- Config for: onedark.nvim
+time([[Config for onedark.nvim]], true)
+require('config.onedark')
+time([[Config for onedark.nvim]], false)
+-- Config for: neovim-session-manager
+time([[Config for neovim-session-manager]], true)
+require('config.session-manager')
+time([[Config for neovim-session-manager]], false)
+-- Config for: onedarkpro.nvim
+time([[Config for onedarkpro.nvim]], true)
+require('config.onedarkpro')
+time([[Config for onedarkpro.nvim]], false)
 -- Config for: impatient.nvim
 time([[Config for impatient.nvim]], true)
 require('impatient')
 time([[Config for impatient.nvim]], false)
--- Config for: nvim-cmp
-time([[Config for nvim-cmp]], true)
-require('config.nvim-cmp')
-time([[Config for nvim-cmp]], false)
+-- Config for: neo-tree.nvim
+time([[Config for neo-tree.nvim]], true)
+require('config.neo-tree')
+time([[Config for neo-tree.nvim]], false)
 -- Config for: lspkind-nvim
 time([[Config for lspkind-nvim]], true)
 require('config.lspkind')
 time([[Config for lspkind-nvim]], false)
--- Config for: edge
-time([[Config for edge]], true)
-require('config.edge-theme')
-time([[Config for edge]], false)
+-- Config for: nvim-treesitter
+time([[Config for nvim-treesitter]], true)
+require('config.treesitter')
+time([[Config for nvim-treesitter]], false)
+-- Config for: nvim-cmp
+time([[Config for nvim-cmp]], true)
+require('config.nvim-cmp')
+time([[Config for nvim-cmp]], false)
+-- Config for: lsp_signature.nvim
+time([[Config for lsp_signature.nvim]], true)
+require('config.lsp_signature')
+time([[Config for lsp_signature.nvim]], false)
 -- Load plugins in order defined by `after`
 time([[Sequenced loading]], true)
 vim.cmd [[ packadd cmp-nvim-ultisnips ]]
@@ -853,75 +853,12 @@ time([[Sequenced loading]], false)
 
 -- Command lazy-loads
 time([[Defining lazy-load commands]], true)
-pcall(vim.api.nvim_create_user_command, 'Conflicted', function(cmdargs)
-          require('packer.load')({'vim-conflicted'}, { cmd = 'Conflicted', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
-        end,
-        {nargs = '*', range = true, bang = true, complete = function()
-          require('packer.load')({'vim-conflicted'}, { cmd = 'Conflicted' }, _G.packer_plugins)
-          return vim.fn.getcompletion('Conflicted ', 'cmdline')
-      end})
 pcall(vim.api.nvim_create_user_command, 'Scriptnames', function(cmdargs)
           require('packer.load')({'vim-scriptease'}, { cmd = 'Scriptnames', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
         end,
         {nargs = '*', range = true, bang = true, complete = function()
           require('packer.load')({'vim-scriptease'}, { cmd = 'Scriptnames' }, _G.packer_plugins)
           return vim.fn.getcompletion('Scriptnames ', 'cmdline')
-      end})
-pcall(vim.api.nvim_create_user_command, 'Message', function(cmdargs)
-          require('packer.load')({'vim-scriptease'}, { cmd = 'Message', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
-        end,
-        {nargs = '*', range = true, bang = true, complete = function()
-          require('packer.load')({'vim-scriptease'}, { cmd = 'Message' }, _G.packer_plugins)
-          return vim.fn.getcompletion('Message ', 'cmdline')
-      end})
-pcall(vim.api.nvim_create_user_command, 'Rename', function(cmdargs)
-          require('packer.load')({'vim-eunuch'}, { cmd = 'Rename', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
-        end,
-        {nargs = '*', range = true, bang = true, complete = function()
-          require('packer.load')({'vim-eunuch'}, { cmd = 'Rename' }, _G.packer_plugins)
-          return vim.fn.getcompletion('Rename ', 'cmdline')
-      end})
-pcall(vim.api.nvim_create_user_command, 'Delete', function(cmdargs)
-          require('packer.load')({'vim-eunuch'}, { cmd = 'Delete', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
-        end,
-        {nargs = '*', range = true, bang = true, complete = function()
-          require('packer.load')({'vim-eunuch'}, { cmd = 'Delete' }, _G.packer_plugins)
-          return vim.fn.getcompletion('Delete ', 'cmdline')
-      end})
-pcall(vim.api.nvim_create_user_command, 'Verbose', function(cmdargs)
-          require('packer.load')({'vim-scriptease'}, { cmd = 'Verbose', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
-        end,
-        {nargs = '*', range = true, bang = true, complete = function()
-          require('packer.load')({'vim-scriptease'}, { cmd = 'Verbose' }, _G.packer_plugins)
-          return vim.fn.getcompletion('Verbose ', 'cmdline')
-      end})
-pcall(vim.api.nvim_create_user_command, 'MundoShow', function(cmdargs)
-          require('packer.load')({'vim-mundo'}, { cmd = 'MundoShow', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
-        end,
-        {nargs = '*', range = true, bang = true, complete = function()
-          require('packer.load')({'vim-mundo'}, { cmd = 'MundoShow' }, _G.packer_plugins)
-          return vim.fn.getcompletion('MundoShow ', 'cmdline')
-      end})
-pcall(vim.api.nvim_create_user_command, 'AsyncRun', function(cmdargs)
-          require('packer.load')({'asyncrun.vim'}, { cmd = 'AsyncRun', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
-        end,
-        {nargs = '*', range = true, bang = true, complete = function()
-          require('packer.load')({'asyncrun.vim'}, { cmd = 'AsyncRun' }, _G.packer_plugins)
-          return vim.fn.getcompletion('AsyncRun ', 'cmdline')
-      end})
-pcall(vim.api.nvim_create_user_command, 'Leaderf', function(cmdargs)
-          require('packer.load')({'LeaderF'}, { cmd = 'Leaderf', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
-        end,
-        {nargs = '*', range = true, bang = true, complete = function()
-          require('packer.load')({'LeaderF'}, { cmd = 'Leaderf' }, _G.packer_plugins)
-          return vim.fn.getcompletion('Leaderf ', 'cmdline')
-      end})
-pcall(vim.api.nvim_create_user_command, 'MundoToggle', function(cmdargs)
-          require('packer.load')({'vim-mundo'}, { cmd = 'MundoToggle', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
-        end,
-        {nargs = '*', range = true, bang = true, complete = function()
-          require('packer.load')({'vim-mundo'}, { cmd = 'MundoToggle' }, _G.packer_plugins)
-          return vim.fn.getcompletion('MundoToggle ', 'cmdline')
       end})
 pcall(vim.api.nvim_create_user_command, 'Neoformat', function(cmdargs)
           require('packer.load')({'neoformat'}, { cmd = 'Neoformat', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
@@ -930,19 +867,12 @@ pcall(vim.api.nvim_create_user_command, 'Neoformat', function(cmdargs)
           require('packer.load')({'neoformat'}, { cmd = 'Neoformat' }, _G.packer_plugins)
           return vim.fn.getcompletion('Neoformat ', 'cmdline')
       end})
-pcall(vim.api.nvim_create_user_command, 'Telescope', function(cmdargs)
-          require('packer.load')({'telescope.nvim'}, { cmd = 'Telescope', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
+pcall(vim.api.nvim_create_user_command, 'Verbose', function(cmdargs)
+          require('packer.load')({'vim-scriptease'}, { cmd = 'Verbose', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
         end,
         {nargs = '*', range = true, bang = true, complete = function()
-          require('packer.load')({'telescope.nvim'}, { cmd = 'Telescope' }, _G.packer_plugins)
-          return vim.fn.getcompletion('Telescope ', 'cmdline')
-      end})
-pcall(vim.api.nvim_create_user_command, 'OSCYank', function(cmdargs)
-          require('packer.load')({'vim-oscyank'}, { cmd = 'OSCYank', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
-        end,
-        {nargs = '*', range = true, bang = true, complete = function()
-          require('packer.load')({'vim-oscyank'}, { cmd = 'OSCYank' }, _G.packer_plugins)
-          return vim.fn.getcompletion('OSCYank ', 'cmdline')
+          require('packer.load')({'vim-scriptease'}, { cmd = 'Verbose' }, _G.packer_plugins)
+          return vim.fn.getcompletion('Verbose ', 'cmdline')
       end})
 pcall(vim.api.nvim_create_user_command, 'Tabularize', function(cmdargs)
           require('packer.load')({'tabular'}, { cmd = 'Tabularize', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
@@ -951,12 +881,61 @@ pcall(vim.api.nvim_create_user_command, 'Tabularize', function(cmdargs)
           require('packer.load')({'tabular'}, { cmd = 'Tabularize' }, _G.packer_plugins)
           return vim.fn.getcompletion('Tabularize ', 'cmdline')
       end})
+pcall(vim.api.nvim_create_user_command, 'AsyncRun', function(cmdargs)
+          require('packer.load')({'asyncrun.vim'}, { cmd = 'AsyncRun', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
+        end,
+        {nargs = '*', range = true, bang = true, complete = function()
+          require('packer.load')({'asyncrun.vim'}, { cmd = 'AsyncRun' }, _G.packer_plugins)
+          return vim.fn.getcompletion('AsyncRun ', 'cmdline')
+      end})
+pcall(vim.api.nvim_create_user_command, 'MundoToggle', function(cmdargs)
+          require('packer.load')({'vim-mundo'}, { cmd = 'MundoToggle', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
+        end,
+        {nargs = '*', range = true, bang = true, complete = function()
+          require('packer.load')({'vim-mundo'}, { cmd = 'MundoToggle' }, _G.packer_plugins)
+          return vim.fn.getcompletion('MundoToggle ', 'cmdline')
+      end})
+pcall(vim.api.nvim_create_user_command, 'MundoShow', function(cmdargs)
+          require('packer.load')({'vim-mundo'}, { cmd = 'MundoShow', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
+        end,
+        {nargs = '*', range = true, bang = true, complete = function()
+          require('packer.load')({'vim-mundo'}, { cmd = 'MundoShow' }, _G.packer_plugins)
+          return vim.fn.getcompletion('MundoShow ', 'cmdline')
+      end})
+pcall(vim.api.nvim_create_user_command, 'Conflicted', function(cmdargs)
+          require('packer.load')({'vim-conflicted'}, { cmd = 'Conflicted', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
+        end,
+        {nargs = '*', range = true, bang = true, complete = function()
+          require('packer.load')({'vim-conflicted'}, { cmd = 'Conflicted' }, _G.packer_plugins)
+          return vim.fn.getcompletion('Conflicted ', 'cmdline')
+      end})
 pcall(vim.api.nvim_create_user_command, 'Flog', function(cmdargs)
           require('packer.load')({'vim-flog'}, { cmd = 'Flog', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
         end,
         {nargs = '*', range = true, bang = true, complete = function()
           require('packer.load')({'vim-flog'}, { cmd = 'Flog' }, _G.packer_plugins)
           return vim.fn.getcompletion('Flog ', 'cmdline')
+      end})
+pcall(vim.api.nvim_create_user_command, 'Leaderf', function(cmdargs)
+          require('packer.load')({'LeaderF'}, { cmd = 'Leaderf', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
+        end,
+        {nargs = '*', range = true, bang = true, complete = function()
+          require('packer.load')({'LeaderF'}, { cmd = 'Leaderf' }, _G.packer_plugins)
+          return vim.fn.getcompletion('Leaderf ', 'cmdline')
+      end})
+pcall(vim.api.nvim_create_user_command, 'Rename', function(cmdargs)
+          require('packer.load')({'vim-eunuch'}, { cmd = 'Rename', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
+        end,
+        {nargs = '*', range = true, bang = true, complete = function()
+          require('packer.load')({'vim-eunuch'}, { cmd = 'Rename' }, _G.packer_plugins)
+          return vim.fn.getcompletion('Rename ', 'cmdline')
+      end})
+pcall(vim.api.nvim_create_user_command, 'OSCYank', function(cmdargs)
+          require('packer.load')({'vim-oscyank'}, { cmd = 'OSCYank', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
+        end,
+        {nargs = '*', range = true, bang = true, complete = function()
+          require('packer.load')({'vim-oscyank'}, { cmd = 'OSCYank' }, _G.packer_plugins)
+          return vim.fn.getcompletion('OSCYank ', 'cmdline')
       end})
 pcall(vim.api.nvim_create_user_command, 'OSCYankReg', function(cmdargs)
           require('packer.load')({'vim-oscyank'}, { cmd = 'OSCYankReg', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
@@ -965,43 +944,64 @@ pcall(vim.api.nvim_create_user_command, 'OSCYankReg', function(cmdargs)
           require('packer.load')({'vim-oscyank'}, { cmd = 'OSCYankReg' }, _G.packer_plugins)
           return vim.fn.getcompletion('OSCYankReg ', 'cmdline')
       end})
+pcall(vim.api.nvim_create_user_command, 'Delete', function(cmdargs)
+          require('packer.load')({'vim-eunuch'}, { cmd = 'Delete', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
+        end,
+        {nargs = '*', range = true, bang = true, complete = function()
+          require('packer.load')({'vim-eunuch'}, { cmd = 'Delete' }, _G.packer_plugins)
+          return vim.fn.getcompletion('Delete ', 'cmdline')
+      end})
+pcall(vim.api.nvim_create_user_command, 'Telescope', function(cmdargs)
+          require('packer.load')({'telescope.nvim'}, { cmd = 'Telescope', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
+        end,
+        {nargs = '*', range = true, bang = true, complete = function()
+          require('packer.load')({'telescope.nvim'}, { cmd = 'Telescope' }, _G.packer_plugins)
+          return vim.fn.getcompletion('Telescope ', 'cmdline')
+      end})
+pcall(vim.api.nvim_create_user_command, 'Message', function(cmdargs)
+          require('packer.load')({'vim-scriptease'}, { cmd = 'Message', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
+        end,
+        {nargs = '*', range = true, bang = true, complete = function()
+          require('packer.load')({'vim-scriptease'}, { cmd = 'Message' }, _G.packer_plugins)
+          return vim.fn.getcompletion('Message ', 'cmdline')
+      end})
 time([[Defining lazy-load commands]], false)
 
 -- Keymap lazy-loads
 time([[Defining lazy-load keymaps]], true)
-vim.cmd [[nnoremap <silent> * <cmd>lua require("packer.load")({'nvim-hlslens'}, { keys = "*", prefix = "" }, _G.packer_plugins)<cr>]]
 vim.cmd [[nnoremap <silent> N <cmd>lua require("packer.load")({'nvim-hlslens'}, { keys = "N", prefix = "" }, _G.packer_plugins)<cr>]]
-vim.cmd [[nnoremap <silent> n <cmd>lua require("packer.load")({'nvim-hlslens'}, { keys = "n", prefix = "" }, _G.packer_plugins)<cr>]]
 vim.cmd [[nnoremap <silent> # <cmd>lua require("packer.load")({'nvim-hlslens'}, { keys = "#", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[nnoremap <silent> n <cmd>lua require("packer.load")({'nvim-hlslens'}, { keys = "n", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[nnoremap <silent> * <cmd>lua require("packer.load")({'nvim-hlslens'}, { keys = "*", prefix = "" }, _G.packer_plugins)<cr>]]
 time([[Defining lazy-load keymaps]], false)
 
 vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time([[Defining lazy-load filetype autocommands]], true)
-vim.cmd [[au FileType toml ++once lua require("packer.load")({'vim-toml'}, { ft = "toml" }, _G.packer_plugins)]]
+vim.cmd [[au FileType python ++once lua require("packer.load")({'vim-python-pep8-indent', 'vim-pythonsense'}, { ft = "python" }, _G.packer_plugins)]]
 vim.cmd [[au FileType json ++once lua require("packer.load")({'vim-json'}, { ft = "json" }, _G.packer_plugins)]]
+vim.cmd [[au FileType toml ++once lua require("packer.load")({'vim-toml'}, { ft = "toml" }, _G.packer_plugins)]]
 vim.cmd [[au FileType yuck ++once lua require("packer.load")({'yuck.vim'}, { ft = "yuck" }, _G.packer_plugins)]]
-vim.cmd [[au FileType markdown ++once lua require("packer.load")({'vim-json', 'vim-markdown', 'vim-markdownfootnotes', 'markdown-preview.nvim'}, { ft = "markdown" }, _G.packer_plugins)]]
+vim.cmd [[au FileType markdown ++once lua require("packer.load")({'vim-markdown', 'vim-markdownfootnotes', 'markdown-preview.nvim', 'vim-json'}, { ft = "markdown" }, _G.packer_plugins)]]
 vim.cmd [[au FileType tex ++once lua require("packer.load")({'vimtex'}, { ft = "tex" }, _G.packer_plugins)]]
-vim.cmd [[au FileType python ++once lua require("packer.load")({'vim-pythonsense', 'vim-python-pep8-indent'}, { ft = "python" }, _G.packer_plugins)]]
 time([[Defining lazy-load filetype autocommands]], false)
   -- Event lazy-loads
 time([[Defining lazy-load event autocommands]], true)
-vim.cmd [[au VimEnter * ++once lua require("packer.load")({'open-browser.vim', 'unicode.vim', 'vim-hexokinase', 'vim-highlighturl', 'vim-indent-object', 'vim-matchup', 'hop.nvim', 'lualine.nvim', 'indent-blankline.nvim', 'kommentary', 'vim-swap', 'neoscroll.nvim', 'which-key.nvim', 'whitespace.nvim', 'vim-repeat', 'nvim-dap', 'vim-asterisk', 'targets.vim', 'alpha-nvim', 'auto-save.nvim', 'vim-sandwich'}, { event = "VimEnter *" }, _G.packer_plugins)]]
 vim.cmd [[au FileType qf ++once lua require("packer.load")({'nvim-bqf'}, { event = "FileType qf" }, _G.packer_plugins)]]
-vim.cmd [[au InsertEnter * ++once lua require("packer.load")({'ultisnips', 'copilot.lua', 'better-escape.vim'}, { event = "InsertEnter *" }, _G.packer_plugins)]]
+vim.cmd [[au InsertEnter * ++once lua require("packer.load")({'better-escape.vim', 'copilot.lua', 'ultisnips'}, { event = "InsertEnter *" }, _G.packer_plugins)]]
+vim.cmd [[au VimEnter * ++once lua require("packer.load")({'alpha-nvim', 'vim-matchup', 'auto-save.nvim', 'nvim-dap', 'vim-repeat', 'vim-sandwich', 'hop.nvim', 'vim-swap', 'open-browser.vim', 'indent-blankline.nvim', 'which-key.nvim', 'whitespace.nvim', 'lualine.nvim', 'targets.vim', 'neoscroll.nvim', 'unicode.vim', 'vim-asterisk', 'vim-hexokinase', 'kommentary', 'vim-highlighturl', 'vim-indent-object'}, { event = "VimEnter *" }, _G.packer_plugins)]]
+vim.cmd [[au BufEnter * ++once lua require("packer.load")({'vim-kitty', 'blamer.nvim', 'cmp-nvim-lsp', 'vim-signify', 'presence.nvim', 'nvim-notify', 'cmp-buffer', 'hlargs.nvim', 'nvim-ts-rainbow', 'nvim-autopairs', 'cmp-tabnine', 'vimtex', 'cmp-cmdline', 'cmp-path', 'refactoring.nvim', 'spotify.nvim', 'renamer.nvim', 'instant.nvim', 'trouble.nvim'}, { event = "BufEnter *" }, _G.packer_plugins)]]
 vim.cmd [[au User InGitRepo ++once lua require("packer.load")({'vim-fugitive'}, { event = "User InGitRepo" }, _G.packer_plugins)]]
-vim.cmd [[au BufEnter * ++once lua require("packer.load")({'trouble.nvim', 'blamer.nvim', 'cmp-buffer', 'presence.nvim', 'cmp-cmdline', 'refactoring.nvim', 'cmp-nvim-lsp', 'renamer.nvim', 'spotify.nvim', 'cmp-path', 'cmp-tabnine', 'vim-kitty', 'hlargs.nvim', 'instant.nvim', 'vim-signify', 'vimtex', 'nvim-autopairs', 'nvim-notify', 'nvim-ts-rainbow'}, { event = "BufEnter *" }, _G.packer_plugins)]]
 time([[Defining lazy-load event autocommands]], false)
 vim.cmd("augroup END")
 vim.cmd [[augroup filetypedetect]]
-time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/packer/opt/vim-json/ftdetect/json.vim]], true)
-vim.cmd [[source /home/arjun/.local/share/nvim/site/pack/packer/opt/vim-json/ftdetect/json.vim]]
-time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/packer/opt/vim-json/ftdetect/json.vim]], false)
 time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/packer/opt/vim-markdown/ftdetect/markdown.vim]], true)
 vim.cmd [[source /home/arjun/.local/share/nvim/site/pack/packer/opt/vim-markdown/ftdetect/markdown.vim]]
 time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/packer/opt/vim-markdown/ftdetect/markdown.vim]], false)
+time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/packer/opt/yuck.vim/ftdetect/yuck.vim]], true)
+vim.cmd [[source /home/arjun/.local/share/nvim/site/pack/packer/opt/yuck.vim/ftdetect/yuck.vim]]
+time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/packer/opt/yuck.vim/ftdetect/yuck.vim]], false)
 time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/packer/opt/vim-toml/ftdetect/toml.vim]], true)
 vim.cmd [[source /home/arjun/.local/share/nvim/site/pack/packer/opt/vim-toml/ftdetect/toml.vim]]
 time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/packer/opt/vim-toml/ftdetect/toml.vim]], false)
@@ -1014,9 +1014,9 @@ time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/pack
 time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/packer/opt/vimtex/ftdetect/tikz.vim]], true)
 vim.cmd [[source /home/arjun/.local/share/nvim/site/pack/packer/opt/vimtex/ftdetect/tikz.vim]]
 time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/packer/opt/vimtex/ftdetect/tikz.vim]], false)
-time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/packer/opt/yuck.vim/ftdetect/yuck.vim]], true)
-vim.cmd [[source /home/arjun/.local/share/nvim/site/pack/packer/opt/yuck.vim/ftdetect/yuck.vim]]
-time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/packer/opt/yuck.vim/ftdetect/yuck.vim]], false)
+time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/packer/opt/vim-json/ftdetect/json.vim]], true)
+vim.cmd [[source /home/arjun/.local/share/nvim/site/pack/packer/opt/vim-json/ftdetect/json.vim]]
+time([[Sourcing ftdetect script at: /home/arjun/.local/share/nvim/site/pack/packer/opt/vim-json/ftdetect/json.vim]], false)
 vim.cmd("augroup END")
 
 _G._packer.inside_compile = false
