@@ -11,9 +11,15 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
+local function evalIf(cond, T, F)
+  if cond then
+    return T
+  else
+    return F
+  end
+end
 vim.g.mapleader = ","
-require("lazy").setup({ -- it is recommened to put impatient.nvim before any other plugins
-  { "lewis6991/impatient.nvim", config = function() require("impatient") end },
+require("lazy").setup({
   "nvim-lua/plenary.nvim",
   "neovim/nvim-lspconfig",
   "simrat39/rust-tools.nvim",
@@ -92,7 +98,7 @@ require("lazy").setup({ -- it is recommened to put impatient.nvim before any oth
     branch = "main",
     config = function() require("config.nvim-cmp") end,
     event = "BufEnter",
-    depenendencies = {
+    dependencies = {
       "onsails/lspkind-nvim",
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
@@ -201,17 +207,14 @@ require("lazy").setup({ -- it is recommened to put impatient.nvim before any oth
 
   -- Stay after pressing * and search selected text
   { "haya14busa/vim-asterisk", event = "VimEnter" },
-
   -- File search, tag search and more
-  --    if vim.g.is_win then
-  --    { "Yggdroot/LeaderF", cmd = "Leaderf" },
-  --else
-  --{
-  --"Yggdroot/LeaderF",
-  -- cmd = "Leaderf",
-  -- build = ":LeaderfInstallCExtension",
-  -- },
-  -- end
+  {
+    evalIf(
+      vim.g.is_win,
+      { "Yggdroot/LeaderF", cmd = "Leaderf" },
+      { "Yggdroot/LeaderF", cmd = "Leaderf", build = ":LeaderfInstallCExtension" }
+    ),
+  },
 
   {
     "nvim-telescope/telescope-fzf-native.nvim",
@@ -302,12 +305,9 @@ require("lazy").setup({ -- it is recommened to put impatient.nvim before any oth
     end,
   },
   { "tyru/open-browser.vim", event = "VimEnter" },
-
-  -- Only install these plugins if ctags are installed on the system
-  -- if utils.executable("ctags") then
-  -- show file tags in vim window
-  -- { "liuchengxu/vista.vim", cmd = "Vista" },
-  -- end
+  {
+    evalIf(utils.executable("ctags"), { "liuchengxu/vista.vim", cmd = "Vista" }, nil),
+  },
 
   -- Snippet engine and snippet template
   "honza/vim-snippets",
@@ -335,7 +335,7 @@ require("lazy").setup({ -- it is recommened to put impatient.nvim before any oth
   { "simnalamburt/vim-mundo", cmd = { "MundoToggle", "MundoShow" } },
 
   -- Manage your yank history
-  -- if vim.g.is_win or vim.g.is_mac then{ "svermeulen/vim-yoink", event = "VimEnter" }, end
+  { evalIf(vim.g.is_win or vim.g.is_mac, { "svermeulen/vim-yoink", event = "VimEnter" }, nil) },
 
   -- Handy unix command inside Vim (Rename, Move etc.)
   { "tpope/vim-eunuch", cmd = { "Rename", "Delete" } },
@@ -346,12 +346,19 @@ require("lazy").setup({ -- it is recommened to put impatient.nvim before any oth
   -- Show the content of register in preview window
   -- Plug 'junegunn/vim-peekaboo'
   { "jdhao/better-escape.vim", event = { "InsertEnter" } },
-
-  --if vim.g.is_mac then
-  --{ "lyokha/vim-xkbswitch", event = { "InsertEnter" } },
-  --elseif vim.g.is_win then
-  --{ "Neur1n/neuims", event = { "InsertEnter" } },
-  --end
+  {
+    evalIf(
+      vim.g.is_mac,
+      {
+        "lyokha/vim-xkbswitch",
+        event = { "InsertEnter" },
+      },
+      evalIf(vim.g.is_win, {
+        "Neur1n/neuims",
+        event = { "InsertEnter" },
+      }, nil)
+    ),
+  },
 
   -- Syntax check and make
   -- 'neomake/neomake',
@@ -379,15 +386,14 @@ require("lazy").setup({ -- it is recommened to put impatient.nvim before any oth
 
   {
     "rhysd/committia.vim",
-    -- init = function() require("lazy").load({"committia.vim"}) end,
   },
 
   -- Another markdown plugin
   { "plasticboy/vim-markdown", ft = { "markdown" } },
   {
     "iamcco/markdown-preview.nvim",
-    build = "cd app && yarn install",
-    setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
+    build = "cd app && npm install",
+    init = function() vim.g.mkdp_filetypes = { "markdown" } end,
     ft = { "markdown" },
   },
   -- Faster footnote generation
@@ -419,14 +425,11 @@ require("lazy").setup({ -- it is recommened to put impatient.nvim before any oth
   { "michaeljsmith/vim-indent-object", event = "VimEnter" },
 
   -- Only use these plugin on Windows and Mac and when LaTeX is installed
-  --if vim.g.is_win or vim.g.is_mac and utils.executable("latex") then{ "lervag/vimtex", ft = { "tex" } }, end
+  { evalIf(vim.g.is_win or vim.g.is_mac and utils.executable("latex"), { "lerag/vimtex", ft = "tex" }, nil) },
 
   -- Since tmux is only available on Linux and Mac, we only enable these plugins
   -- for Linux and Mac
-  --if utils.executable("tmux") then
-  -- .tmux.conf syntax highlighting and setting check
-  --{ "tmux-plugins/vim-tmux", ft = { "tmux" } },
-  --end
+  { evalIf(not vim.g.is_win and utils.executable("tmux"), { "tmux-plugins/vim-tmux", ft = { "tmux" } }, nil) },
 
   -- Modern matchit implementation
   { "andymass/vim-matchup", event = "VimEnter" },
@@ -466,8 +469,7 @@ require("lazy").setup({ -- it is recommened to put impatient.nvim before any oth
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function() require("config.session-manager") end,
   },
-
-  -- if vim.g.is_linux then{ "ojroques/vim-oscyank", cmd = { "OSCYank", "OSCYankReg" } }, end
+  { evalIf(vim.g.is_linux, { "ojroques/vim-oscyank", cmd = { "OSCYank", "OSCYankReg" } }, nil) },
 
   -- showing keybindings
   {
