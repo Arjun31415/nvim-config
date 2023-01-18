@@ -49,8 +49,8 @@ local cfg = {
 
 -- recommended:
 require("lsp_signature").setup(cfg) -- no need to specify bufnr if you don't use toggle_key
-local current_signature = function(width)
+--[[ local current_signature = function(width)
   if not packer_plugins["lsp_signature.nvim"] or packer_plugins["lsp_signature.nvim"].loaded == false then return "" end
   local sig = require("lsp_signature").status_line(width)
   return sig.label .. "🐼" .. sig.hint
-end
+end ]]

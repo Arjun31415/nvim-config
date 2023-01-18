@@ -1,519 +1,508 @@
 local utils = require("utils")
-local fn = vim.fn
-
-vim.g.package_home = fn.stdpath("data") .. "/site/pack/packer/"
-local packer_install_dir = vim.g.package_home .. "opt/packer.nvim"
-local plug_url_format = ""
-plug_url_format = "https://github.com/%s"
-local packer_repo = string.format(plug_url_format, "wbthomason/packer.nvim")
-local install_cmd = string.format("10split |term git clone --depth=1 %s %s", packer_repo, packer_install_dir)
-
--- Auto-install packer in case it hasn't been installed.
-if fn.glob(packer_install_dir) == "" then
-  vim.api.nvim_echo({ { "Installing packer.nvim", "Type" } }, true, {})
-  vim.cmd(install_cmd)
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
 end
-vim.cmd([[packadd packer.nvim]])
+vim.opt.rtp:prepend(lazypath)
+vim.g.mapleader = ","
+require("lazy").setup({ -- it is recommened to put impatient.nvim before any other plugins
+  { "lewis6991/impatient.nvim", config = function() require("impatient") end },
+  "nvim-lua/plenary.nvim",
+  "neovim/nvim-lspconfig",
+  "simrat39/rust-tools.nvim",
+  "williamboman/mason.nvim",
+  "williamboman/mason-lspconfig.nvim",
+  {
+    "folke/trouble.nvim",
+    dependencies = "kyazdani42/nvim-web-devicons",
+    event = "BufEnter",
+  },
+  {
+    "mfussenegger/nvim-dap",
+    event = "VimEnter",
+    config = function() require("config.Dap") end,
+  },
+  {
+    "rrethy/vim-hexokinase",
+    build = "cd  ~/.local/share/nvim/lazy/vim-hexokinase && make hexokinase",
+    event = "VimEnter",
+  },
+  {
+    "andweeb/presence.nvim",
+    config = function() require("config.discordPresence") end,
+    event = "BufEnter",
+  },
+  {
+    "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+    config = function() require("lsp_lines").setup() end,
+  },
+  "tamago324/nlsp-settings.nvim", -- language server settings defined in json for jsonls
+  -- Refactoring plugins
+  {
+    "ThePrimeagen/refactoring.nvim",
+    dependencies = {
+      { "nvim-lua/plenary.nvim" },
+      { "nvim-treesitter/nvim-treesitter" },
+    },
+    event = "BufEnter",
+    config = function() require("config.refactoring") end,
+  },
+  {
+    "filipdutescu/renamer.nvim",
+    branch = "master",
+    event = "BufEnter",
+    dependencies = { { "nvim-lua/plenary.nvim" } },
+    config = function() require("config.renamer") end,
+  },
 
-local packer_util = require("packer.util")
-require("packer").startup({
-  function(use)
-    -- it is recommened to put impatient.nvim before any other plugins
-    use({ "lewis6991/impatient.nvim", config = [[require('impatient')]] })
-    use("wbthomason/packer.nvim")
-    use({ "nvim-lua/plenary.nvim" })
-    use({ "neovim/nvim-lspconfig" })
-    use({ "simrat39/rust-tools.nvim" })
-    use({ "williamboman/mason.nvim" })
-    use({ "williamboman/mason-lspconfig.nvim" })
-    use({
-      "folke/trouble.nvim",
-      requires = "kyazdani42/nvim-web-devicons",
-      event = "BufEnter",
-    })
-    use({
-      "mfussenegger/nvim-dap",
-      event = "VimEnter",
-      config = [[require('config.Dap')]],
-    })
-    use({
-      "rrethy/vim-hexokinase",
-      run = "cd ~/.local/share/nvim/site/pack/packer/opt/vim-hexokinase && make hexokinase",
-      event = "VimEnter",
-    })
-    use({
-      "andweeb/presence.nvim",
-      config = [[require('config.discordPresence')]],
-      event = "BufEnter",
-    })
-    use({
-      "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-      config = function() require("lsp_lines").setup() end,
-    })
-    use({ "tamago324/nlsp-settings.nvim" }) -- language server settings defined in json for jsonls
-    -- Refactoring plugins
-    use({
-      "ThePrimeagen/refactoring.nvim",
-      requires = {
-        { "nvim-lua/plenary.nvim" },
-        { "nvim-treesitter/nvim-treesitter" },
-      },
-      event = "BufEnter",
-      config = [[require('config.refactoring')]],
-    })
-    use({
-      "filipdutescu/renamer.nvim",
-      branch = "master",
-      event = "BufEnter",
-      requires = { { "nvim-lua/plenary.nvim" } },
-      config = [[require('config.renamer')]],
-    })
-    -- add vscode like symbols to neovim's lsp menu
-    use({ "onsails/lspkind-nvim", config = [[require('config.lspkind')]] })
-
-    use({
-      "hrsh7th/nvim-cmp",
-      branch = "main",
-      config = [[require('config.nvim-cmp')]],
-    })
-
-    use({ "hrsh7th/cmp-nvim-lsp", event = "BufEnter", after = "nvim-cmp" })
-    use({ "hrsh7th/cmp-buffer", event = "BufEnter", after = "nvim-cmp" })
-    use({ "hrsh7th/cmp-path", event = "BufEnter", after = "nvim-cmp" })
-    use({ "hrsh7th/cmp-cmdline", event = "BufEnter", after = "nvim-cmp" })
-    use({ "quangnguyen30192/cmp-nvim-ultisnips", after = "nvim-cmp" })
-    use({ "github/copilot.vim" })
-    use({
-      "zbirenbaum/copilot.lua",
-      event = "InsertEnter",
-      config = function()
-        vim.schedule(function() require("copilot").setup() end)
-      end,
-    })
-    use({ "zbirenbaum/copilot-cmp", after = { "copilot.lua", "nvim-cmp" } })
-    use({
+  -- nvim-cmp dependencies
+  "hrsh7th/cmp-nvim-lsp",
+  "onsails/lspkind-nvim",
+  "hrsh7th/cmp-nvim-lsp",
+  "hrsh7th/cmp-buffer",
+  "hrsh7th/cmp-path",
+  "hrsh7th/cmp-cmdline",
+  "hrsh7th/cmp-cmdline",
+  "quangnguyen30192/cmp-nvim-ultisnips",
+  "github/copilot.vim",
+  "zbirenbaum/copilot-cmp",
+  {
+    "zbirenbaum/copilot.lua",
+    event = "InsertEnter",
+    config = function()
+      vim.schedule(function() require("copilot").setup() end)
+    end,
+    dependencies = { "zbirenbaum/copilot-cmp" },
+  },
+  {
+    "tzachar/cmp-tabnine",
+    build = "./install.sh",
+    dependencies = "hrsh7th/nvim-cmp",
+    config = function() require("config.nvim-cmp-tabnine") end,
+  },
+  {
+    "hrsh7th/nvim-cmp",
+    branch = "main",
+    config = function() require("config.nvim-cmp") end,
+    event = "BufEnter",
+    depenendencies = {
+      "onsails/lspkind-nvim",
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-cmdline",
+      "hrsh7th/cmp-cmdline",
+      "quangnguyen30192/cmp-nvim-ultisnips",
       "tzachar/cmp-tabnine",
-      run = "./install.sh",
-      requires = "hrsh7th/nvim-cmp",
-      config = [[require('config.nvim-cmp-tabnine')]],
-      event = "BufEnter",
-      after = "nvim-cmp",
-    })
-    use({
-      "lervag/vimtex",
-      ft = "tex",
-      event = "BufEnter",
-      config = function()
-        vim.g.tex_flavor = "latex"
-        vim.g.vimtex_fold_enable = 0
-        vim.g.vimtex_indent_enable = 1
-        vim.g.vimtex_view_method = "zathura"
-        vim.g.vimtex_latexmk_continuous = 1
-      end,
-    })
+      "zbirenbaum/copilot-cmp",
+    },
+  },
+  {
+    "lervag/vimtex",
+    ft = "tex",
+    event = "BufEnter",
+    config = function()
+      vim.g.tex_flavor = "latex"
+      vim.g.vimtex_fold_enable = 0
+      vim.g.vimtex_indent_enable = 1
+      vim.g.vimtex_view_method = "zathura"
+      vim.g.vimtex_latexmk_continuous = 1
+    end,
+  },
 
-    use({
-      "stsewd/spotify.nvim",
-      event = "BufEnter",
-      run = ":UpdateRemotePlugins",
-      config = [[require('config.nvim-spotify')]],
-    })
-    use({
-      "nvim-treesitter/nvim-treesitter",
-      -- event = 'BufEnter',
-      run = ":TSUpdate",
-      config = [[require('config.treesitter')]],
-    })
-    use({ "elkowar/yuck.vim", ft = "yuck" })
-    use({ "fladson/vim-kitty", event = "BufEnter" })
-    use({
-      "SmiteshP/nvim-navic",
-      requires = "neovim/nvim-lspconfig",
-      -- config = [[require('config.nvim-navic')]]
-    })
-    use({
-      "zbirenbaum/neodim",
-      config = function() require("neodim").setup() end,
-    })
-    use({
-      "p00f/nvim-ts-rainbow",
-      event = "BufEnter",
-      requires = "nvim-treesitter/nvim-treesitter",
-    })
-    use({
-      "m-demare/hlargs.nvim",
-      requires = { "nvim-treesitter/nvim-treesitter" },
-      config = [[require('config.hlargs')]],
-      event = "BufEnter",
-    })
-    -- use({'nvim-treesitter/playground'})
-    --         todo highlighter
-    use({
-      "folke/todo-comments.nvim",
-      requires = "nvim-lua/plenary.nvim",
-      config = function()
-        require("todo-comments").setup({
-          -- your configuration comes here
-          -- or leave it empty to use the default settings
-          -- refer to the configuration section below
-        })
-      end,
-    })
-    -- Python indent (follows the PEP8 style)
-    use({ "Vimjas/vim-python-pep8-indent", ft = { "python" } })
-
-    -- Python-related text object
-    use({ "jeetsukumaran/vim-pythonsense", ft = { "python" } })
-    use({ "searleser97/cpbooster.vim" })
-    use({ "machakann/vim-swap", event = "VimEnter" })
-
-    use({
-      "ray-x/lsp_signature.nvim",
-      config = [[require('config.lsp_signature')]],
-    })
-    -- Super fast buffer jump
-    use({
-      "phaazon/hop.nvim",
-      event = "VimEnter",
-      config = function()
-        vim.defer_fn(function() require("config.nvim_hop") end, 2000)
-      end,
-    })
-    use({
-      "ThePrimeagen/harpoon",
-      requires = { { "nvim-lua/plenary.nvim" } },
-      config = [[require('config.harpoon')]],
-    })
-    -- Clear highlight search automatically for you
-    -- use({"romainl/vim-cool", event = "VimEnter"})
-
-    -- Show match number and index for searching
-    use({
-      "kevinhwang91/nvim-hlslens",
-      branch = "main",
-      keys = { { "n", "*" }, { "n", "#" }, { "n", "n" }, { "n", "N" } },
-      config = [[require('config.hlslens')]],
-    })
-
-    -- Stay after pressing * and search selected text
-    use({ "haya14busa/vim-asterisk", event = "VimEnter" })
-
-    -- File search, tag search and more
-    if vim.g.is_win then
-      use({ "Yggdroot/LeaderF", cmd = "Leaderf" })
-    else
-      use({
-        "Yggdroot/LeaderF",
-        cmd = "Leaderf",
-        run = ":LeaderfInstallCExtension",
+  {
+    "stsewd/spotify.nvim",
+    event = "BufEnter",
+    build = ":UpdateRemotePlugins",
+    config = function() require("config.nvim-spotify") end,
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    -- event = 'BufEnter',
+    build = ":TSUpdate",
+    config = function() require("config.treesitter") end,
+  },
+  { "elkowar/yuck.vim", ft = "yuck" },
+  { "fladson/vim-kitty", event = "BufEnter" },
+  {
+    "SmiteshP/nvim-navic",
+    dependencies = "neovim/nvim-lspconfig",
+    -- config = function() require('config.nvim-navic') end,
+  },
+  {
+    "zbirenbaum/neodim",
+    config = function() require("neodim").setup() end,
+  },
+  {
+    "p00f/nvim-ts-rainbow",
+    event = "BufEnter",
+    dependencies = "nvim-treesitter/nvim-treesitter",
+  },
+  {
+    "m-demare/hlargs.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function() require("config.hlargs") end,
+    event = "BufEnter",
+  },
+  --'nvim-treesitter/playground'
+  {
+    "folke/todo-comments.nvim",
+    dependencies = "nvim-lua/plenary.nvim",
+    config = function()
+      require("todo-comments").setup({
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
       })
-    end
+    end,
+  },
+  -- Python indent (follows the PEP8 style)
+  { "Vimjas/vim-python-pep8-indent", ft = { "python" } },
 
-    use({
-      "nvim-telescope/telescope.nvim",
-      cmd = "Telescope",
-      opt = true,
-      requires = { { "nvim-lua/plenary.nvim" } },
-    })
-    use({
+  -- Python-related text object
+  { "jeetsukumaran/vim-pythonsense", ft = { "python" } },
+  "searleser97/cpbooster.vim",
+  { "machakann/vim-swap", event = "VimEnter" },
+
+  {
+    "ray-x/lsp_signature.nvim",
+    config = function() require("config.lsp_signature") end,
+  },
+  -- Super fast buffer jump
+  {
+    "phaazon/hop.nvim",
+    event = "VimEnter",
+    config = function()
+      vim.defer_fn(function() require("config.nvim_hop") end, 2000)
+    end,
+  },
+  {
+    "ThePrimeagen/harpoon",
+    dependencies = { { "nvim-lua/plenary.nvim" } },
+    config = function() require("config.harpoon") end,
+  },
+  -- Clear highlight search automatically for you
+  --"romainl/vim-cool", event = "VimEnter"
+
+  -- Show match number and index for searching
+  {
+    "kevinhwang91/nvim-hlslens",
+    branch = "main",
+    keys = { { "n", "*" }, { "n", "#" }, { "n", "n" }, { "n", "N" } },
+    config = function() require("config.hlslens") end,
+  },
+
+  -- Stay after pressing * and search selected text
+  { "haya14busa/vim-asterisk", event = "VimEnter" },
+
+  -- File search, tag search and more
+  --    if vim.g.is_win then
+  --    { "Yggdroot/LeaderF", cmd = "Leaderf" },
+  --else
+  --{
+  --"Yggdroot/LeaderF",
+  -- cmd = "Leaderf",
+  -- build = ":LeaderfInstallCExtension",
+  -- },
+  -- end
+
+  {
+    "nvim-telescope/telescope-fzf-native.nvim",
+    build = "make",
+  },
+  -- search emoji and other symbols
+  "nvim-telescope/telescope-symbols.nvim",
+
+  "nvim-telescope/telescope-ui-select.nvim",
+  {
+    "nvim-telescope/telescope.nvim",
+    cmd = "Telescope",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope-fzf-native.nvim",
-      run = "make",
-      after = "telescope.nvim",
-    })
-
-    use({
       "nvim-telescope/telescope-ui-select.nvim",
-      after = "telescope.nvim",
-      config = [[require('config.telescope-nvim')]],
-    })
-    -- search emoji and other symbols
-    use({ "nvim-telescope/telescope-symbols.nvim", after = "telescope.nvim" })
+      "nvim-telescope/telescope-symbols.nvim",
+    },
+    config = function() require("config.telescope-nvim") end,
+  },
 
-    -- Another similar plugin is command-t
-    -- use 'wincent/command-t'
+  -- Another similar plugin is command-t
+  -- 'wincent/command-t',
 
-    -- A grepping tool
-    -- use {'mhinz/vim-grepper', cmd = {'Grepper', '<plug>(GrepperOperator)'}}
-    -- Themes
-    -- A list of colorscheme plugin you may want to try. Find what suits you.
-    use({ "folke/tokyonight.nvim", config = [[require("config.tokyonight")]] })
-    -- use({ "navarasu/onedark.nvim", config = [[require('config.onedark')]] })
-    -- use({
-    -- "olimorris/onedarkpro.nvim",
-    -- config = [[require('config.onedarkpro')]],
-    --})
+  -- A grepping tool
+  -- 'mhinz/vim-grepper', cmd = {'Grepper', '<plug>(GrepperOperator)'},
+  -- Themes
+  -- A list of colorscheme plugin you may want to try. Find what suits you.
+  { "folke/tokyonight.nvim", config = function() require("config.tokyonight") end },
+  --{ "navarasu/onedark.nvim", config = function() require('config.onedark') end, },
+  --{
+  -- "olimorris/onedarkpro.nvim",
+  -- config = function() require('config.onedarkpro') end,
+  --},
 
-    --[[ use({
+  --[[{
       "rose-pine/neovim",
       as = "rose-pine",
       config = function()
         require("rose-pine").setup({ dark_variant = "main" })
         vim.cmd("colorscheme rose-pine")
       end,
-    }) ]]
-    -- use({ "sainnhe/edge", config = [[require('config.edge-theme')]] })
-    -- use {'catppuccin/nvim', as = "catppuccin"}
-    -- Show git change (change, delete, add) signs in vim sign column
-    use({ "mhinz/vim-signify", event = "BufEnter" })
-    -- Git lens similar to vscode
-    use({ "APZelos/blamer.nvim", event = "BufEnter" })
-    -- Another similar plugin
-    -- use 'airblade/vim-gitgutter'
-    --[[ use({
+    }, ]]
+  --{ "sainnhe/edge", config = function() require('config.edge-theme') end, },
+  -- Show git change (change, delete, add) signs in vim sign column
+  { "mhinz/vim-signify", event = "BufEnter" },
+  -- Git lens similar to vscode
+  { "APZelos/blamer.nvim", event = "BufEnter" },
+  -- Another similar plugin
+  -- 'airblade/vim-gitgutter',
+  --[[{
             'ldelossa/gh.nvim',
             event = 'InsertEnter',
-            requires = 'ldelossa/litee.nvim',
+            dependencies = 'ldelossa/litee.nvim',
             config = function()
                 require('litee.lib').setup()
                 require('litee.gh').setup()
             end
-        }) ]]
-    use({
-      "nvim-lualine/lualine.nvim",
-      event = "VimEnter",
-      config = [[require('config.statusline')]],
-    })
-
-    -- fancy start screen
-    use({
-      "goolord/alpha-nvim",
-      event = "VimEnter",
-      config = [[require('config.alpha-nvim')]],
-    })
-
-    use({
-      "lukas-reineke/indent-blankline.nvim",
-      event = "VimEnter",
-      config = [[require('config.indent-blankline')]],
-    })
-
-    -- Highlight URLs inside vim
-    use({ "itchyny/vim-highlighturl", event = "VimEnter" })
-
-    -- notification plugin
-    use({
-      "rcarriga/nvim-notify",
-      event = "BufEnter",
-      config = function()
-        vim.defer_fn(function() require("config.nvim-notify") end, 2000)
-      end,
-    })
-    use({ "tyru/open-browser.vim", event = "VimEnter" })
-
-    -- Only install these plugins if ctags are installed on the system
-    if utils.executable("ctags") then
-      -- show file tags in vim window
-      use({ "liuchengxu/vista.vim", cmd = "Vista" })
-    end
-
-    -- Snippet engine and snippet template
-    use({ "SirVer/ultisnips", event = "InsertEnter" })
-    use({ "honza/vim-snippets", after = "ultisnips" })
-
-    use({
-      "windwp/nvim-autopairs",
-      event = "BufEnter",
-      config = [[require('config.autopairs')]],
-    })
-
-    -- Comment plugin
-    use({ "b3nj5m1n/kommentary", event = "VimEnter" })
-
-    -- Autosave files on certain events
-    use({
-      "Pocco81/auto-save.nvim",
-      event = "VimEnter",
-      config = function()
-        vim.defer_fn(function() require("config.autosave") end, 1500)
-      end,
-    })
-
-    -- Show undo history visually
-    use({ "simnalamburt/vim-mundo", cmd = { "MundoToggle", "MundoShow" } })
-
-    -- Manage your yank history
-    if vim.g.is_win or vim.g.is_mac then use({ "svermeulen/vim-yoink", event = "VimEnter" }) end
-
-    -- Handy unix command inside Vim (Rename, Move etc.)
-    use({ "tpope/vim-eunuch", cmd = { "Rename", "Delete" } })
-
-    -- Repeat vim motions
-    use({ "tpope/vim-repeat", event = "VimEnter" })
-
-    -- Show the content of register in preview window
-    -- Plug 'junegunn/vim-peekaboo'
-    use({ "jdhao/better-escape.vim", event = { "InsertEnter" } })
-
-    if vim.g.is_mac then
-      use({ "lyokha/vim-xkbswitch", event = { "InsertEnter" } })
-    elseif vim.g.is_win then
-      use({ "Neur1n/neuims", event = { "InsertEnter" } })
-    end
-
-    -- Syntax check and make
-    -- use 'neomake/neomake'
-
-    -- Auto format tools
-    use({ "sbdchd/neoformat", cmd = { "Neoformat" } })
-
-    -- Git command inside vim
-    use({ "tpope/vim-fugitive", event = "User InGitRepo" })
-
-    -- Better git log display
-    use({ "rbong/vim-flog", requires = "tpope/vim-fugitive", cmd = { "Flog" } })
-
-    use({
-      "christoomey/vim-conflicted",
-      requires = "tpope/vim-fugitive",
-      cmd = { "Conflicted" },
-    })
-
-    use({
-      "kevinhwang91/nvim-bqf",
-      event = "FileType qf",
-      config = [[require('config.bqf')]],
-    })
-
-    use({
-      "rhysd/committia.vim",
-      opt = true,
-      setup = [[vim.cmd('packadd committia.vim')]],
-    })
-
-    -- Another markdown plugin
-    use({ "plasticboy/vim-markdown", ft = { "markdown" } })
-    use({
-      "iamcco/markdown-preview.nvim",
-      run = "cd app && yarn install",
-      setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
-      ft = { "markdown" },
-    })
-    -- Faster footnote generation
-    use({ "vim-pandoc/vim-markdownfootnotes", ft = { "markdown" } })
-
-    -- Vim tabular plugin for manipulate tabular, required by markdown plugins
-    use({ "godlygeek/tabular", cmd = { "Tabularize" } })
-
-    -- Markdown JSON header highlight plugin
-    use({ "elzr/vim-json", ft = { "json", "markdown" } })
-
-    -- use({
-    -- 'folke/zen-mode.nvim',
-    -- cmd = 'ZenMode',
-    -- config = [[require('config.zen-mode')]]
-    -- })
-
-    use({ "chrisbra/unicode.vim", event = "VimEnter" })
-
-    -- Additional powerful text object for vim, this plugin should be studied
-    -- carefully to use its full power
-    use({ "wellle/targets.vim", event = "VimEnter" })
-
-    -- Plugin to manipulate character pairs quickly
-    -- use 'tpope/vim-surround'
-    use({ "machakann/vim-sandwich", event = "VimEnter" })
-
-    -- Add indent object for vim (useful for languages like Python)
-    use({ "michaeljsmith/vim-indent-object", event = "VimEnter" })
-
-    -- Only use these plugin on Windows and Mac and when LaTeX is installed
-    if vim.g.is_win or vim.g.is_mac and utils.executable("latex") then use({ "lervag/vimtex", ft = { "tex" } }) end
-
-    -- Since tmux is only available on Linux and Mac, we only enable these plugins
-    -- for Linux and Mac
-    if utils.executable("tmux") then
-      -- .tmux.conf syntax highlighting and setting check
-      use({ "tmux-plugins/vim-tmux", ft = { "tmux" } })
-    end
-
-    -- Modern matchit implementation
-    use({ "andymass/vim-matchup", event = "VimEnter" })
-
-    -- Smoothie motions
-    -- use 'psliwka/vim-smoothie'
-    use({
-      "karb94/neoscroll.nvim",
-      event = "VimEnter",
-      config = function()
-        vim.defer_fn(function() require("config.neoscroll") end, 2000)
-      end,
-    })
-
-    use({
-      "tpope/vim-scriptease",
-      cmd = { "Scriptnames", "Message", "Verbose" },
-    })
-
-    -- Asynchronous command execution
-    use({ "skywind3000/asyncrun.vim", opt = true, cmd = { "AsyncRun" } })
-    -- Another asynchronous plugin
-    -- Plug 'tpope/vim-dispatch'
-
-    use({ "cespare/vim-toml", ft = { "toml" }, branch = "main" })
-
-    -- Edit text area in browser using nvim
-    -- use({
-    -- "glacambre/firenvim",
-    -- run = function() fn["firenvim#install"](0) end,
-    -- opt = true,
-    -- setup = [[vim.cmd('packadd firenvim')]]
-    -- })
-    -- Session management plugin
-    use({
-      "Shatur/neovim-session-manager",
-      requires = { "nvim-lua/plenary.nvim" },
-      config = [[require('config.session-manager')]],
-    })
-
-    if vim.g.is_linux then use({ "ojroques/vim-oscyank", cmd = { "OSCYank", "OSCYankReg" } }) end
-
-    -- showing keybindings
-    use({
-      "folke/which-key.nvim",
-      event = "VimEnter",
-      config = function()
-        vim.defer_fn(function() require("config.which-key") end, 2000)
-      end,
-    })
-    use({
-      "jbyuki/instant.nvim",
-      event = "BufEnter",
-      config = [[require('config.instant-nvim')]],
-    })
-
-    -- show and trim trailing whitespaces
-    use({ "jdhao/whitespace.nvim", event = "VimEnter" })
-    use({ "kyazdani42/nvim-web-devicons" })
-    use({ "ryanoasis/vim-devicons" })
-    -- use({
-    -- "akinsho/bufferline.nvim",
-    -- event = "VimEnter",
-    -- requires = "kyazdani42/nvim-web-devicons",
-    -- config = [[require('config.bufferline')]],
-    -- })
-
-    use({
-      "nvim-neo-tree/neo-tree.nvim",
-      branch = "v2.x",
-      requires = {
-        "nvim-lua/plenary.nvim",
-        "kyazdani42/nvim-web-devicons",
-        "MunifTanjim/nui.nvim",
-      },
-      config = [[require('config.neo-tree')]],
-    })
-  end,
-  config = {
-    max_jobs = 16,
-    compile_path = packer_util.join_paths(vim.fn.stdpath("config"), "lua", "packer_compiled.lua"),
-    git = { default_url_format = plug_url_format },
-    profile = {
-      enable = true,
-      threshold = 1, -- the amount in ms that a plugins load time must be over for it to be included in the profile
-    },
+        }, ]]
+  {
+    "nvim-lualine/lualine.nvim",
+    event = "VimEnter",
+    config = function() require("config.statusline") end,
   },
-  -- Always load the vim-devicons as the very last one.
-})
 
-local status, _ = pcall(require, "packer_compiled")
-if not status then vim.notify("Error requiring packer_compiled.lua: run PackerSync to fix!") end
+  -- fancy start screen
+  {
+    "goolord/alpha-nvim",
+    event = "VimEnter",
+    config = function() require("config.alpha-nvim") end,
+  },
+
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    event = "VimEnter",
+    config = function() require("config.indent-blankline") end,
+  },
+
+  -- Highlight URLs inside vim
+  { "itchyny/vim-highlighturl", event = "VimEnter" },
+
+  -- notification plugin
+  {
+    "rcarriga/nvim-notify",
+    event = "BufEnter",
+    config = function()
+      vim.defer_fn(function() require("config.nvim-notify") end, 2000)
+    end,
+  },
+  { "tyru/open-browser.vim", event = "VimEnter" },
+
+  -- Only install these plugins if ctags are installed on the system
+  -- if utils.executable("ctags") then
+  -- show file tags in vim window
+  -- { "liuchengxu/vista.vim", cmd = "Vista" },
+  -- end
+
+  -- Snippet engine and snippet template
+  "honza/vim-snippets",
+  { "SirVer/ultisnips", event = "InsertEnter", dependencies = { "honza/vim-snippets" } },
+
+  {
+    "windwp/nvim-autopairs",
+    event = "BufEnter",
+    config = function() require("config.autopairs") end,
+  },
+
+  -- Comment plugin
+  { "b3nj5m1n/kommentary", event = "VimEnter" },
+
+  -- Autosave files on certain events
+  {
+    "Pocco81/auto-save.nvim",
+    event = "VimEnter",
+    config = function()
+      vim.defer_fn(function() require("config.autosave") end, 1500)
+    end,
+  },
+
+  -- Show undo history visually
+  { "simnalamburt/vim-mundo", cmd = { "MundoToggle", "MundoShow" } },
+
+  -- Manage your yank history
+  -- if vim.g.is_win or vim.g.is_mac then{ "svermeulen/vim-yoink", event = "VimEnter" }, end
+
+  -- Handy unix command inside Vim (Rename, Move etc.)
+  { "tpope/vim-eunuch", cmd = { "Rename", "Delete" } },
+
+  -- Repeat vim motions
+  { "tpope/vim-repeat", event = "VimEnter" },
+
+  -- Show the content of register in preview window
+  -- Plug 'junegunn/vim-peekaboo'
+  { "jdhao/better-escape.vim", event = { "InsertEnter" } },
+
+  --if vim.g.is_mac then
+  --{ "lyokha/vim-xkbswitch", event = { "InsertEnter" } },
+  --elseif vim.g.is_win then
+  --{ "Neur1n/neuims", event = { "InsertEnter" } },
+  --end
+
+  -- Syntax check and make
+  -- 'neomake/neomake',
+
+  -- Auto format tools
+  { "sbdchd/neoformat", cmd = { "Neoformat" } },
+
+  -- Git command inside vim
+  { "tpope/vim-fugitive", event = "User InGitRepo" },
+
+  -- Better git log display
+  { "rbong/vim-flog", dependencies = "tpope/vim-fugitive", cmd = { "Flog" } },
+
+  {
+    "christoomey/vim-conflicted",
+    dependencies = "tpope/vim-fugitive",
+    cmd = { "Conflicted" },
+  },
+
+  {
+    "kevinhwang91/nvim-bqf",
+    event = "FileType qf",
+    config = function() require("config.bqf") end,
+  },
+
+  {
+    "rhysd/committia.vim",
+    -- init = function() require("lazy").load({"committia.vim"}) end,
+  },
+
+  -- Another markdown plugin
+  { "plasticboy/vim-markdown", ft = { "markdown" } },
+  {
+    "iamcco/markdown-preview.nvim",
+    build = "cd app && yarn install",
+    setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
+    ft = { "markdown" },
+  },
+  -- Faster footnote generation
+  { "vim-pandoc/vim-markdownfootnotes", ft = { "markdown" } },
+
+  -- Vim tabular plugin for manipulate tabular, required by markdown plugins
+  { "godlygeek/tabular", cmd = { "Tabularize" } },
+
+  -- Markdown JSON header highlight plugin
+  { "elzr/vim-json", ft = { "json", "markdown" } },
+
+  --{
+  -- 'folke/zen-mode.nvim',
+  -- cmd = 'ZenMode',
+  -- config = function() require('config.zen-mode') end,
+  -- },
+
+  { "chrisbra/unicode.vim", event = "VimEnter" },
+
+  -- Additional powerful text object for vim, this plugin should be studied
+  -- carefully to use its full power
+  { "wellle/targets.vim", event = "VimEnter" },
+
+  -- Plugin to manipulate character pairs quickly
+  -- 'tpope/vim-surround',
+  { "machakann/vim-sandwich", event = "VimEnter" },
+
+  -- Add indent object for vim (useful for languages like Python)
+  { "michaeljsmith/vim-indent-object", event = "VimEnter" },
+
+  -- Only use these plugin on Windows and Mac and when LaTeX is installed
+  --if vim.g.is_win or vim.g.is_mac and utils.executable("latex") then{ "lervag/vimtex", ft = { "tex" } }, end
+
+  -- Since tmux is only available on Linux and Mac, we only enable these plugins
+  -- for Linux and Mac
+  --if utils.executable("tmux") then
+  -- .tmux.conf syntax highlighting and setting check
+  --{ "tmux-plugins/vim-tmux", ft = { "tmux" } },
+  --end
+
+  -- Modern matchit implementation
+  { "andymass/vim-matchup", event = "VimEnter" },
+
+  -- Smoothie motions
+  -- 'psliwka/vim-smoothie',
+  {
+    "karb94/neoscroll.nvim",
+    event = "VimEnter",
+    config = function()
+      vim.defer_fn(function() require("config.neoscroll") end, 2000)
+    end,
+  },
+
+  {
+    "tpope/vim-scriptease",
+    cmd = { "Scriptnames", "Message", "Verbose" },
+  },
+
+  -- Asynchronous command execution
+  --  { "skywind3000/asyncbuild.vim", opt = true, cmd = { "Asyncbuild" } },
+  -- Another asynchronous plugin
+  -- Plug 'tpope/vim-dispatch'
+
+  { "cespare/vim-toml", ft = { "toml" }, branch = "main" },
+
+  -- Edit text area in browser using nvim
+  --{
+  -- "glacambre/firenvim",
+  -- build = function() fn["firenvim#install"](0) end,
+  -- opt = true,
+  -- setup = function vim.cmd('packadd firenvim') end,
+  -- },
+  -- Session management plugin
+  {
+    "Shatur/neovim-session-manager",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function() require("config.session-manager") end,
+  },
+
+  -- if vim.g.is_linux then{ "ojroques/vim-oscyank", cmd = { "OSCYank", "OSCYankReg" } }, end
+
+  -- showing keybindings
+  {
+    "folke/which-key.nvim",
+    event = "VimEnter",
+    config = function()
+      vim.defer_fn(function() require("config.which-key") end, 2000)
+    end,
+  },
+  {
+    "jbyuki/instant.nvim",
+    event = "BufEnter",
+    config = function() require("config.instant-nvim") end,
+  },
+
+  -- show and trim trailing whitespaces
+  { "jdhao/whitespace.nvim", event = "VimEnter" },
+  "kyazdani42/nvim-web-devicons",
+  "ryanoasis/vim-devicons",
+
+  --{
+  -- "akinsho/bufferline.nvim",
+  -- event = "VimEnter",
+  -- dependencies = "kyazdani42/nvim-web-devicons",
+  -- config = function() require('config.bufferline') end,
+  -- },
+
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v2.x",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "kyazdani42/nvim-web-devicons",
+      "MunifTanjim/nui.nvim",
+    },
+    config = function() require("config.neo-tree") end,
+  },
+})

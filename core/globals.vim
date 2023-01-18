@@ -17,7 +17,6 @@ else
 endif
 
 " Custom mapping <leader> (see `:h mapleader` for more info) cause \ is too far and I'm lazy
-let g:mapleader = ','
 " Enable syntax highlighting for lua in vim
 let g:vimsyn_embed = 'l'
 " I speak english thank you.

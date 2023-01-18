@@ -7,10 +7,10 @@ lua require('lua-init')
 " To use these shortcuts: first activate command line with `:`, then input the
 " short alias, e.g., `pi`, then press <space>, the alias will be expanded to
 " the full command automatically.
-call utils#Cabbrev('pi', 'PackerInstall')
-call utils#Cabbrev('pud', 'PackerUpdate')
-call utils#Cabbrev('pc', 'PackerClean')
-call utils#Cabbrev('ps', 'PackerSync')
+call utils#Cabbrev('li', 'Lazy install')
+call utils#Cabbrev('lud', 'Lazy Update')
+call utils#Cabbrev('lc', 'Lazy clean')
+call utils#Cabbrev('ls', 'Lazy sync')
 set guifont=VictorMono_Nerd_Font:h14
 """""""""""""""""""""""""UltiSnips settings"""""""""""""""""""
 " Trigger configuration. Do not use <tab> if you use YouCompleteMe
