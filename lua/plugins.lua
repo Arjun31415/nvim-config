@@ -236,12 +236,13 @@ require("packer").startup({
     -- use {'mhinz/vim-grepper', cmd = {'Grepper', '<plug>(GrepperOperator)'}}
     -- Themes
     -- A list of colorscheme plugin you may want to try. Find what suits you.
-    -- use({'folke/tokyonight.nvim'})
-    use({ "navarasu/onedark.nvim", config = [[require('config.onedark')]] })
-    use({
-      "olimorris/onedarkpro.nvim",
-      config = [[require('config.onedarkpro')]],
-    })
+    use({ "folke/tokyonight.nvim", config = [[require("config.tokyonight")]] })
+    -- use({ "navarasu/onedark.nvim", config = [[require('config.onedark')]] })
+    -- use({
+    -- "olimorris/onedarkpro.nvim",
+    -- config = [[require('config.onedarkpro')]],
+    --})
+
     --[[ use({
       "rose-pine/neovim",
       as = "rose-pine",
