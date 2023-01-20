@@ -31,6 +31,9 @@ lspKindConfig.init({
     Unit = "[] Unit",
     Value = "[] Value",
     Variable = "[ﳛ] Variable",
+    Copilot = "",
   },
 })
+vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
+-- print
 return lspKindConfig
