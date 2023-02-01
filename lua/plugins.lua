@@ -123,12 +123,12 @@ require("lazy").setup({
     end,
   },
 
-  {
+  --[[ {
     "stsewd/spotify.nvim",
     event = "BufEnter",
     build = ":UpdateRemotePlugins",
     config = function() require("config.nvim-spotify") end,
-  },
+  }, ]]
   {
     "nvim-treesitter/nvim-treesitter",
     -- event = 'BufEnter',
