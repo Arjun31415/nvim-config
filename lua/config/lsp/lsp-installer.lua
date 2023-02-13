@@ -47,7 +47,7 @@ local sumneko_opts = require("config.lsp.settings.sumneko_lua")
 local opts = {}
 opts = vim.tbl_deep_extend("force", sumneko_opts, opts)
 opts.on_attach = configFunctions.on_attach
-lspconfig.sumneko_lua.setup(opts)
+lspconfig.lua_ls.setup(opts)
 
 -- jsonls setup
 
