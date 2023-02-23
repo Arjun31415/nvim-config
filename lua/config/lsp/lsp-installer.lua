@@ -15,7 +15,6 @@ local servers = {
   "cssmodules_ls",
   "rust_analyzer",
 }
-mason_lspconfig.setup({ ensure_installed = servers })
 local lsp_server_names = {
   "bash-language-server",
   "pyright",
@@ -27,8 +26,9 @@ local lsp_server_names = {
   "vim-language-server",
   "tailwindcss-language-server",
   "cssmodules-language-server",
-  "rust_analyzer",
+  "rust-analyzer",
 }
+mason_lspconfig.setup({ ensure_installed = servers})
 
 local configFunctions = require("config.lsp.handlers")
 local lspconfig = require("lspconfig")

@@ -11,6 +11,7 @@ require("nvim-treesitter.configs").setup({
   ensure_installed = {
     "python",
     "cpp",
+    "c",
     "lua",
     "vim",
     "java",
@@ -18,13 +19,18 @@ require("nvim-treesitter.configs").setup({
     "javascript",
     "html",
     "css",
+    "bash",
+    "fish",
+    "cuda",
+    "markdown",
+    "markdown_inline",
+    "rust"
   },
   ignore_install = {
     "beancount",
     "clojure",
     "commonlisp",
     "c_sharp",
-    "cuda",
     "d",
     "devicetree",
     "dot",

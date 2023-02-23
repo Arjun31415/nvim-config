@@ -135,6 +135,13 @@ require("lazy").setup({
     build = ":TSUpdate",
     config = function() require("config.treesitter") end,
   },
+  {
+    "danymat/neogen",
+    dependencies = "nvim-treesitter/nvim-treesitter",
+    config = true,
+    -- Uncomment next line if you want to follow only stable versions
+    -- version = "*"
+  },
   { "elkowar/yuck.vim", ft = "yuck" },
   { "fladson/vim-kitty", event = "BufEnter" },
   {
