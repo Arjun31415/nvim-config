@@ -134,6 +134,11 @@ require("lazy").setup({
     -- event = 'BufEnter',
     build = ":TSUpdate",
     config = function() require("config.treesitter") end,
+    dependencies = {
+      {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+      },
+    },
   },
   {
     "danymat/neogen",
@@ -420,10 +425,18 @@ require("lazy").setup({
 
   { "chrisbra/unicode.vim", event = "VimEnter" },
 
-  -- Additional powerful text object for vim, this plugin should be studied
-  -- carefully to use its full power
-  { "wellle/targets.vim", event = "VimEnter" },
-
+  -- Additional powerful text object for vim
+  {
+    "echasnovski/mini.ai",
+    -- keys = {
+    --   { "a", mode = { "x", "o" } },
+    --   { "i", mode = { "x", "o" } },
+    -- },
+    event = "VeryLazy",
+    dependencies = { "nvim-treesitter-textobjects" },
+    opts = function() require("config.mini-ai").setup() end,
+    config = function(_, opts) require("config.mini-ai").config(opts) end,
+  },
   -- Plugin to manipulate character pairs quickly
   -- 'tpope/vim-surround',
   { "machakann/vim-sandwich", event = "VimEnter" },

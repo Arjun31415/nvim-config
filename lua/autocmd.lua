@@ -1,6 +1,6 @@
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
-local utils = require("utils")
+
 -- Do not use smart case in command line mode, extracted from
 -- https://vi.stackexchange.com/a/16511/15292.
 -- You can dynamically toggle smartcase using autocmds,
@@ -50,10 +50,3 @@ autocmd({
 }, {
   callback = function() require("config.winbar").get_winbar() end,
 })
---[[ _id = augroup("harpoon_add_current_file", { clear = true })
-autocmd({ "InsertEnter" }, {
-  pattern = { "*" },
-  group = _id,
-  callback = function() require("harpoon.mark").add_file() end,
-  desc = "Add the current file to harpoon marks",
-}) ]]

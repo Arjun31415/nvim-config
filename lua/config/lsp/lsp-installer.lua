@@ -28,11 +28,12 @@ local lsp_server_names = {
   "cssmodules-language-server",
   "rust-analyzer",
 }
--- mason_lspconfig.setup({ ensure_installed = servers })
-mason_lspconfig.setup()
+
+require("mason-lspconfig").setup {
+    ensure_installed = { "lua_ls", "rust_analyzer" },
+}
 
 local configFunctions = require("config.lsp.handlers")
-local lspconfig = require("lspconfig")
 
 lsp_installer.setup({
   ui = {
