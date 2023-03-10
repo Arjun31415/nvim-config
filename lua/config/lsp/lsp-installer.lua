@@ -28,10 +28,12 @@ local lsp_server_names = {
   "cssmodules-language-server",
   "rust-analyzer",
 }
-mason_lspconfig.setup({ ensure_installed = servers})
+-- mason_lspconfig.setup({ ensure_installed = servers })
+mason_lspconfig.setup()
 
 local configFunctions = require("config.lsp.handlers")
 local lspconfig = require("lspconfig")
+
 lsp_installer.setup({
   ui = {
     icons = {
@@ -42,62 +44,33 @@ lsp_installer.setup({
   },
 })
 
--- lua language server setup
-local sumneko_opts = require("config.lsp.settings.sumneko_lua")
-local opts = {}
-opts = vim.tbl_deep_extend("force", sumneko_opts, opts)
-opts.on_attach = configFunctions.on_attach
-lspconfig.lua_ls.setup(opts)
+mason_lspconfig.setup_handlers({
+  function(server_name) require("lspconfig")[server_name].setup({ on_attach = configFunctions.on_attach }) end,
+  ["rust_analyzer"] = function() require("config.lsp.settings.rust") end,
+  ["clangd"] = function()
+    local clangd_capabilities = configFunctions.capabilities
+    clangd_capabilities.offsetEncoding = "utf-8"
+    require("lspconfig").clangd.setup({
+      capabilities = clangd_capabilities,
+      on_attach = configFunctions.on_attach,
+    })
+  end,
 
--- jsonls setup
-
-opts = {}
-local jsonls_opts = require("config.lsp.settings.jsonls")
-opts = vim.tbl_deep_extend("force", jsonls_opts, opts)
-opts.on_attach = configFunctions.on_attach
-lspconfig.jsonls.setup(opts)
--- r language server
-lspconfig.r_language_server.setup({ on_attach = configFunctions.on_attach })
--- asm_lsp
--- lspconfig.asm_lsp.setup({ on_attach = configFunctions.on_attach })
--- bash
-lspconfig.bashls.setup({ on_attach = configFunctions.on_attach })
--- cmake setup
-lspconfig.cmake.setup({ on_attach = configFunctions.on_attach })
--- clangd setup
-local clangd_capabilities = configFunctions.capabilities
-clangd_capabilities.offsetEncoding = "utf-8"
-lspconfig.clangd.setup({
-  capabilities = clangd_capabilities,
-  on_attach = configFunctions.on_attach,
+  ["jsonls"] = function()
+    local jsonls_opts = require("config.lsp.settings.jsonls")
+    local opts = {}
+    opts = vim.tbl_deep_extend("force", jsonls_opts, opts)
+    opts.on_attach = configFunctions.on_attach
+    require("lspconfig").jsonls.setup(opts)
+  end,
+  ["lua_ls"] = function()
+    local sumneko_opts = require("config.lsp.settings.sumneko_lua")
+    local opts = {}
+    opts = vim.tbl_deep_extend("force", sumneko_opts, opts)
+    opts.on_attach = configFunctions.on_attach
+    require("lspconfig").lua_ls.setup(opts)
+  end,
 })
--- pyright setup
-lspconfig.pyright.setup({ on_attach = configFunctions.on_attach })
--- pylsp
-lspconfig.pylsp.setup({ on_attach = configFunctions.on_attach })
--- tssserver
-lspconfig.tsserver.setup({ on_attach = configFunctions.on_attach })
--- eslint server
-lspconfig.eslint.setup({ on_attach = configFunctions.on_attach })
--- html server
-lspconfig.html.setup({ on_attach = configFunctions.on_attach })
--- svelete config
-lspconfig.svelte.setup({ on_attach = configFunctions.on_attach })
--- css server
-lspconfig.cssmodules_ls.setup({ on_attach = configFunctions.on_attach })
--- tailwindcss
-lspconfig.tailwindcss.setup({ on_attach = configFunctions.on_attach })
--- vim
-lspconfig.vimls.setup({ on_attach = configFunctions.on_attach })
--- rust_analyzer
-require("config.lsp.settings.rust")
--- java server setup
-lspconfig.jdtls.setup({ on_attach = configFunctions.on_attach })
--- lspconfig.rust_analyzer.setup({on_attach = configFunctions.on_attach})
--- latex server
-lspconfig.texlab.setup({ on_attach = configFunctions.on_attach })
--- golang server - gopls
-lspconfig.gopls.setup({ on_attach = configFunctions.on_attach })
 
 vim.api.nvim_create_user_command("MasonInstallAll", function()
   for _, name in pairs(lsp_server_names) do

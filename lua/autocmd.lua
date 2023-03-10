@@ -57,10 +57,3 @@ autocmd({ "InsertEnter" }, {
   callback = function() require("harpoon.mark").add_file() end,
   desc = "Add the current file to harpoon marks",
 }) ]]
-
--- FIXME: this does not work
--- _id = augroup("open_neotree_after_session_load", {clear = true})
--- autocmd({"SessionLoadPost"}, {
---     group = _id,
---     callback = function() vim.cmd([[Neotree position=left]]) end
--- })
