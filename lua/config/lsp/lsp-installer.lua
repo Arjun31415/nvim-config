@@ -14,6 +14,7 @@ local servers = {
   "tailwindcss",
   "cssmodules_ls",
   "rust_analyzer",
+  "lua_ls"
 }
 local lsp_server_names = {
   "bash-language-server",
@@ -29,12 +30,6 @@ local lsp_server_names = {
   "rust-analyzer",
 }
 
-require("mason-lspconfig").setup {
-    ensure_installed = { "lua_ls", "rust_analyzer" },
-}
-
-local configFunctions = require("config.lsp.handlers")
-
 lsp_installer.setup({
   ui = {
     icons = {
@@ -44,6 +39,13 @@ lsp_installer.setup({
     },
   },
 })
+
+require("mason-lspconfig").setup {
+    ensure_installed = servers,
+}
+
+local configFunctions = require("config.lsp.handlers")
+
 
 mason_lspconfig.setup_handlers({
   function(server_name) require("lspconfig")[server_name].setup({ on_attach = configFunctions.on_attach }) end,
