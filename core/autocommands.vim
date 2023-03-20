@@ -40,12 +40,6 @@ augroup auto_read
   autocmd FocusGained,CursorHold * if getcmdwintype() == '' | checktime | endif
 augroup END
 
-" relative number toggling I personlly dont like it
-" augroup numbertoggle
-"   autocmd!
-"   autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu | set rnu   | endif
-"   autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu | set nornu | endif
-" augroup END
 
 " Define or override some highlight groups
 augroup custom_highlight
@@ -62,7 +56,7 @@ function! s:custom_highlight() abort
   highlight Cursor2 guifg=red guibg=red
 
   " For floating windows border highlight
-  highlight FloatBorder guifg=LightGreen guibg=NONE
+  " highlight FloatBorder guifg=LightGreen guibg=NONE
 
   " highlight for matching parentheses
   highlight MatchParen cterm=bold,underline gui=bold,underline

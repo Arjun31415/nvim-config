@@ -3,8 +3,8 @@ local present, cmp = pcall(require, "cmp")
 if not present then return end
 local lspkind = require("config.lspkind")
 require("config.lsp")
-local present, copilot = pcall(require, "copilot")
-if present then
+local present2, copilot = pcall(require, "copilot")
+if present2 then
   copilot.setup({
     suggestion = { enabled = false },
     panel = { enabled = false },

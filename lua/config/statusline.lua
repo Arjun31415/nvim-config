@@ -1,5 +1,4 @@
 local harpoon_component = require("config.harpoon-line").component
-local is_buffer_present = require("config.harpoon-line").cond
 local function spell()
   if vim.o.spell then return string.format("[SPELL]") end
 

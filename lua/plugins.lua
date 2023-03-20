@@ -20,7 +20,10 @@ local function evalIf(cond, T, F)
 end
 vim.g.mapleader = ","
 require("lazy").setup({
+
   "nvim-lua/plenary.nvim",
+  { "folke/tokyonight.nvim", priority = 1000, lazy = false, opts = require("config.tokyonight") },
+
   "neovim/nvim-lspconfig",
   "simrat39/rust-tools.nvim",
   "williamboman/mason.nvim",
@@ -39,11 +42,6 @@ require("lazy").setup({
     "rrethy/vim-hexokinase",
     build = "cd  ~/.local/share/nvim/lazy/vim-hexokinase && make hexokinase",
     event = "VimEnter",
-  },
-  {
-    "andweeb/presence.nvim",
-    config = function() require("config.discordPresence") end,
-    event = "BufEnter",
   },
   {
     "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
@@ -104,7 +102,6 @@ require("lazy").setup({
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
-      "hrsh7th/cmp-cmdline",
       "quangnguyen30192/cmp-nvim-ultisnips",
       "tzachar/cmp-tabnine",
       "zbirenbaum/copilot-cmp",
@@ -123,12 +120,6 @@ require("lazy").setup({
     end,
   },
 
-  --[[ {
-    "stsewd/spotify.nvim",
-    event = "BufEnter",
-    build = ":UpdateRemotePlugins",
-    config = function() require("config.nvim-spotify") end,
-  }, ]]
   {
     "nvim-treesitter/nvim-treesitter",
     -- event = 'BufEnter',
@@ -144,8 +135,6 @@ require("lazy").setup({
     "danymat/neogen",
     dependencies = "nvim-treesitter/nvim-treesitter",
     config = true,
-    -- Uncomment next line if you want to follow only stable versions
-    -- version = "*"
   },
   { "elkowar/yuck.vim", ft = "yuck" },
   { "fladson/vim-kitty", event = "BufEnter" },
@@ -169,30 +158,23 @@ require("lazy").setup({
     config = function() require("config.hlargs") end,
     event = "BufEnter",
   },
-  --'nvim-treesitter/playground'
   {
     "folke/todo-comments.nvim",
     dependencies = "nvim-lua/plenary.nvim",
-    config = function()
-      require("todo-comments").setup({
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      })
-    end,
+    config = function() require("todo-comments").setup({}) end,
   },
   -- Python indent (follows the PEP8 style)
-  { "Vimjas/vim-python-pep8-indent", ft = { "python" } },
+  -- { "Vimjas/vim-python-pep8-indent", ft = { "python" } },
 
   -- Python-related text object
-  { "jeetsukumaran/vim-pythonsense", ft = { "python" } },
+  --[[ { "jeetsukumaran/vim-pythonsense", ft = { "python" } },
   "searleser97/cpbooster.vim",
-  { "machakann/vim-swap", event = "VimEnter" },
+  { "machakann/vim-swap", event = "VimEnter" }, ]]
 
-  {
+  --[[ {
     "ray-x/lsp_signature.nvim",
     config = function() require("config.lsp_signature") end,
-  },
+  }, ]]
   -- Super fast buffer jump
   {
     "phaazon/hop.nvim",
@@ -220,13 +202,13 @@ require("lazy").setup({
   -- Stay after pressing * and search selected text
   { "haya14busa/vim-asterisk", event = "VimEnter" },
   -- File search, tag search and more
-  {
+  --[[ {
     evalIf(
       vim.g.is_win,
       { "Yggdroot/LeaderF", cmd = "Leaderf" },
       { "Yggdroot/LeaderF", cmd = "Leaderf", build = ":LeaderfInstallCExtension" }
     ),
-  },
+  }, ]]
 
   {
     "nvim-telescope/telescope-fzf-native.nvim",
@@ -248,13 +230,6 @@ require("lazy").setup({
     config = function() require("config.telescope-nvim") end,
   },
 
-  -- A list of colorscheme plugin you may want to try. Find what suits you.
-  { "folke/tokyonight.nvim", config = function() require("config.tokyonight") end },
-  --{ "navarasu/onedark.nvim", config = function() require('config.onedark') end, },
-  --{
-  -- "olimorris/onedarkpro.nvim",
-  -- config = function() require('config.onedarkpro') end,
-  --},
   -- Show git change (change, delete, add) signs in vim sign column
   { "mhinz/vim-signify", event = "BufEnter" },
   -- Git lens similar to vscode
@@ -319,22 +294,46 @@ require("lazy").setup({
 
   -- Highlight URLs inside vim
   { "itchyny/vim-highlighturl", event = "VimEnter" },
+  {
+    "rcarriga/nvim-notify",
+    event = "BufEnter",
+    init = function()
+      -- require("config.nvim-notify")
+      vim.notify = require("notify")
+    end,
+  },
 
   -- better ui
   {
     "folke/noice.nvim",
     event = "VeryLazy",
+
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-notify",
+    },
     opts = {
       lsp = {
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
           ["vim.lsp.util.stylize_markdown"] = true,
+          ["cmp.entry.get_documentation"] = true,
+        },
+        progress = {
+          enabled = true,
+          format = "lsp_progress",
+          view = "notify",
         },
       },
       presets = {
         bottom_search = true,
         command_palette = true,
         long_message_to_split = true,
+      },
+      popupmenu = {
+        enabled = true, -- enables the Noice popupmenu UI
+        ---@type 'nui'|'cmp'
+        backend = "cmp", -- backend to use to show regular cmdline completions
       },
     },
     -- stylua: ignore
@@ -348,24 +347,6 @@ require("lazy").setup({
     },
   },
   -- notification plugin
-  {
-    "rcarriga/nvim-notify",
-    event = "BufEnter",
-    opts = {
-      timeout = 3000,
-      max_height = function() return math.floor(vim.o.lines * 0.75) end,
-      max_width = function() return math.floor(vim.o.columns * 0.75) end,
-    },
-
-    config = function()
-      vim.defer_fn(function() require("config.nvim-notify") end, 2000)
-    end,
-    init = function()
-      -- when noice is not enabled, install notify on VeryLazy
-      local Util = require("utils")
-      if not Util.has_plugin("noice.nvim") then Util.on_very_lazy(function() vim.notify = require("notify") end) end
-    end,
-  },
   {
     "stevearc/dressing.nvim",
     lazy = true,
@@ -382,7 +363,6 @@ require("lazy").setup({
       end
     end,
   },
-  { "tyru/open-browser.vim", event = "VimEnter" },
   {
     evalIf(utils.executable("ctags"), { "liuchengxu/vista.vim", cmd = "Vista" }, nil),
   },
@@ -542,13 +522,6 @@ require("lazy").setup({
 
   { "cespare/vim-toml", ft = { "toml" }, branch = "main" },
 
-  -- Edit text area in browser using nvim
-  --{
-  -- "glacambre/firenvim",
-  -- build = function() fn["firenvim#install"](0) end,
-  -- opt = true,
-  -- setup = function vim.cmd('packadd firenvim') end,
-  -- },
   -- Session management plugin
   {
     "Shatur/neovim-session-manager",
@@ -594,3 +567,5 @@ require("lazy").setup({
     config = function() require("config.neo-tree") end,
   },
 })
+vim.o.termguicolors = true
+vim.cmd([[ colorscheme tokyonight]])

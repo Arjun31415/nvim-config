@@ -10,6 +10,13 @@ function M.executable(name)
   return false
 end
 
+function M.on_very_lazy(fn)
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "VeryLazy",
+    callback = function() fn() end,
+  })
+end
+
 function M.may_create_dir()
   local fpath = vim.fn.expand("<afile>")
   local parent_dir = vim.fn.fnamemodify(fpath, ":p:h")

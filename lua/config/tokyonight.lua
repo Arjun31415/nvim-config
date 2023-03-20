@@ -1,4 +1,4 @@
-require("tokyonight").setup({
+return {
   -- your configuration comes here
   -- or leave it empty to use the default settings
   style = "moon", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
@@ -21,5 +21,4 @@ require("tokyonight").setup({
   hide_inactive_statusline = false, -- Enabling this option, will hide inactive statuslines and replace them with a thin border instead. Should work with the standard **StatusLine** and **LuaLine**.
   dim_inactive = false, -- dims inactive windows
   lualine_bold = true, -- When `true`, section headers in the lualine theme will be bold
-})
-vim.cmd([[colorscheme tokyonight]])
+}
