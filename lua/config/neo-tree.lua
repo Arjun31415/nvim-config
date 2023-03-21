@@ -34,7 +34,12 @@ require("neo-tree").setup({
     },
     window = {
       position = "float",
+      mapping_options = {
+        noremap = true,
+        nowait = true,
+      },
       mappings = {
+        ["<2-LeftMouse>"] = "open",
         ["A"] = "git_add_all",
         ["gu"] = "git_unstage_file",
         ["ga"] = "git_add_file",
@@ -46,20 +51,28 @@ require("neo-tree").setup({
     },
   },
   hijack_netrw_behavior = "open_current",
+  use_libuv_file_watcher = true,
   filesystem = {
     filtered_items = {
-      visible = false, -- when true, they will just be displayed differently than normal items
+      visible = true, -- when true, they will just be displayed differently than normal items
       hide_dotfiles = false,
       hide_gitignored = false,
       hide_by_name = {
         ".DS_Store",
         "thumbs.db",
-        "node_modules"
+        "node_modules",
       },
       never_show = { -- remains hidden even if visible is toggled to true
-        -- ".DS_Store",
-        -- "thumbs.db"
+        ".DS_Store",
+        "thumbs.db",
       },
     },
   },
 })
+local utils = require("utils")
+utils.map(
+  "n",
+  "<leader>e",
+  [[<ESC><Cmd> lua require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })<CR>]],
+  { silent = true }
+)
