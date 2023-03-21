@@ -147,6 +147,6 @@ require("lualine").setup({
     lualine_y = {},
     lualine_z = {},
   },
-  tabline = { lualine_a = { harpoon_component } },
+  -- tabline = { lualine_a = { harpoon_component } },
   extensions = { "quickfix", "fugitive" },
 })

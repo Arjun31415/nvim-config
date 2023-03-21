@@ -1,4 +1,3 @@
----@diagnostic disable: unused-local
 local map = require("utils").map
 require("bufferline").setup({
   options = {
@@ -16,8 +15,8 @@ require("bufferline").setup({
     max_name_length = 18,
     max_prefix_length = 15,
     tab_size = 10,
-    diagnostics = "coc",
-    diagnostics_indicator = function(count, level, diagnostics_dict, context)
+    diagnostics = "nvim_lsp",
+    diagnostics_indicator = function(count, level, _, _)
       local icon = level:match("error") and " " or " "
       return " " .. icon .. count
     end,
@@ -26,7 +25,7 @@ require("bufferline").setup({
       -- buffer will be hidden.
 
       -- filter out filetypes you don't want to see
-      local exclude_ft = { "qf", "fugitive", "git" }
+      local exclude_ft = { "qf", "fugitive", "git" ,"neo-tree"}
       local cur_ft = vim.bo[bufnr].filetype
       local should_filter = vim.tbl_contains(exclude_ft, cur_ft)
 
@@ -34,6 +33,14 @@ require("bufferline").setup({
 
       return true
     end,
+    offsets = {
+      {
+        filetype = "neo-tree",
+        text = "Neo-tree",
+        highlight = "Directory",
+        text_align = "left",
+      },
+    },
     show_buffer_icons = true,
     show_buffer_close_icons = true,
     show_close_icon = true,
@@ -41,7 +48,7 @@ require("bufferline").setup({
     persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
     separator_style = "bar",
     enforce_regular_tabs = false,
-    always_show_bufferline = true,
+    always_show_bufferline = false,
     sort_by = "id",
   },
 })

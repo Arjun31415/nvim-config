@@ -322,7 +322,7 @@ require("lazy").setup({
         progress = {
           enabled = true,
           format = "lsp_progress",
-          view = "notify",
+          view = "mini",
         },
       },
       presets = {
@@ -549,12 +549,12 @@ require("lazy").setup({
   "kyazdani42/nvim-web-devicons",
   "ryanoasis/vim-devicons",
 
-  --{
-  -- "akinsho/bufferline.nvim",
-  -- event = "VimEnter",
-  -- dependencies = "kyazdani42/nvim-web-devicons",
-  -- config = function() require('config.bufferline') end,
-  -- },
+  {
+    "akinsho/bufferline.nvim",
+    event = "VimEnter",
+    dependencies = "kyazdani42/nvim-web-devicons",
+    config = function() require("config.bufferline") end,
+  },
 
   {
     "nvim-neo-tree/neo-tree.nvim",
