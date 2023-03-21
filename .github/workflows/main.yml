@@ -1,0 +1,27 @@
+on: [push]
+
+jobs:
+  scc_job:
+    runs-on: ubuntu-latest
+    name: A job to count the lines of code.
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Get lines of code (more sophisticated)
+        id: scc
+        uses: iryanbell/scc-docker-action@v1.0.2
+        with:
+          args: ${{ env.workspace }} -i lua,vim  --format json
+
+      - name: Make lines of code badge
+        uses: emibcn/badge-action@v2.0.2
+        with:
+          label: Lines of Code
+          status: ${{ fromJson(steps.scc.outputs.scc)[0].Code }}
+          color: "blue"
+          path: .github/lines.svg
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update lines of code badge
