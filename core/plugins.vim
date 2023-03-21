@@ -8,7 +8,7 @@ lua require('lua-init')
 " short alias, e.g., `pi`, then press <space>, the alias will be expanded to
 " the full command automatically.
 call utils#Cabbrev('li', 'Lazy install')
-call utils#Cabbrev('lud', 'Lazy Update')
+call utils#Cabbrev('lud', 'Lazy update')
 call utils#Cabbrev('lc', 'Lazy clean')
 call utils#Cabbrev('ls', 'Lazy sync')
 set guifont=VictorMono_Nerd_Font:h14
