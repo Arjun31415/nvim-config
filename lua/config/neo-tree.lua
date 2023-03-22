@@ -70,9 +70,3 @@ require("neo-tree").setup({
   },
 })
 local utils = require("utils")
-utils.map(
-  "n",
-  "<leader>e",
-  [[<ESC><Cmd> lua require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })<CR>]],
-  { silent = true }
-)

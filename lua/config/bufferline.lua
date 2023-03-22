@@ -52,8 +52,3 @@ require("bufferline").setup({
     sort_by = "id",
   },
 })
-map("n", "[b", ":BufferLineCycleNext<CR>", { silent = true })
-map("n", "]b", ":BufferLineCyclePrev<CR>", { silent = true })
-map("n", "<Leader>bse", ":BufferLineSortByExtension<CR>", { silent = true })
-map("n", "<Leader>bsd", ":BufferLineSortByDirectory<CR>", { silent = true })
-map("n", "<Leader>bq", "<Cmd>lua require('bufdelete').bufdelete(0, true)<CR>", { silent = true })

@@ -4,4 +4,5 @@ require("utils")
 require("autocmd")
 -- plugin installation
 require("plugins")
+require("keymaps")
 require("config.neovide")

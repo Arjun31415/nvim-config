@@ -27,7 +27,8 @@ end
 function M.map(mode, lhs, rhs, opts)
   local options = { noremap = true }
   if opts then options = vim.tbl_extend("force", options, opts) end
-  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+  -- vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+  vim.keymap.set(mode, lhs, rhs, options)
 end
 -- checks if a given table has a value
 function M.has_value(tab, val)
@@ -82,5 +83,26 @@ function M.get_root()
   end
   ---@cast root string
   return root
+end
+
+-- this will return a function that calls telescope.
+-- cwd will default to lazyvim.util.get_root
+-- for `files`, git_files or find_files will be chosen depending on .git
+function M.telescope(builtin, opts)
+  local params = { builtin = builtin, opts = opts }
+  return function()
+    builtin = params.builtin
+    opts = params.opts
+    opts = vim.tbl_deep_extend("force", { cwd = M.get_root() }, opts or {})
+    if builtin == "files" then
+      if vim.loop.fs_stat((opts.cwd or vim.loop.cwd()) .. "/.git") then
+        opts.show_untracked = true
+        builtin = "git_files"
+      else
+        builtin = "find_files"
+      end
+    end
+    require("telescope.builtin")[builtin](opts)
+  end
 end
 return M
