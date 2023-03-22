@@ -1,4 +1,5 @@
 local present, telescope = pcall(require, "telescope")
+local map =require("utils").map
 if not present then return end
 vim.g.theme_switcher_loaded = true
 local options = {
@@ -35,3 +36,5 @@ pcall(function()
     telescope.load_extension(ext)
   end
 end)
+
+map("n", "<leader>ff", "<cmd>Telescope find_files<cr>")

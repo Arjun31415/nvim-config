@@ -2,8 +2,8 @@ local map = require("utils").map
 require("bufferline").setup({
   options = {
     numbers = "buffer_id",
-    close_command = "bdelete! %d",
-    right_mouse_command = nil,
+    close_command = function(bufnum) require("bufdelete").bufdelete(bufnum, true) end,
+    right_mouse_command = "vertical sbuffer %d",
     left_mouse_command = "buffer %d",
     middle_mouse_command = nil,
     indicator = { icon = "▎", style = "icon" },
@@ -25,7 +25,7 @@ require("bufferline").setup({
       -- buffer will be hidden.
 
       -- filter out filetypes you don't want to see
-      local exclude_ft = { "qf", "fugitive", "git" ,"neo-tree"}
+      local exclude_ft = { "qf", "fugitive", "git", "neo-tree" }
       local cur_ft = vim.bo[bufnr].filetype
       local should_filter = vim.tbl_contains(exclude_ft, cur_ft)
 
@@ -56,3 +56,4 @@ map("n", "[b", ":BufferLineCycleNext<CR>", { silent = true })
 map("n", "]b", ":BufferLineCyclePrev<CR>", { silent = true })
 map("n", "<Leader>bse", ":BufferLineSortByExtension<CR>", { silent = true })
 map("n", "<Leader>bsd", ":BufferLineSortByDirectory<CR>", { silent = true })
+map("n", "<Leader>bq", "<Cmd>lua require('bufdelete').bufdelete(0, true)<CR>", { silent = true })

@@ -552,7 +552,7 @@ require("lazy").setup({
   {
     "akinsho/bufferline.nvim",
     event = "VimEnter",
-    dependencies = "kyazdani42/nvim-web-devicons",
+    dependencies = { "kyazdani42/nvim-web-devicons", "famiu/bufdelete.nvim" },
     config = function() require("config.bufferline") end,
   },
 
