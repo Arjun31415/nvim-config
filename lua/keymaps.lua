@@ -23,7 +23,7 @@ map("n", "<Leader>bq", "<Cmd>lua require('bufdelete').bufdelete(0, true)<CR>", {
 
 -- {{{ Harpoon keymaps
 map("n", "<leader>'", ':lua require("harpoon.mark").add_file()<CR>', { silent = true }, "Harpoon add file")
-map("n", "<leader>hq", ':lua require("harpoon.ui").toggle_quick_menu()<CR>', "Harpoon menu")
+map("n", "<leader>hq", ':lua require("harpoon.ui").toggle_quick_menu()<CR>', { silent = true }, "Harpoon menu")
 map("n", "<A-1>", ':lua require("harpoon.ui").nav_file(1)<CR>', { silent = true }, "Go to file 1")
 map("n", "<A-2>", ':lua require("harpoon.ui").nav_file(2)<CR>', { silent = true }, "Go to file 2")
 map("n", "<A-3>", ':lua require("harpoon.ui").nav_file(3)<CR>', { silent = true }, "Go to file 3")
