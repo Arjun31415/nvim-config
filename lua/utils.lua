@@ -24,11 +24,14 @@ function M.may_create_dir()
 
   if res == 0 then vim.fn.mkdir(parent_dir, "p") end
 end
-function M.map(mode, lhs, rhs, opts)
+function M.map(mode, lhs, rhs, opts, desc)
   local options = { noremap = true }
   if opts then options = vim.tbl_extend("force", options, opts) end
   -- vim.api.nvim_set_keymap(mode, lhs, rhs, options)
   vim.keymap.set(mode, lhs, rhs, options)
+  local ok, wk = pcall(require, "which-key")
+  if not ok then return end
+  if desc then wk.register({ [lhs] = { rhs, desc } }, { mode = mode }) end
 end
 -- checks if a given table has a value
 function M.has_value(tab, val)

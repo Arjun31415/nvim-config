@@ -501,10 +501,10 @@ require("lazy").setup({
   -- Additional powerful text object for vim
   {
     "echasnovski/mini.ai",
-    -- keys = {
-    --   { "a", mode = { "x", "o" } },
-    --   { "i", mode = { "x", "o" } },
-    -- },
+    keys = {
+      { "a", mode = { "x", "o" } },
+      { "i", mode = { "x", "o" } },
+    },
     event = "VeryLazy",
     dependencies = { "nvim-treesitter-textobjects" },
     opts = function() require("config.mini-ai").setup() end,
