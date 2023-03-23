@@ -117,6 +117,38 @@ map("n", "0", "g0", { desc = "Move the cursor to the first character of the line
 map("x", "<", "<gv", {}, "decrease indent in visual mode")
 map("x", ">", ">gv", {}, "increase indent in visual mode")
 
+-- Search in selected region
+map(
+  "x",
+  "/",
+  ":<C-U>call feedkeys('/\\%>'.(line(\"'<\")-1).'l\\%<'.(line(\"'>\")+1).\"l\")<CR>",
+  {},
+  "search in selected region"
+)
+
+if vim.fn.maparg("<C-L>", "n") == "" then
+  map(
+    "n",
+    "<C-L>",
+    ":nohlsearch<Bar>lua vim.defer_fn(vim.fn.diffupdate, 0)<CR><CR><C-L>",
+    { noremap = true, silent = true },
+    "Clear highlighting"
+  )
+end
+
+-- Text objects{{{
+-- Text objects for URL
+map("x", "iu", ":<C-U>call text_obj#URL()<CR>", { silent = true })
+map("o", "iu", ":<C-U>call text_obj#URL()<CR>", { silent = true })
+
+-- Text objects for entire buffer
+map("x", "iB", ":<C-U>call text_obj#Buffer()<CR>", { silent = true })
+map("o", "iB", ":<C-U>call text_obj#Buffer()<CR>", { silent = true })
+-- }}}
+
+-- Toggle cursor column
+map("n", "<leader>cl", ":<C-U>call utils#ToggleCursorCol()<CR>", { silent = true }, "toggle cursor col")
+
 -- Line switching{{{
 
 map("n", "<A-k>", '<Cmd>call utils#SwitchLine(line("."), "up")<CR>', { silent = true }, "Move current line up")
@@ -125,10 +157,17 @@ map("x", "<A-k>", ':<C-U>call utils#MoveSelection("up")<CR>', { silent = true },
 map("x", "<A-j>", ':<C-U>call utils#MoveSelection("down")<CR>', { silent = true }, "Move selection down")
 -- }}}
 
+-- Undo break points{{{
+-- Break inserted text into smaller undo units.
+for _, ch in ipairs({ ",", ".", "!", "?", ";", ":" }) do
+  map("i", ch, ch .. "<C-g>u", { noremap = true })
+end
+--}}}
+
 -- Change current working directory locally and print cwd after that,
 -- see https://vim.fandom.com/wiki/Set_working_directory_to_the_current_file
 map("n", "<leader>cd", "<Cmd>lcd %:p:h<CR>:pwd<CR>", { silent = true })
-
+map("n", "<leader>rc", "<Cmd>call utils#clearRegisters()<CR>", { silent = true })
 --}}}
 
 --{{{ Window Mappings

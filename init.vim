@@ -5,7 +5,6 @@ let g:config_files = [
     \ 'globals.vim',
     \ 'options.vim',
     \ 'autocommands.vim',
-    \ 'mappings.vim',
     \ 'plugins.vim',
     \ ]
 

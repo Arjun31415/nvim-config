@@ -34,12 +34,12 @@ autocmd({ "TermOpen" }, {
 -- More accurate syntax highlighting
 _id = augroup("accurate_syn_highlight", { clear = true })
 autocmd({ "BufEnter" }, { command = "syntax sync fromstart", group = _id })
+
 -- TODO: Return to last cursor position when opening a file
-_id = augroup("auto_create_dir", { clear = true })
 autocmd({ "BufWritePre" }, {
   pattern = { "*" },
   callback = require("utils").may_create_dir,
-  group = _id,
+  group = augroup("auto_create_dir", { clear = true }),
 })
 autocmd({
   "CursorMoved",
@@ -49,4 +49,11 @@ autocmd({
   "BufWritePost",
 }, {
   callback = function() require("config.winbar").get_winbar() end,
+})
+
+-- highlight yanked region, see `:h lua-highlight`
+autocmd({ "TextYankPost" }, {
+  pattern = "*",
+  group = augroup("highlight_yank", { clear = true }),
+  callback = function() vim.highlight.on_yank({ higroup = "YankColor", timeout = 300 }) end,
 })
