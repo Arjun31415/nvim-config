@@ -542,11 +542,6 @@ require("lazy").setup({
     cmd = { "Scriptnames", "Message", "Verbose" },
   },
 
-  -- Asynchronous command execution
-  --  { "skywind3000/asyncbuild.vim", opt = true, cmd = { "Asyncbuild" } },
-  -- Another asynchronous plugin
-  -- Plug 'tpope/vim-dispatch'
-
   { "cespare/vim-toml", ft = { "toml" }, branch = "main" },
 
   -- Session management plugin
@@ -557,7 +552,6 @@ require("lazy").setup({
   },
   { evalIf(vim.g.is_linux, { "ojroques/vim-oscyank", cmd = { "OSCYank", "OSCYankReg" } }, nil) },
 
-  -- showing keybindings
   {
     "folke/which-key.nvim",
     event = "VimEnter",
