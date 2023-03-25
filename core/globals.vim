@@ -16,7 +16,6 @@ else
   echoerr 'Python 3 executable not found! You must install Python 3 and set its PATH correctly!'
 endif
 
-" Custom mapping <leader> (see `:h mapleader` for more info) cause \ is too far and I'm lazy
 " Enable syntax highlighting for lua in vim
 let g:vimsyn_embed = 'l'
 " I speak english thank you.

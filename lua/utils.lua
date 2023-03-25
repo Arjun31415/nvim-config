@@ -17,13 +17,13 @@ function M.on_very_lazy(fn)
   })
 end
 
-function M.may_create_dir()
-  local fpath = vim.fn.expand("<afile>")
-  local parent_dir = vim.fn.fnamemodify(fpath, ":p:h")
-  local res = vim.fn.isdirectory(parent_dir)
+--- Create a dir if it does not exist
+function M.may_create_dir(dir)
+  local res = vim.fn.isdirectory(dir)
 
-  if res == 0 then vim.fn.mkdir(parent_dir, "p") end
+  if res == 0 then vim.fn.mkdir(dir, "p") end
 end
+
 function M.map(mode, lhs, rhs, opts, desc)
   local options = { noremap = true }
   if opts then options = vim.tbl_extend("force", options, opts) end
@@ -88,6 +88,12 @@ function M.get_root()
   return root
 end
 
+function M.get_nvim_version()
+  local actual_ver = vim.version()
+
+  local nvim_ver_str = string.format("%d.%d.%d", actual_ver.major, actual_ver.minor, actual_ver.patch)
+  return nvim_ver_str
+end
 -- this will return a function that calls telescope.
 -- cwd will default to lazyvim.util.get_root
 -- for `files`, git_files or find_files will be chosen depending on .git
@@ -108,4 +114,31 @@ function M.telescope(builtin, opts)
     require("telescope.builtin")[builtin](opts)
   end
 end
+
+--- Generate random integers in the range [Low, High], inclusive,
+--- adapted from https://stackoverflow.com/a/12739441/6064933
+--- @low: the lower value for this range
+--- @high: the upper value for this range
+function M.rand_int(low, high)
+  -- Use lua to generate random int, see also: https://stackoverflow.com/a/20157671/6064933
+  math.randomseed(os.time())
+
+  return math.random(low, high)
+end
+
+--- Select a random element from a sequence/list.
+--- @seq: the sequence to choose an element
+function M.rand_element(seq)
+  local idx = M.rand_int(1, #seq)
+
+  return seq[idx]
+end
+
+function M.add_pack(name)
+  ---@diagnostic disable-next-line: param-type-mismatch
+  local status, _ = pcall(vim.cmd, "packadd " .. name)
+
+  return status
+end
+
 return M

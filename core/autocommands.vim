@@ -20,42 +20,15 @@ function s:resume_cursor_position() abort
   endif
 endfunction
 
-" Display a message when the current file is not in utf-8 format.
-" Note that we need to use `unsilent` command here because of this issue:
-" https://github.com/vim/vim/issues/4379
-augroup non_utf8_file_warn
-  autocmd!
-  " we can not use `lua vim.notify()`: it will error out E5107 parsing lua.
-  autocmd BufRead * if &fileencoding != 'utf-8' | call v:lua.vim.notify('File not in UTF-8 format!', 'warn', {'title': 'nvim-config'}) | endif
-augroup END
-
-" Automatically reload the file if it is changed outside of Nvim, see
-" https://unix.stackexchange.com/a/383044/221410. It seems that `checktime`
-" command does not work in command line. We need to check if we are in command
-" line before executing this command. See also
-" https://vi.stackexchange.com/a/20397/15292.
-augroup auto_read
-  autocmd!
-  autocmd FileChangedShellPost * call v:lua.vim.notify("File changed on disk. Buffer reloaded!", 'warn', {'title': 'nvim-config'})
-  autocmd FocusGained,CursorHold * if getcmdwintype() == '' | checktime | endif
-augroup END
-
-
-" Define or override some highlight groups
-augroup custom_highlight
-  autocmd!
-  autocmd ColorScheme * call s:custom_highlight()
-augroup END
-
 function! s:custom_highlight() abort
   " highlight for matching parentheses
   highlight MatchParen cterm=bold,underline gui=bold,underline
 endfunction
 
-" highlight yanked region, see `:h lua-highlight`
-augroup highlight_yank
+" Define or override some highlight groups
+augroup custom_highlight
   autocmd!
-  au TextYankPost * silent! lua vim.highlight.on_yank{higroup="YankColor", timeout=300, on_visual=false}
+  autocmd ColorScheme * call s:custom_highlight()
 augroup END
 
 augroup auto_close_win
@@ -75,5 +48,25 @@ endfunction
 augroup git_repo_check
   autocmd!
   autocmd VimEnter,DirChanged * call utils#Inside_git_repo()
+augroup END
+
+" ref: https://vi.stackexchange.com/a/169/15292
+function! s:handle_large_file() abort
+  let g:large_file = 10485760 " 10MB
+  let f = expand("<afile>")
+
+  if getfsize(f) > g:large_file || getfsize(f) == -2
+    set eventignore+=all
+    " turning off relative number helps a lot
+    set norelativenumber
+    setlocal noswapfile bufhidden=unload buftype=nowrite undolevels=-1
+  else
+    set eventignore-=all relativenumber
+  endif
+endfunction
+
+augroup LargeFile
+  autocmd!
+  autocmd BufReadPre * call s:handle_large_file()
 augroup END
 

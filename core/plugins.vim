@@ -238,5 +238,5 @@ let g:matchup_delim_noskips = 0
 " Show offscreen match pair in popup window
 let g:matchup_matchparen_offscreen = {'method': 'popup'}
 
-
+""""""""""""""""""""""""Hexokinase settings""""""""""""""""""""""""""""""""""
 let g:Hexokinase_highlighters = ['backgroundfull']
