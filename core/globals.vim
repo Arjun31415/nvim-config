@@ -21,8 +21,8 @@ let g:vimsyn_embed = 'l'
 " I speak english thank you.
 language en_IN.UTF-8
 " I dont want netrw i use neo-tree.lua cause that is what cool ppl do
-let g:loaded_netrw       = 0
-let g:loaded_netrwPlugin = 0
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
 
 let g:loaded_2html_plugin = 1
 " Do not load zipPlugin.vim, gzip.vim and tarPlugin.vim (all these plugins are
