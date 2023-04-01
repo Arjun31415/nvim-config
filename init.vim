@@ -1,4 +1,5 @@
 " The encoding displayed.
+lua vim.loader.enable()
 set encoding=utf-8
 set sessionoptions+=globals
 let g:config_files = [
