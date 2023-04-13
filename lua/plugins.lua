@@ -61,6 +61,10 @@ require("lazy").setup({
     event = "BufEnter",
   },
   {
+    "andweeb/presence.nvim",
+    config = function() require("config.discordPresence") end,
+  },
+  {
     "mfussenegger/nvim-dap",
     event = "VimEnter",
     config = function() require("config.Dap") end,
