@@ -343,30 +343,7 @@ require("lazy").setup({
       "MunifTanjim/nui.nvim",
       "rcarriga/nvim-notify",
     },
-    opts = {
-      lsp = {
-        override = {
-          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-          ["vim.lsp.util.stylize_markdown"] = true,
-          ["cmp.entry.get_documentation"] = true,
-        },
-        progress = {
-          enabled = true,
-          format = "lsp_progress",
-          view = "mini",
-        },
-      },
-      presets = {
-        bottom_search = true,
-        command_palette = true,
-        long_message_to_split = true,
-      },
-      popupmenu = {
-        enabled = true, -- enables the Noice popupmenu UI
-        ---@type 'nui'|'cmp'
-        backend = "cmp", -- backend to use to show regular cmdline completions
-      },
-    },
+    init = function() require("config.noice-nvim") end,
     -- stylua: ignore
     keys = {
       { "<S-Enter>", function() require("noice").redirect(vim.fn.getcmdline()) end, mode = "c", desc = "Redirect Cmdline" },
