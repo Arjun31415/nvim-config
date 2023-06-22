@@ -328,12 +328,12 @@ require("lazy").setup({
   {
     "rcarriga/nvim-notify",
     event = "BufEnter",
-    init = function()
-      -- require("config.nvim-notify")
-      vim.notify = require("notify")
-    end,
+    init = function() vim.notify = require("notify") end,
   },
-
+  -- WakaTime and wakapi metrics
+  {
+    "wakatime/vim-wakatime",
+  },
   -- better ui
   {
     "folke/noice.nvim",
