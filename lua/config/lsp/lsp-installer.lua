@@ -75,6 +75,7 @@ mason_lspconfig.setup_handlers({
   end,
 })
 
+require("lspconfig").nil_ls.setup({on_attach=configFunctions.on_attach});
 vim.api.nvim_create_user_command("MasonInstallAll", function()
   for _, name in pairs(lsp_server_names) do
     vim.cmd("MasonInstall " .. name)
