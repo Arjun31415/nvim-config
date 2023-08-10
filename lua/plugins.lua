@@ -26,8 +26,6 @@ require("lazy").setup({
 
   "neovim/nvim-lspconfig",
   "simrat39/rust-tools.nvim",
-  "williamboman/mason.nvim",
-  "williamboman/mason-lspconfig.nvim",
   {
     "kevinhwang91/nvim-ufo",
     event = "BufReadPre",
