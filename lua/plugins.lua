@@ -105,7 +105,7 @@ require("lazy").setup({
   "hrsh7th/cmp-path",
   "hrsh7th/cmp-cmdline",
   "hrsh7th/cmp-cmdline",
-  "quangnguyen30192/cmp-nvim-ultisnips",
+  "saadparwaiz1/cmp_luasnip",
   "github/copilot.vim",
   "zbirenbaum/copilot-cmp",
   {
@@ -133,7 +133,6 @@ require("lazy").setup({
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
-      "quangnguyen30192/cmp-nvim-ultisnips",
       "tzachar/cmp-tabnine",
       "zbirenbaum/copilot-cmp",
     },
@@ -377,14 +376,61 @@ require("lazy").setup({
 
   -- Snippet engine and snippet template
   "honza/vim-snippets",
-  { "SirVer/ultisnips", event = "InsertEnter", dependencies = { "honza/vim-snippets" } },
-
+  {
+    "L3MON4D3/LuaSnip",
+    -- follow latest release.
+    version = "2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+    -- install jsregexp (optional!).
+    build = "make install_jsregexp",
+    config = function() require("config.luasnip") end,
+  },
   {
     "windwp/nvim-autopairs",
     event = "BufEnter",
     config = function() require("config.autopairs") end,
   },
 
+  --[[ {
+    "smjonas/snippet-converter.nvim",
+    -- SnippetConverter uses semantic versioning. Example: use version = "1.*" to avoid breaking changes on version 1.
+    -- Uncomment the next line to follow stable releases only.
+    -- tag = "*",
+    config = function()
+      local template = {
+        -- name = "t1", (optionally give your template a name to refer to it in the `ConvertSnippets` command)
+        sources = {
+          ultisnips = {
+            vim.fn.stdpath("config") .. "/my_snippets",
+          },
+        },
+        output = {
+          -- Specify the output formats and paths
+          snipmate_luasnip = {
+            vim.fn.stdpath("config") .. "/luasnip_snippets",
+          },
+        },
+      }
+
+      require("snippet_converter").setup({
+        templates = { template },
+        -- To change the default settings (see configuration section in the documentation)
+        -- settings = {},
+      })
+    end,
+  }, ]]
+  {
+    "VonHeikemen/lsp-zero.nvim",
+    branch = "v2.x",
+    dependencies = {
+      -- LSP Support
+      { "neovim/nvim-lspconfig" }, -- Required
+
+      -- Autocompletion
+      { "hrsh7th/nvim-cmp" }, -- Required
+      { "hrsh7th/cmp-nvim-lsp" }, -- Required
+      { "L3MON4D3/LuaSnip" }, -- Required
+    },
+  },
   -- Comment plugin
   { "b3nj5m1n/kommentary", event = "VimEnter" },
 

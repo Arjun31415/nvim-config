@@ -12,23 +12,6 @@ call utils#Cabbrev('lud', 'Lazy update')
 call utils#Cabbrev('lc', 'Lazy clean')
 call utils#Cabbrev('ls', 'Lazy sync')
 set guifont=VictorMono_Nerd_Font:h14
-"""""""""""""""""""""""""UltiSnips settings"""""""""""""""""""
-" Trigger configuration. Do not use <tab> if you use YouCompleteMe
-" let g:UltiSnipsExpandTrigger='<c-j>'
-let g:UltiSnipsExpandTrigger="<tab>"
-
-" Do not look for SnipMate snippets
-let g:UltiSnipsEnableSnipMate = 0
-
-" Shortcut to jump forward and backward in tabstop positions
-let g:UltiSnipsJumpForwardTrigger='<tab>'
-" FIXME: Shift + tab might not work check out
-"  https://stackoverflow.com/questions/2745428/how-to-capture-shift-tab-in-vim
-let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
-
-" Configuration for custom snippets directory, see
-" https://jdhao.github.io/2019/04/17/neovim_snippet_s1/ for details.
-let g:UltiSnipsSnippetDirectories=['UltiSnips', 'my_snippets']
 
 """"""""""""""""""""""""vim-mundo settings"""""""""""""""""""""""
 let g:mundo_verbose_graph = 0
