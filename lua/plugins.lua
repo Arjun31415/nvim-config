@@ -589,7 +589,11 @@ require("lazy").setup({
     event = "BufEnter",
     config = function() require("config.instant-nvim") end,
   },
-
+  {
+    "xeluxee/competitest.nvim",
+    dependencies = "MunifTanjim/nui.nvim",
+    config = function() require("competitest").setup() end,
+  },
   -- show and trim trailing whitespaces
   { "jdhao/whitespace.nvim", event = "VimEnter" },
   "kyazdani42/nvim-web-devicons",
