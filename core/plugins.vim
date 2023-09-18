@@ -52,18 +52,18 @@ let g:XkbSwitchEnabled = 1
 
 """""""""""""""""""""""""""""" neoformat settings """""""""""""""""""""""
 
-let g:neoformat_enabled_python = ['black', 'yapf']
-let g:neoformat_cpp_clangformat = {
-      \ 'exe': 'clang-format',
-      \ 'args': ['--style="{IndentWidth: 4,AlwaysBreakTemplateDeclarations: Yes, BreakBeforeBraces: Allman, NamespaceIndentation: All, UseTab: Always,TabWidth: 4, AllowShortIfStatementsOnASingleLine: AllIfsAndElse } "']
-      \ }
-let g:neoformat_c_clangformat = {
-      \ 'exe': 'clang-format',
-        \ 'args': ['--style="{IndentWidth: 4, BreakBeforeBraces: Allman,AllowShortIfStatementsOnASingleLine: AllIfsAndElse,UseTab: Always,TabWidth: 4} "']
-      \ }
+" let g:neoformat_enabled_python = ['black', 'yapf']
+" let g:neoformat_cpp_clangformat = {
+"       \ 'exe': 'clang-format',
+"       \ 'args': ['--style="{IndentWidth: 4,AlwaysBreakTemplateDeclarations: Yes, BreakBeforeBraces: Allman, NamespaceIndentation: All, UseTab: Always,TabWidth: 4, AllowShortIfStatementsOnASingleLine: AllIfsAndElse } "']
+"       \ }
+" let g:neoformat_c_clangformat = {
+"       \ 'exe': 'clang-format',
+"         \ 'args': ['--style="{IndentWidth: 4, BreakBeforeBraces: Allman,AllowShortIfStatementsOnASingleLine: AllIfsAndElse,UseTab: Always,TabWidth: 4} "']
+"       \ }
 
-let g:neoformat_enabled_cpp = ['clangformat']
-let g:neoformat_enabled_c = ['clangformat']
+" let g:neoformat_enabled_cpp = ['clangformat']
+" let g:neoformat_enabled_c = ['clangformat']
 """""""""""""""""""""""""vim-signify settings""""""""""""""""""""""""""""""
 " The VCS to use
 let g:signify_vcs_list = [ 'git' ]
