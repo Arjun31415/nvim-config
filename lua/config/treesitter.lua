@@ -24,7 +24,7 @@ require("nvim-treesitter.configs").setup({
     "cuda",
     "markdown",
     "markdown_inline",
-    "rust"
+    "rust",
   },
   ignore_install = {
     "beancount",

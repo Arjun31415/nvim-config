@@ -12,7 +12,7 @@ local options = {
       -- the default case_mode is "smart_case"
     },
   },
-  extensions_list = { "ui-select", "fzf", "harpoon", "notify","noice" },
+  extensions_list = { "ui-select", "fzf", "harpoon", "notify", "noice" },
   pickers = { colorscheme = { enable_preview = true } },
   defaults = {
     initial_mode = "insert",
@@ -35,4 +35,3 @@ pcall(function()
     telescope.load_extension(ext)
   end
 end)
-
