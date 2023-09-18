@@ -22,7 +22,7 @@ vim.g.mapleader = ","
 require("lazy").setup({
 
     "nvim-lua/plenary.nvim",
-    { "folke/tokyonight.nvim", priority = 1000,   lazy = false, opts = require("config.tokyonight") },
+    { "folke/tokyonight.nvim", priority = 1000, lazy = false, opts = require("config.tokyonight") },
     "neovim/nvim-lspconfig",
     "simrat39/rust-tools.nvim",
     {
@@ -37,18 +37,32 @@ require("lazy").setup({
                     require("statuscol").setup({
                         relculright = true,
                         segments = {
-                            { text = { builtin.foldfunc },      click = "v:lua.ScFa" },
-                            { text = { "%s" },                  click = "v:lua.ScSa" },
+                            { text = { builtin.foldfunc }, click = "v:lua.ScFa" },
+                            { text = { "%s" }, click = "v:lua.ScSa" },
                             { text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" },
                         },
                     })
                 end,
             },
         },
-        config = function() require("config.nvim-ufo") end,
+        config = function()
+            require("config.nvim-ufo")
+        end,
         keys = {
-            { "zR", function() require("ufo").openAllFolds() end,  desc = "Open All Folds" },
-            { "zM", function() require("ufo").closeAllFolds() end, desc = "Close All Folds" },
+            {
+                "zR",
+                function()
+                    require("ufo").openAllFolds()
+                end,
+                desc = "Open All Folds",
+            },
+            {
+                "zM",
+                function()
+                    require("ufo").closeAllFolds()
+                end,
+                desc = "Close All Folds",
+            },
         },
     },
 
@@ -59,12 +73,16 @@ require("lazy").setup({
     },
     {
         "andweeb/presence.nvim",
-        config = function() require("config.discordPresence") end,
+        config = function()
+            require("config.discordPresence")
+        end,
     },
     {
         "mfussenegger/nvim-dap",
         event = "VimEnter",
-        config = function() require("config.Dap") end,
+        config = function()
+            require("config.Dap")
+        end,
     },
     {
         "rrethy/vim-hexokinase",
@@ -73,7 +91,9 @@ require("lazy").setup({
     },
     {
         "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-        config = function() require("lsp_lines").setup() end,
+        config = function()
+            require("lsp_lines").setup()
+        end,
     },
     "tamago324/nlsp-settings.nvim", -- language server settings defined in json for jsonls
     -- Refactoring plugins
@@ -84,14 +104,18 @@ require("lazy").setup({
             { "nvim-treesitter/nvim-treesitter" },
         },
         event = "BufEnter",
-        config = function() require("config.refactoring") end,
+        config = function()
+            require("config.refactoring")
+        end,
     },
     {
         "filipdutescu/renamer.nvim",
         branch = "master",
         event = "BufEnter",
         dependencies = { { "nvim-lua/plenary.nvim" } },
-        config = function() require("config.renamer") end,
+        config = function()
+            require("config.renamer")
+        end,
     },
 
     -- nvim-cmp dependencies
@@ -109,7 +133,9 @@ require("lazy").setup({
         "zbirenbaum/copilot.lua",
         event = "InsertEnter",
         config = function()
-            vim.schedule(function() require("copilot").setup() end)
+            vim.schedule(function()
+                require("copilot").setup()
+            end)
         end,
         dependencies = { "zbirenbaum/copilot-cmp" },
     },
@@ -117,12 +143,16 @@ require("lazy").setup({
         "tzachar/cmp-tabnine",
         build = "./install.sh",
         dependencies = "hrsh7th/nvim-cmp",
-        config = function() require("config.nvim-cmp-tabnine") end,
+        config = function()
+            require("config.nvim-cmp-tabnine")
+        end,
     },
     {
         "hrsh7th/nvim-cmp",
         branch = "main",
-        config = function() require("config.nvim-cmp") end,
+        config = function()
+            require("config.nvim-cmp")
+        end,
         event = "BufEnter",
         dependencies = {
             "onsails/lspkind-nvim",
@@ -151,7 +181,9 @@ require("lazy").setup({
         "nvim-treesitter/nvim-treesitter",
         -- event = 'BufEnter',
         build = ":TSUpdate",
-        config = function() require("config.treesitter") end,
+        config = function()
+            require("config.treesitter")
+        end,
         dependencies = {
             {
                 "nvim-treesitter/nvim-treesitter-textobjects",
@@ -167,7 +199,7 @@ require("lazy").setup({
         "elkowar/yuck.vim",
         ft = "yuck",
     },
-    { "fladson/vim-kitty",     event = "BufEnter" },
+    { "fladson/vim-kitty", event = "BufEnter" },
     {
         "SmiteshP/nvim-navic",
         dependencies = "neovim/nvim-lspconfig",
@@ -175,7 +207,9 @@ require("lazy").setup({
     },
     {
         "zbirenbaum/neodim",
-        config = function() require("neodim").setup() end,
+        config = function()
+            require("neodim").setup()
+        end,
     },
     {
         "p00f/nvim-ts-rainbow",
@@ -185,26 +219,34 @@ require("lazy").setup({
     {
         "m-demare/hlargs.nvim",
         dependencies = { "nvim-treesitter/nvim-treesitter" },
-        config = function() require("config.hlargs") end,
+        config = function()
+            require("config.hlargs")
+        end,
         event = "BufEnter",
     },
     {
         "folke/todo-comments.nvim",
         dependencies = "nvim-lua/plenary.nvim",
-        config = function() require("todo-comments").setup({}) end,
+        config = function()
+            require("todo-comments").setup({})
+        end,
     },
     -- Super fast buffer jump
     {
         "phaazon/hop.nvim",
         event = "VimEnter",
         config = function()
-            vim.defer_fn(function() require("config.nvim_hop") end, 2000)
+            vim.defer_fn(function()
+                require("config.nvim_hop")
+            end, 2000)
         end,
     },
     {
         "ThePrimeagen/harpoon",
         dependencies = { { "nvim-lua/plenary.nvim" } },
-        config = function() require("config.harpoon") end,
+        config = function()
+            require("config.harpoon")
+        end,
     },
     -- Clear highlight search automatically for you
     --"romainl/vim-cool", event = "VimEnter"
@@ -214,7 +256,9 @@ require("lazy").setup({
         "kevinhwang91/nvim-hlslens",
         branch = "main",
         keys = { { "n", "*" }, { "n", "#" }, { "n", "n" }, { "n", "N" } },
-        config = function() require("config.hlslens") end,
+        config = function()
+            require("config.hlslens")
+        end,
     },
 
     -- Stay after pressing * and search selected text
@@ -237,30 +281,38 @@ require("lazy").setup({
             "nvim-telescope/telescope-ui-select.nvim",
             "nvim-telescope/telescope-symbols.nvim",
         },
-        config = function() require("config.telescope-nvim") end,
+        config = function()
+            require("config.telescope-nvim")
+        end,
     },
 
     -- Show git change (change, delete, add) signs in vim sign column
-    { "mhinz/vim-signify",       event = "BufEnter" },
+    { "mhinz/vim-signify", event = "BufEnter" },
     -- Git lens similar to vscode
-    { "APZelos/blamer.nvim",     event = "BufEnter" },
+    { "APZelos/blamer.nvim", event = "BufEnter" },
     {
         "nvim-lualine/lualine.nvim",
         event = "VimEnter",
-        config = function() require("config.statusline") end,
+        config = function()
+            require("config.statusline")
+        end,
     },
 
     -- fancy start screen
     {
         "goolord/alpha-nvim",
         event = "VimEnter",
-        config = function() require("config.alpha-nvim") end,
+        config = function()
+            require("config.alpha-nvim")
+        end,
     },
 
     {
         "lukas-reineke/indent-blankline.nvim",
         event = "VimEnter",
-        config = function() require("config.indent-blankline") end,
+        config = function()
+            require("config.indent-blankline")
+        end,
     },
     {
         "echasnovski/mini.indentscope",
@@ -285,10 +337,14 @@ require("lazy").setup({
                     "Trouble",
                     "lazy",
                 },
-                callback = function() vim.b.miniindentscope_disable = true end,
+                callback = function()
+                    vim.b.miniindentscope_disable = true
+                end,
             })
         end,
-        config = function(_, opts) require("mini.indentscope").setup(opts) end,
+        config = function(_, opts)
+            require("mini.indentscope").setup(opts)
+        end,
     },
 
     -- Highlight URLs inside vim
@@ -296,7 +352,9 @@ require("lazy").setup({
     {
         "rcarriga/nvim-notify",
         event = "BufEnter",
-        init = function() vim.notify = require("notify") end,
+        init = function()
+            vim.notify = require("notify")
+        end,
     },
     -- WakaTime and wakapi metrics
     {
@@ -311,52 +369,70 @@ require("lazy").setup({
             "MunifTanjim/nui.nvim",
             "rcarriga/nvim-notify",
         },
-        init = function() require("config.noice-nvim") end,
+        init = function()
+            require("config.noice-nvim")
+        end,
         keys = {
             {
                 "<S-Enter>",
-                function() require("noice").redirect(vim.fn.getcmdline()) end,
+                function()
+                    require("noice").redirect(vim.fn.getcmdline())
+                end,
                 mode = "c",
-                desc =
-                "Redirect Cmdline"
+                desc = "Redirect Cmdline",
             },
             {
                 "<leader>snl",
-                function() require("noice").cmd("last") end,
-                desc =
-                "Noice Last Message"
+                function()
+                    require("noice").cmd("last")
+                end,
+                desc = "Noice Last Message",
             },
             {
                 "<leader>snh",
-                function() require("noice").cmd("history") end,
-                desc =
-                "Noice History"
+                function()
+                    require("noice").cmd("history")
+                end,
+                desc = "Noice History",
             },
             {
                 "<leader>sna",
-                function() require("noice").cmd("all") end,
-                desc =
-                "Noice All"
+                function()
+                    require("noice").cmd("all")
+                end,
+                desc = "Noice All",
             },
             {
                 "<c-f>",
-                function() if not require("noice.lsp").scroll(4) then return "<c-f>" end end,
+                function()
+                    if not require("noice.lsp").scroll(4) then
+                        return "<c-f>"
+                    end
+                end,
                 silent = true,
                 expr = true,
-                desc =
-                "Scroll forward",
+                desc = "Scroll forward",
                 mode = {
-                    "i", "n", "s" }
+                    "i",
+                    "n",
+                    "s",
+                },
             },
             {
                 "<c-b>",
-                function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end,
+                function()
+                    if not require("noice.lsp").scroll(-4) then
+                        return "<c-b>"
+                    end
+                end,
                 silent = true,
                 expr = true,
-                desc =
-                "Scroll backward",
+                desc = "Scroll backward",
                 mode = {
-                    "i", "n", "s" }
+                    "i",
+                    "n",
+                    "s",
+                },
             },
         },
     },
@@ -389,12 +465,16 @@ require("lazy").setup({
         version = "2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
         -- install jsregexp (optional!).
         build = "make install_jsregexp",
-        config = function() require("config.luasnip") end,
+        config = function()
+            require("config.luasnip")
+        end,
     },
     {
         "windwp/nvim-autopairs",
         event = "BufEnter",
-        config = function() require("config.autopairs") end,
+        config = function()
+            require("config.autopairs")
+        end,
     },
 
     --[[ {
@@ -433,20 +513,22 @@ require("lazy").setup({
             { "neovim/nvim-lspconfig" }, -- Required
 
             -- Autocompletion
-            { "hrsh7th/nvim-cmp" },     -- Required
+            { "hrsh7th/nvim-cmp" }, -- Required
             { "hrsh7th/cmp-nvim-lsp" }, -- Required
-            { "L3MON4D3/LuaSnip" },     -- Required
+            { "L3MON4D3/LuaSnip" }, -- Required
         },
     },
     -- Comment plugin
-    { "b3nj5m1n/kommentary",      event = "VimEnter" },
+    { "b3nj5m1n/kommentary", event = "VimEnter" },
 
     -- Autosave files on certain events
     {
         "Pocco81/auto-save.nvim",
         event = "VimEnter",
         config = function()
-            vim.defer_fn(function() require("config.autosave") end, 1500)
+            vim.defer_fn(function()
+                require("config.autosave")
+            end, 1500)
         end,
     },
 
@@ -502,7 +584,9 @@ require("lazy").setup({
         dependencies = {
             "nvimdev/guard-collection",
         },
-        config = function() require("config.guard") end,
+        config = function()
+            require("config.guard")
+        end,
     },
 
     -- Git command inside vim
@@ -529,7 +613,9 @@ require("lazy").setup({
     {
         "kevinhwang91/nvim-bqf",
         event = "FileType qf",
-        config = function() require("config.bqf") end,
+        config = function()
+            require("config.bqf")
+        end,
     },
 
     {
@@ -544,7 +630,9 @@ require("lazy").setup({
     {
         "iamcco/markdown-preview.nvim",
         build = "cd app && npm install",
-        init = function() vim.g.mkdp_filetypes = { "markdown" } end,
+        init = function()
+            vim.g.mkdp_filetypes = { "markdown" }
+        end,
         ft = { "markdown" },
     },
     -- Faster footnote generation
@@ -585,8 +673,12 @@ require("lazy").setup({
         },
         event = "VeryLazy",
         dependencies = { "nvim-treesitter-textobjects" },
-        opts = function() require("config.mini-ai").setup() end,
-        config = function(_, opts) require("config.mini-ai").config(opts) end,
+        opts = function()
+            require("config.mini-ai").setup()
+        end,
+        config = function(_, opts)
+            require("config.mini-ai").config(opts)
+        end,
     },
     -- Plugin to manipulate character pairs quickly
     -- 'tpope/vim-surround',
@@ -620,7 +712,9 @@ require("lazy").setup({
         "karb94/neoscroll.nvim",
         event = "VimEnter",
         config = function()
-            vim.defer_fn(function() require("config.neoscroll") end, 2000)
+            vim.defer_fn(function()
+                require("config.neoscroll")
+            end, 2000)
         end,
     },
 
@@ -639,7 +733,9 @@ require("lazy").setup({
     {
         "Shatur/neovim-session-manager",
         dependencies = { "nvim-lua/plenary.nvim" },
-        config = function() require("config.session-manager") end,
+        config = function()
+            require("config.session-manager")
+        end,
     },
     { evalIf(vim.g.is_linux, { "ojroques/vim-oscyank", cmd = { "OSCYank", "OSCYankReg" } }, nil) },
 
@@ -647,18 +743,24 @@ require("lazy").setup({
         "folke/which-key.nvim",
         event = "VimEnter",
         config = function()
-            vim.defer_fn(function() require("config.which-key") end, 2000)
+            vim.defer_fn(function()
+                require("config.which-key")
+            end, 2000)
         end,
     },
     {
         "jbyuki/instant.nvim",
         event = "BufEnter",
-        config = function() require("config.instant-nvim") end,
+        config = function()
+            require("config.instant-nvim")
+        end,
     },
     {
         "xeluxee/competitest.nvim",
         dependencies = "MunifTanjim/nui.nvim",
-        config = function() require("competitest").setup() end,
+        config = function()
+            require("competitest").setup()
+        end,
     },
     -- show and trim trailing whitespaces
     {
@@ -675,7 +777,9 @@ require("lazy").setup({
             "kyazdani42/nvim-web-devicons",
             "famiu/bufdelete.nvim",
         },
-        config = function() require("config.bufferline") end,
+        config = function()
+            require("config.bufferline")
+        end,
     },
 
     {

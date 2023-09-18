@@ -1,18 +1,18 @@
 local lsp = require("lsp-zero").preset({})
 
 local servers = {
-  "bashls",
-  "pyright",
-  "pylsp",
-  "jsonls",
-  "clangd",
-  "tsserver",
-  "cmake",
-  "vimls",
-  "tailwindcss",
-  "cssmodules_ls",
-  "rust_analyzer",
-  "lua_ls",
+    "bashls",
+    "pyright",
+    "pylsp",
+    "jsonls",
+    "clangd",
+    "tsserver",
+    "cmake",
+    "vimls",
+    "tailwindcss",
+    "cssmodules_ls",
+    "rust_analyzer",
+    "lua_ls",
 }
 lsp.setup_servers(servers)
 
@@ -27,12 +27,12 @@ local clangd_capabilities = configFunctions.capabilities
 clangd_capabilities.offsetEncoding = "utf-16"
 
 require("lspconfig").clangd.setup({
-  capabilities = clangd_capabilities,
-  on_attach = configFunctions.on_attach,
+    capabilities = clangd_capabilities,
+    on_attach = configFunctions.on_attach,
 })
 require("lspconfig").pyright.setup({
-  capabilities = configFunctions.capabilities,
-  on_attach = configFunctions.on_attach,
+    capabilities = configFunctions.capabilities,
+    on_attach = configFunctions.on_attach,
 })
 local jsonls_opts = require("config.lsp.settings.jsonls")
 local opts = {}

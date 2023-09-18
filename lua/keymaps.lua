@@ -9,8 +9,12 @@ map("n", "q;", "q:", { noremap = true }, "open command window")
 map("i", "<A-;>", "<ESC>miA;<ESC>`ii", {}, "Insert semicolon at the end of the line")
 
 -- Tab-complete, see https://vi.stackexchange.com/q/19675/15292.
-map("i", "<Tab>", function() return vim.fn.pumvisible() == 1 and "<C-n>" or "<Tab>" end, { expr = true })
-map("i", "<s-tab>", function() return vim.fn.pumvisible() == 1 and "<C-p>" or "<s-tab>" end, { expr = true })
+map("i", "<Tab>", function()
+    return vim.fn.pumvisible() == 1 and "<C-n>" or "<Tab>"
+end, { expr = true })
+map("i", "<s-tab>", function()
+    return vim.fn.pumvisible() == 1 and "<C-p>" or "<s-tab>"
+end, { expr = true })
 
 -- Yanking{{{
 -- Retain cursor position after yank
@@ -60,11 +64,11 @@ map("n", "<leader>q", ":<C-U>x<CR>", { noremap = true, silent = true, desc = "Sa
 -- Close location list or quickfix list if they are present
 -- see https://superuser.com/q/355325/736190
 map(
-  "n",
-  "\\x",
-  ":<C-U>windo lclose <bar> cclose<CR>",
-  { noremap = true, silent = true },
-  "Close location list or quickfix list"
+    "n",
+    "\\x",
+    ":<C-U>windo lclose <bar> cclose<CR>",
+    { noremap = true, silent = true },
+    "Close location list or quickfix list"
 )
 --Whitespace {{{
 
@@ -73,18 +77,18 @@ map("x", "$", "g_", { desc = "Go to the last non-blank character of the line in 
 
 -- see https://stackoverflow.com/a/16136133/6064933
 map(
-  "n",
-  "<expr> <Space>o",
-  "printf('m`%so<ESC>``', v:count1)",
-  { noremap = true },
-  "Insert blankline after current line"
+    "n",
+    "<expr> <Space>o",
+    "printf('m`%so<ESC>``', v:count1)",
+    { noremap = true },
+    "Insert blankline after current line"
 )
 map(
-  "n",
-  "<expr> <Space>O",
-  "printf('m`%sO<ESC>``', v:count1)",
-  { noremap = true },
-  "Insert blankline before current line"
+    "n",
+    "<expr> <Space>O",
+    "printf('m`%sO<ESC>``', v:count1)",
+    { noremap = true },
+    "Insert blankline before current line"
 )
 map("n", "<Space><Space>", "a<Space><ESC>h", { noremap = true }, "insert space after current character")
 
@@ -119,21 +123,21 @@ map("x", ">", ">gv", {}, "increase indent in visual mode")
 
 -- Search in selected region
 map(
-  "x",
-  "/",
-  ":<C-U>call feedkeys('/\\%>'.(line(\"'<\")-1).'l\\%<'.(line(\"'>\")+1).\"l\")<CR>",
-  {},
-  "search in selected region"
+    "x",
+    "/",
+    ":<C-U>call feedkeys('/\\%>'.(line(\"'<\")-1).'l\\%<'.(line(\"'>\")+1).\"l\")<CR>",
+    {},
+    "search in selected region"
 )
 
 if vim.fn.maparg("<C-L>", "n") == "" then
-  map(
-    "n",
-    "<C-L>",
-    ":nohlsearch<Bar>lua vim.defer_fn(vim.fn.diffupdate, 0)<CR><CR><C-L>",
-    { noremap = true, silent = true },
-    "Clear highlighting"
-  )
+    map(
+        "n",
+        "<C-L>",
+        ":nohlsearch<Bar>lua vim.defer_fn(vim.fn.diffupdate, 0)<CR><CR><C-L>",
+        { noremap = true, silent = true },
+        "Clear highlighting"
+    )
 end
 
 -- Text objects{{{
@@ -160,7 +164,7 @@ map("x", "<A-j>", ':<C-U>call utils#MoveSelection("down")<CR>', { silent = true 
 -- Undo break points{{{
 -- Break inserted text into smaller undo units.
 for _, ch in ipairs({ ",", ".", "!", "?", ";", ":" }) do
-  map("i", ch, ch .. "<C-g>u", { noremap = true })
+    map("i", ch, ch .. "<C-g>u", { noremap = true })
 end
 --}}}
 
@@ -224,57 +228,57 @@ map("n", "#", "<Plug>(asterisk-z#)<Cmd>lua require('hlslens').start()<CR>", { si
 
 --{{{ Neotree
 map(
-  "n",
-  "<leader>e",
-  [[<ESC><Cmd> lua require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })<CR>]],
-  { silent = true },
-  "Toggle tree"
+    "n",
+    "<leader>e",
+    [[<ESC><Cmd> lua require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })<CR>]],
+    { silent = true },
+    "Toggle tree"
 )
 -- }}}
 -- Refactoring {{{
 map(
-  "v",
-  "<leader>re",
-  [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function')<CR>]],
-  { silent = true, expr = false },
-  "Extract function"
+    "v",
+    "<leader>re",
+    [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function')<CR>]],
+    { silent = true, expr = false },
+    "Extract function"
 )
 map(
-  "v",
-  "<leader>rf",
-  [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function To File')<CR>]],
-  { silent = true, expr = false },
-  "Extract function to file"
+    "v",
+    "<leader>rf",
+    [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function To File')<CR>]],
+    { silent = true, expr = false },
+    "Extract function to file"
 )
 map(
-  "v",
-  "<leader>rv",
-  [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Variable')<CR>]],
-  { silent = true, expr = false },
-  "Extract variable"
+    "v",
+    "<leader>rv",
+    [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Variable')<CR>]],
+    { silent = true, expr = false },
+    "Extract variable"
 )
 map(
-  "v",
-  "<leader>ri",
-  [[ <Esc><Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]],
-  { silent = true, expr = false },
-  "Extract variable inline"
+    "v",
+    "<leader>ri",
+    [[ <Esc><Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]],
+    { silent = true, expr = false },
+    "Extract variable inline"
 )
 
 -- Extract block doesn't need visual mode
 map(
-  "n",
-  "<leader>rb",
-  [[ <Cmd>lua require('refactoring').refactor('Extract Block')<CR>]],
-  { silent = true, expr = false },
-  "Extract block"
+    "n",
+    "<leader>rb",
+    [[ <Cmd>lua require('refactoring').refactor('Extract Block')<CR>]],
+    { silent = true, expr = false },
+    "Extract block"
 )
 map(
-  "n",
-  "<leader>rbf",
-  [[ <Cmd>lua require('refactoring').refactor('Extract Block To File')<CR>]],
-  { silent = true, expr = false },
-  "Extract block to file"
+    "n",
+    "<leader>rbf",
+    [[ <Cmd>lua require('refactoring').refactor('Extract Block To File')<CR>]],
+    { silent = true, expr = false },
+    "Extract block to file"
 )
 
 -- }}}
@@ -282,18 +286,18 @@ map(
 -- Renamer{{{
 map("i", "<F2>", '<cmd>lua require("renamer").rename()<cr>', { noremap = true, silent = true })
 map(
-  "n",
-  "<leader>rn",
-  '<cmd>lua require("renamer").rename()<cr>',
-  { noremap = true, silent = true },
-  "rename text object"
+    "n",
+    "<leader>rn",
+    '<cmd>lua require("renamer").rename()<cr>',
+    { noremap = true, silent = true },
+    "rename text object"
 )
 map(
-  "v",
-  "<leader>rn",
-  '<cmd>lua require("renamer").rename()<cr>',
-  { noremap = true, silent = true },
-  "rename text object"
+    "v",
+    "<leader>rn",
+    '<cmd>lua require("renamer").rename()<cr>',
+    { noremap = true, silent = true },
+    "rename text object"
 )
 -- }}}
 --

@@ -1,7 +1,10 @@
 local ft = require("guard.filetype")
 
-ft("lua"):fmt("lsp"):append("stylua"):lint("selene") -- Call setup() LAST!
+ft("lua"):fmt("stylua"):lint("selene") -- Call setup() LAST!
 ft("c"):fmt("clang-format"):lint("clang-tidy")
+ft("cpp"):fmt("clang-format"):lint("clang-tidy")
+ft("nix"):fmt({ cmd = "alejandra", stdin = true })
+
 require("guard").setup({
     -- the only options for the setup function
     fmt_on_save = false,
