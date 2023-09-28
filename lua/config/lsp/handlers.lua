@@ -61,22 +61,27 @@ local function lsp_keymaps(bufnr)
             desc = "LSP: " .. desc
         end
 
-        vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc, silent = true, noremap = true })
+        vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
     end
     nmap("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
     nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-
-    nmap("K", vim.lsp.buf.hover(), "Hover Documentation")
-    -- nmap("gi", vim.lsp.buf.implementation()("[G]oto [I]mplementation"))
-    nmap("gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+    nmap("K", vim.lsp.buf.hover, "Hover Documentation")
     nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
-    nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
     nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-
-    nmap("gr", vim.lsp.buf.references(), "[G]oto [R]eferences")
+    -- nmap("gr", vim.lsp.buf.references(), "[G]oto [R]eferences")
     nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+    -- dont change this to `nmap` does not work with it, because a argument `border=rounded` nneds to be passsed in
+    vim.api.nvim_buf_set_keymap(
+        bufnr,
+        "n",
+        "gl",
+        "<cmd>lua vim.diagnostic.open_float({ border = 'rounded' })<CR>",
+        { silent = true, noremap = true, desc = "LSP: show diagnostics" }
+    )
 
-    nmap("gl", vim.diagnostic.open_float({ border = "rounded" }), "open diagnostics")
+    nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+    nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+
     -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
     -- vim.keymap.set("n", "<space>fb", function()
     --     vim.lsp.buf.format({ async = true })
@@ -88,6 +93,7 @@ M.on_attach = function(client, bufnr)
     if client.name == "tsserver" then
         client.server_capabilities.documentHighlightProvider = false
     end
+    print("setting up keymaps ", bufnr)
     lsp_keymaps(bufnr)
     lsp_highlight_document(client)
     -- if client.server_capabilities.documentSymbolProvider and client.name ~= "html" then
