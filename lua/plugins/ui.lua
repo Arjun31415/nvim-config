@@ -14,7 +14,8 @@ return {
                             event = "msg_show",
                             kind = "search_count",
                         },
-                        opts = { skip = true }, },
+                        opts = { skip = true },
+                    },
                     {
                         filter = {
                             event = "msg_show",

@@ -4,9 +4,6 @@
 vim.g.mapleader = ","
 vim.g.maplocalleader = ","
 vim.o.cmdheight = 0
--- Install package manager
---    https://github.com/folke/lazy.nvim
---    `:help lazy.nvim.txt` for more info
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
     vim.fn.system({
@@ -20,26 +17,15 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- NOTE: Here is where you install your plugins.
---  You can configure plugins using the `config` key.
---
---  You can also configure plugins after the setup call,
---    as they will be available in your neovim runtime.
 require("lazy").setup({
     { import = "plugins" },
-
-    -- NOTE: First, some plugins that don't require any configuration
 
     -- Git related plugins
     "tpope/vim-fugitive",
     "tpope/vim-rhubarb",
     { "APZelos/blamer.nvim", event = "BufEnter" },
-    {
-        "rhysd/committia.vim",
-    },
-    {
-        "wakatime/vim-wakatime",
-    },
+    "rhysd/committia.vim",
+    "wakatime/vim-wakatime",
     -- Detect tabstop and shiftwidth automatically
     "tpope/vim-sleuth",
 
@@ -49,7 +35,6 @@ require("lazy").setup({
         -- LSP Configuration & Plugins
         "neovim/nvim-lspconfig",
         dependencies = {
-
             -- Additional lua configuration, makes nvim stuff amazing!
             "folke/neodev.nvim",
         },

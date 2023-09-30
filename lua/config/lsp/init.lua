@@ -30,6 +30,6 @@ local opts = {}
 opts = vim.tbl_deep_extend("force", jsonls_opts, opts)
 opts.on_attach = configFunctions.on_attach
 lspconfig.jsonls.setup(opts)
-local lua_ls_opts = lsp.nvim_lua_ls({on_attach=configFunctions.on_attach})
+local lua_ls_opts = lsp.nvim_lua_ls({ on_attach = configFunctions.on_attach })
 lspconfig.lua_ls.setup(lua_ls_opts)
 lspconfig.nil_ls.setup({ on_attach = configFunctions.on_attach })
