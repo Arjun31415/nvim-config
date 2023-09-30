@@ -93,7 +93,6 @@ M.on_attach = function(client, bufnr)
     if client.name == "tsserver" then
         client.server_capabilities.documentHighlightProvider = false
     end
-    print("setting up keymaps ", bufnr)
     lsp_keymaps(bufnr)
     lsp_highlight_document(client)
     -- if client.server_capabilities.documentSymbolProvider and client.name ~= "html" then
