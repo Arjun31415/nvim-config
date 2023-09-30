@@ -26,6 +26,12 @@ require("lazy").setup({
     { "APZelos/blamer.nvim", event = "BufEnter" },
     "rhysd/committia.vim",
     "wakatime/vim-wakatime",
+    {
+        "RRethy/vim-hexokinase",
+        build = "cd  ~/.local/share/nvim/lazy/vim-hexokinase && make hexokinase",
+        event = "VimEnter",
+    },
+
     -- Detect tabstop and shiftwidth automatically
     "tpope/vim-sleuth",
     {
@@ -379,6 +385,8 @@ require("nvim-treesitter.configs").setup({
         },
     },
 })
+
+            vim.cmd("let g:Hexokinase_highlighters = ['backgroundfull']")
 
 require("neodev").setup()
 
