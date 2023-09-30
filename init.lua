@@ -33,7 +33,13 @@ require("lazy").setup({
     -- Git related plugins
     "tpope/vim-fugitive",
     "tpope/vim-rhubarb",
-
+    { "APZelos/blamer.nvim", event = "BufEnter" },
+    {
+        "rhysd/committia.vim",
+    },
+    {
+        "wakatime/vim-wakatime",
+    },
     -- Detect tabstop and shiftwidth automatically
     "tpope/vim-sleuth",
 
