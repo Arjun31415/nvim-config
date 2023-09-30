@@ -13,8 +13,48 @@ local has_words_before = function()
     return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
-local function config()
+local function lspkind_config()
+    local lspKindConfig = require("lspkind")
+    lspKindConfig.init({
+        symbol_map = {
+            Boolean = "[] Boolean",
+            Character = "[] Character",
+            Class = "[] Class",
+            Color = "[] Color",
+            Constant = "[] Constant",
+            Constructor = "[] Constructor",
+            Enum = "[] Enum",
+            EnumMember = "[] EnumMember",
+            Event = "[ﳅ] Event",
+            Field = "[] Field",
+            File = "[] File",
+            Folder = "[ﱮ] Folder",
+            Function = "[ﬦ] Function",
+            Interface = "[] Interface",
+            Keyword = "[] Keyword",
+            Method = "[] Method",
+            Module = "[] Module",
+            Number = "[] Number",
+            Operator = "[Ψ] Operator",
+            Parameter = "[] Parameter",
+            Property = "[ﭬ] Property",
+            Reference = "[] Reference",
+            Snippet = "[] Snippet",
+            String = "[] String",
+            Struct = "[ﯟ] Struct",
+            Text = "[] Text",
+            TypeParameter = "[] TypeParameter",
+            Unit = "[] Unit",
+            Value = "[] Value",
+            Variable = "[ﳛ] Variable",
+            Copilot = "",
+        },
+    })
+end
+
+local function cmp_config()
     require("config.lsp")
+    local lspkind = require("lspkind")
     local present2, copilot = pcall(require, "copilot")
     if present2 then
         copilot.setup({
@@ -40,6 +80,26 @@ local function config()
             expand = function(args)
                 luasnip.lsp_expand(args.body)
             end,
+        },
+        style = { winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder" },
+        formatting = {
+            format = lspkind.cmp_format({ with_text = false, maxwidth = 50 }),
+        },
+        window = {
+            completion = {
+                border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+                scrollbar = "║",
+                autocomplete = {
+                    require("cmp.types").cmp.TriggerEvent.InsertEnter,
+                    require("cmp.types").cmp.TriggerEvent.TextChanged,
+                },
+            },
+
+            documentation = {
+                border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+                winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+                scrollbar = "║",
+            },
         },
         mapping = cmp.mapping.preset.insert({
             ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
@@ -99,6 +159,7 @@ local function config()
             },
         },
     })
+    vim.cmd([[ set pumheight=10 ]])
     cmp.setup.cmdline(":", {
         mapping = cmp.mapping.preset.cmdline(),
         sources = cmp.config.sources({ { name = "path" } }, { { name = "cmdline" } }),
@@ -107,6 +168,27 @@ local function config()
         mapping = cmp.mapping.preset.cmdline(),
         sources = { { name = "buffer" } },
     })
+    -- local highlights = {
+    --     CmpItemKindText = { fg = "Grey" },
+    --     CmpItemKindFunction = { fg = "#C586C0" },
+    --     CmpItemKindClass = { fg = "Orange" },
+    --     CmpItemKindKeyword = { fg = "#f90c71" },
+    --     CmpItemKindSnippet = { fg = "#565c64" },
+    --     CmpItemKindConstructor = { fg = "#ae43f0" },
+    --     CmpItemKindVariable = { fg = "#9CDCFE", bg = "NONE" },
+    --     CmpItemKindInterface = { fg = "#f90c71", bg = "NONE" },
+    --     CmpItemKindFolder = { fg = "#2986cc" },
+    --     CmpItemKindReference = { fg = "#922b21" },
+    --     CmpItemKindMethod = { fg = "#C586C0" },
+    --     CmpItemMenu = { fg = "#C586C0", bg = "#C586C0" },
+    --     CmpItemAbbr = { fg = "#565c64", bg = "NONE" },
+    --     CmpItemAbbrMatch = { fg = "#569CD6", bg = "NONE" },
+    --     CmpItemAbbrMatchFuzzy = { fg = "#569CD6", bg = "NONE" },
+    -- }
+    -- vim.api.nvim_set_hl(0, "CmpBorderedWindow_FloatBorder", { fg = "#565c64" })
+    -- for group, hl in pairs(highlights) do
+    --     vim.api.nvim_set_hl(0, group, hl)
+    -- end
 end
 
 return {
@@ -119,7 +201,7 @@ return {
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
         "hrsh7th/cmp-cmdline",
-
+        { "onsails/lspkind.nvim", config = lspkind_config },
         -- Adds LSP completion capabilities
         "hrsh7th/cmp-nvim-lsp",
 
@@ -135,5 +217,5 @@ return {
         "github/copilot.vim",
         "zbirenbaum/copilot-cmp",
     },
-    config = config,
+    config = cmp_config,
 }
