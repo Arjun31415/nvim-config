@@ -386,8 +386,7 @@ require("nvim-treesitter.configs").setup({
     },
 })
 
-            vim.cmd("let g:Hexokinase_highlighters = ['backgroundfull']")
-
+vim.cmd("let g:Hexokinase_highlighters = ['backgroundfull']")
 require("neodev").setup()
 
 -- The line beneath this is called `modeline`. See `:help modeline`
