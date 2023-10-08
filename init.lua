@@ -164,7 +164,7 @@ require("lazy").setup({
                     smart_indent_cap = true,
                 },
                 scope = {
-                    include = { lua = { "return_statement", "table_constructor" } },
+                    include = { node_type = { lua = { "return_statement", "table_constructor" } } },
                     enabled = true,
                     priority = 500,
                     highlight = highlight,
