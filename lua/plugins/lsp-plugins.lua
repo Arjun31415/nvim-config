@@ -13,10 +13,10 @@ return {
         dependencies = "kyazdani42/nvim-web-devicons",
         event = "BufEnter",
     },
-    {
-        "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+    { "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
         config = function()
             require("lsp_lines").setup()
         end,
+        event = "BufEnter",
     },
 }
