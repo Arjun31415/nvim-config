@@ -74,7 +74,6 @@ local function cmp_config()
     local luasnip = require("luasnip")
     require("luasnip.loaders.from_vscode").lazy_load()
     luasnip.config.setup({})
-
     cmp.setup({
         snippet = {
             expand = function(args)
@@ -196,7 +195,12 @@ return {
     "hrsh7th/nvim-cmp",
     dependencies = {
         -- Snippet Engine & its associated nvim-cmp source
-        "L3MON4D3/LuaSnip",
+        {
+            "L3MON4D3/LuaSnip",
+            config = function()
+                require("luasnip.loaders.from_snipmate").lazy_load({ paths = { "./luasnip_snippets" } })
+            end,
+        },
         "saadparwaiz1/cmp_luasnip",
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
