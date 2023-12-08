@@ -202,6 +202,7 @@ require("lazy").setup({
         "nvim-treesitter/nvim-treesitter",
         dependencies = {
             "nvim-treesitter/nvim-treesitter-textobjects",
+            "luckasRanarison/tree-sitter-hypr",
         },
         build = ":TSUpdate",
     },
@@ -385,7 +386,15 @@ require("nvim-treesitter.configs").setup({
         },
     },
 })
-
+local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+parser_config.hypr = {
+    install_info = {
+        url = "https://github.com/luckasRanarison/tree-sitter-hypr",
+        files = { "src/parser.c" },
+        branch = "master",
+    },
+    filetype = "hypr",
+}
 vim.cmd("let g:Hexokinase_highlighters = ['backgroundfull']")
 require("neodev").setup()
 
