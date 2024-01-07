@@ -202,7 +202,7 @@ require("lazy").setup({
         "nvim-treesitter/nvim-treesitter",
         dependencies = {
             "nvim-treesitter/nvim-treesitter-textobjects",
-            "luckasRanarison/tree-sitter-hypr",
+            "luckasRanarison/tree-sitter-hyprlang",
         },
         build = ":TSUpdate",
     },
@@ -389,7 +389,7 @@ require("nvim-treesitter.configs").setup({
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.hypr = {
     install_info = {
-        url = "https://github.com/luckasRanarison/tree-sitter-hypr",
+        url = "https://github.com/luckasRanarison/tree-sitter-hyprlang",
         files = { "src/parser.c" },
         branch = "master",
     },
