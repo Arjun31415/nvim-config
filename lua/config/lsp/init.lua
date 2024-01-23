@@ -8,7 +8,6 @@ local servers = {
     "clangd",
     "tsserver",
     "cmake",
-    "rust_analyzer",
     "lua_ls",
     "nil_ls",
     "nixd",

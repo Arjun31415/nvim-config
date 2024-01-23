@@ -397,6 +397,7 @@ parser_config.hypr = {
 }
 vim.cmd("let g:Hexokinase_highlighters = ['backgroundfull']")
 require("neodev").setup()
+vim.cmd("highlight LspInlayHint guibg=none")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

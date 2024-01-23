@@ -210,12 +210,6 @@ return {
 
         -- Adds a number of user-friendly snippets
         "rafamadriz/friendly-snippets",
-        {
-            "simrat39/rust-tools.nvim",
-            dependencies = {
-                "mfussenegger/nvim-dap",
-            },
-        },
         "tamago324/nlsp-settings.nvim",
         "github/copilot.vim",
         "zbirenbaum/copilot-cmp",
