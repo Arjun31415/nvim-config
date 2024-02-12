@@ -16,6 +16,10 @@ if not vim.loop.fs_stat(lazypath) then
     })
 end
 vim.opt.rtp:prepend(lazypath)
+if vim.g.neovide then
+    -- Put anything you want to happen only in Neovide here
+    require("config.neovide")
+end
 
 require("lazy").setup({
     { import = "plugins" },
