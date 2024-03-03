@@ -56,10 +56,7 @@ local function cmp_config()
     local lspkind = require("lspkind")
     local present2, copilot = pcall(require, "copilot")
     if present2 then
-        copilot.setup({
-            suggestion = { enabled = false },
-            panel = { enabled = false },
-        })
+        copilot.setup()
         require("copilot_cmp").setup({
             method = "getCompletionsCycling",
             formatters = {
@@ -211,7 +208,7 @@ return {
         -- Adds a number of user-friendly snippets
         "rafamadriz/friendly-snippets",
         "tamago324/nlsp-settings.nvim",
-        "github/copilot.vim",
+        "zbirenbaum/copilot.lua",
         "zbirenbaum/copilot-cmp",
     },
     config = cmp_config,
