@@ -27,6 +27,13 @@ require("lazy").setup({
     -- Git related plugins
     "tpope/vim-fugitive",
     "tpope/vim-rhubarb",
+    {
+        "lervag/vimtex",
+        init = function()
+            vim.g.vimtex_view_method = "zathura"
+            -- Use init for configuration, don't use the more common "config".
+        end,
+    },
     { "APZelos/blamer.nvim", event = "BufEnter" },
     "rhysd/committia.vim",
     "wakatime/vim-wakatime",
