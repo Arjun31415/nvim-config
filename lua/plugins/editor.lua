@@ -40,6 +40,7 @@ return {
             ft("cpp"):fmt("clang-format"):lint("clang-tidy")
             ft("nix"):fmt({ cmd = "alejandra", stdin = true })
             ft("rust"):fmt("rustfmt")
+            ft("tex"):fmt("latexindent")
             require("guard").setup({
                 -- the only options for the setup function
                 fmt_on_save = false,
