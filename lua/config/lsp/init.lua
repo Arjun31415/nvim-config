@@ -10,7 +10,7 @@ local servers = {
     "cmake",
     "lua_ls",
     "nil_ls",
-    "nixd",
+    -- "nixd",
 }
 lsp.setup_servers(servers)
 lsp.on_attach = configFunctions.on_attach
@@ -34,4 +34,4 @@ lspconfig.jsonls.setup(opts)
 local lua_ls_opts = lsp.nvim_lua_ls({ on_attach = configFunctions.on_attach })
 lspconfig.lua_ls.setup(lua_ls_opts)
 lspconfig.nil_ls.setup({ on_attach = configFunctions.on_attach })
-lspconfig.nixd.setup({ on_attach = configFunctions.on_attach })
+-- lspconfig.nixd.setup({ on_attach = configFunctions.on_attach })
