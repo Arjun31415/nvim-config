@@ -21,11 +21,22 @@ if vim.g.neovide then
     require("config.neovide")
 end
 
+-- TODO: Remove unused plugins
+--
 require("lazy").setup({
     { import = "plugins" },
 
     -- Git related plugins
     "tpope/vim-fugitive",
+    {
+        "folke/todo-comments.nvim",
+        opts = {
+            -- your configuration comes here
+            -- or leave it empty to use the default settings
+            -- refer to the configuration section below
+        },
+        dependencies = { "nvim-lua/plenary.nvim" },
+    },
     "tpope/vim-rhubarb",
     {
         "lervag/vimtex",
@@ -407,7 +418,6 @@ parser_config.hypr = {
     filetype = "hypr",
 }
 vim.cmd("let g:Hexokinase_highlighters = ['backgroundfull']")
-require("neodev").setup()
 vim.cmd("highlight LspInlayHint guibg=none")
 
 -- The line beneath this is called `modeline`. See `:help modeline`

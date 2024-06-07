@@ -189,6 +189,7 @@ end
 return {
     -- Autocompletion
     "hrsh7th/nvim-cmp",
+    event = { "BufReadPost", "BufNewFile" },
     dependencies = {
         -- Snippet Engine & its associated nvim-cmp source
         {
@@ -197,6 +198,7 @@ return {
                 require("luasnip.loaders.from_snipmate").lazy_load({ paths = { "./luasnip_snippets" } })
             end,
         },
+        { "folke/lazydev.nvim", ft = "lua", opts = {} },
         "saadparwaiz1/cmp_luasnip",
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
