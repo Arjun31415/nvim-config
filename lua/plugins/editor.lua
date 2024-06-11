@@ -55,4 +55,11 @@ return {
             require("marks").setup()
         end,
     },
+    {
+        "tris203/precognition.nvim",
+        config = {
+            startVisible = true,
+            showBlankVirtLine = true,
+        },
+    },
 }
