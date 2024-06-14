@@ -22,7 +22,6 @@ if vim.g.neovide then
 end
 
 -- TODO: Remove unused plugins
---
 require("lazy").setup({
     { import = "plugins" },
 
@@ -326,6 +325,16 @@ vim.keymap.set("n", "<leader>sw", require("telescope.builtin").grep_string, { de
 vim.keymap.set("n", "<leader>sg", require("telescope.builtin").live_grep, { desc = "[S]earch by [G]rep" })
 vim.keymap.set("n", "<leader>sd", require("telescope.builtin").diagnostics, { desc = "[S]earch [D]iagnostics" })
 vim.keymap.set("n", "<leader>sr", require("telescope.builtin").resume, { desc = "[S]earch [R]esume" })
+
+-- Mapping to move lines.
+-- ref: https://vim.fandom.com/wiki/Moving_lines_up_or_down#Mappings_to_move_lines
+
+vim.keymap.set("n", "<A-j>", "<cmd>m .+1<CR>==", { noremap = true })
+vim.keymap.set("n", "<A-k>", "<cmd>m .-2<CR>==", { noremap = true })
+vim.keymap.set("i", "<A-j>", "<Esc>:m .+1<CR>==gi", { noremap = true })
+vim.keymap.set("i", "<A-k>", "<Esc>:m .-2<CR>==gi", { noremap = true })
+vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { noremap = true })
+vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { noremap = true })
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
