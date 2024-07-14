@@ -6,7 +6,15 @@ return {
     {
         "folke/trouble.nvim",
         dependencies = "kyazdani42/nvim-web-devicons",
-        event = "BufEnter",
+        cmd = "Trouble",
+        opts = {},
+        keys = {
+            {
+                "<leader>xx",
+                "<cmd>Trouble diagnostics toggle<cr>",
+                desc = "Diagnostics (Trouble)",
+            },
+        },
     },
     {
         "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
