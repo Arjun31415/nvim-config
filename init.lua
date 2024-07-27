@@ -21,6 +21,12 @@ if vim.g.neovide then
     require("config.neovide")
 end
 
+-- Diagnostic Signs
+vim.fn.sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticSignError" })
+vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticSignWarn" })
+vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSignInfo" })
+vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
+
 -- TODO: Remove unused plugins
 require("lazy").setup({
     { import = "plugins" },
@@ -129,20 +135,20 @@ require("lazy").setup({
         },
     },
 
-    {
-        -- Set lualine as statusline
-        "nvim-lualine/lualine.nvim",
-        -- See `:help lualine.txt`
-        opts = {
-            options = {
-                icons_enabled = false,
-                theme = "onedark",
-                component_separators = "|",
-                section_separators = "",
-            },
-        },
-    },
-
+    -- {
+    --     -- Set lualine as statusline
+    --     "nvim-lualine/lualine.nvim",
+    --     -- See `:help lualine.txt`
+    --     opts = {
+    --         options = {
+    --             icons_enabled = false,
+    --             theme = "onedark",
+    --             component_separators = "|",
+    --             section_separators = "",
+    --         },
+    --     },
+    -- },
+    --
     {
         -- Add indentation guides even on blank lines
         "lukas-reineke/indent-blankline.nvim",

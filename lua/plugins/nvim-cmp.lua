@@ -50,7 +50,6 @@ local function lspkind_config()
         },
     })
 end
-
 local function cmp_config()
     require("config.lsp")
     local lspkind = require("lspkind")
