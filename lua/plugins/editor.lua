@@ -22,8 +22,8 @@ return {
                 end,
                 desc = "Delete Buffer",
             },
-      -- stylua: ignore
-      { "<leader>bD", function() require("mini.bufremove").delete(0, true) end, desc = "Delete Buffer (Force)" },
+            -- stylua: ignore
+            { "<leader>bD", function() require("mini.bufremove").delete(0, true) end, desc = "Delete Buffer (Force)" },
         },
     },
     {
@@ -34,19 +34,15 @@ return {
         },
         config = function()
             local ft = require("guard.filetype")
-
-            ft("lua"):fmt("stylua"):lint("selene") -- Call setup() LAST!
-            ft("c"):fmt("clang-format"):lint("clang-tidy")
-            ft("cpp"):fmt("clang-format"):lint("clang-tidy")
-            ft("nix"):fmt({ cmd = "alejandra", stdin = true })
-            ft("rust"):fmt("rustfmt")
-            ft("tex"):fmt("latexindent")
-            require("guard").setup({
+            ft("typescript,javascript,typescriptreact"):fmt("prettier")
+            ft("*"):lint("codespell")
+            -- ft("tex"):fmt("latexindent")
+            vim.g.guard_config = {
                 -- the only options for the setup function
                 fmt_on_save = false,
                 -- Use lsp if no formatter was defined for this filetype
                 lsp_as_default_formatter = false,
-            })
+            }
         end,
     },
     {
@@ -54,6 +50,15 @@ return {
         config = function()
             require("marks").setup()
         end,
+    },
+    {
+        "OXY2DEV/markview.nvim",
+        -- lazy = false, -- Recommended
+        ft = "markdown", -- If you decide to lazy-load anyway
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+            "nvim-tree/nvim-web-devicons",
+        },
     },
     -- {
     --     "tris203/precognition.nvim",

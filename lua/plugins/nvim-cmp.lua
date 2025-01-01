@@ -134,15 +134,15 @@ local function cmp_config()
         }),
         sources = cmp.config.sources({
             { name = "cmp_tabnine" },
-            { name = "copilot", group_index = 2 },
+            -- { name = "copilot", group_index = 2 },
             { name = "nvim_lsp" },
             { name = "luasnip" }, -- For luasnip users
         }, { { name = "buffer" } }),
         sorting = {
             priority_weight = 2,
             comparators = {
-                require("copilot_cmp.comparators").prioritize,
-                require("copilot_cmp.comparators").score,
+                -- require("copilot_cmp.comparators").prioritize,
+                -- require("copilot_cmp.comparators").score,
                 cmp.config.compare.group_index,
                 cmp.config.compare.recently_used,
                 cmp.config.compare.offset,
@@ -209,8 +209,8 @@ return {
         -- Adds a number of user-friendly snippets
         "rafamadriz/friendly-snippets",
         "tamago324/nlsp-settings.nvim",
-        "zbirenbaum/copilot.lua",
-        "zbirenbaum/copilot-cmp",
+        -- "zbirenbaum/copilot.lua",
+        -- "zbirenbaum/copilot-cmp",
     },
     config = cmp_config,
 }
