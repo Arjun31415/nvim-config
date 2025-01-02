@@ -80,8 +80,8 @@ local function lsp_keymaps(bufnr)
         { silent = true, noremap = true, desc = "LSP: show diagnostics" }
     )
 
-    nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-    nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+    nmap("gI", require("fzf-lua").lsp_implementations, "[G]oto [I]mplementation")
+    nmap("gr", require("fzf-lua").lsp_references, "[G]oto [R]eferences")
 
     -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
     -- vim.keymap.set("n", "<space>fb", function()

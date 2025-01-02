@@ -203,24 +203,33 @@ require("lazy").setup({
     { "numToStr/Comment.nvim", opts = {} },
 
     -- Fuzzy Finder (files, lsp, etc)
+    -- {
+    --     "nvim-telescope/telescope.nvim",
+    --     branch = "0.1.x",
+    --     dependencies = {
+    --         "nvim-lua/plenary.nvim",
+    --         -- Fuzzy Finder Algorithm which requires local dependencies to be built.
+    --         -- Only load if `make` is available. Make sure you have the system
+    --         -- requirements installed.
+    --         {
+    --             "nvim-telescope/telescope-fzf-native.nvim",
+    --             -- NOTE: If you are having trouble with this installation,
+    --             --       refer to the README for telescope-fzf-native for more instructions.
+    --             build = "make",
+    --             cond = function()
+    --                 return vim.fn.executable("make") == 1
+    --             end,
+    --         },
+    --     },
+    -- },
+    --
     {
-        "nvim-telescope/telescope.nvim",
-        branch = "0.1.x",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            -- Fuzzy Finder Algorithm which requires local dependencies to be built.
-            -- Only load if `make` is available. Make sure you have the system
-            -- requirements installed.
-            {
-                "nvim-telescope/telescope-fzf-native.nvim",
-                -- NOTE: If you are having trouble with this installation,
-                --       refer to the README for telescope-fzf-native for more instructions.
-                build = "make",
-                cond = function()
-                    return vim.fn.executable("make") == 1
-                end,
-            },
-        },
+        "ibhagwan/fzf-lua",
+        -- optional for icon support
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        -- or if using mini.icons/mini.nvim
+        -- dependencies = { "echasnovski/mini.icons" },
+        opts = {},
     },
 
     {
@@ -342,38 +351,34 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
-require("telescope").setup({
-    defaults = {
-        mappings = {
-            i = {
-                ["<C-u>"] = false,
-                ["<C-d>"] = false,
-            },
-        },
-    },
-})
-
--- Enable telescope fzf native, if installed
-pcall(require("telescope").load_extension, "fzf")
+-- require("telescope").setup({
+--     defaults = {
+--         mappings = {
+--             i = {
+--                 ["<C-u>"] = false,
+--                 ["<C-d>"] = false,
+--             },
+--         },
+--     },
+-- })
 
 -- See `:help telescope.builtin`
-vim.keymap.set("n", "<leader>?", require("telescope.builtin").oldfiles, { desc = "[?] Find recently opened files" })
-vim.keymap.set("n", "<leader><space>", require("telescope.builtin").buffers, { desc = "[ ] Find existing buffers" })
-vim.keymap.set("n", "<leader>/", function()
-    -- You can pass additional configuration to telescope to change theme, layout, etc.
-    require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-        winblend = 10,
-        previewer = false,
-    }))
-end, { desc = "[/] Fuzzily search in current buffer" })
-
-vim.keymap.set("n", "<leader>gf", require("telescope.builtin").git_files, { desc = "Search [G]it [F]iles" })
-vim.keymap.set("n", "<leader>sf", require("telescope.builtin").find_files, { desc = "[S]earch [F]iles" })
-vim.keymap.set("n", "<leader>sh", require("telescope.builtin").help_tags, { desc = "[S]earch [H]elp" })
-vim.keymap.set("n", "<leader>sw", require("telescope.builtin").grep_string, { desc = "[S]earch current [W]ord" })
-vim.keymap.set("n", "<leader>sg", require("telescope.builtin").live_grep, { desc = "[S]earch by [G]rep" })
-vim.keymap.set("n", "<leader>sd", require("telescope.builtin").diagnostics, { desc = "[S]earch [D]iagnostics" })
-vim.keymap.set("n", "<leader>sr", require("telescope.builtin").resume, { desc = "[S]earch [R]esume" })
+vim.keymap.set("n", "<leader>?", require("fzf-lua").oldfiles, { desc = "[?] Find recently opened files" })
+vim.keymap.set("n", "<leader><space>", require("fzf-lua").buffers, { desc = "[ ] Find existing buffers" })
+-- vim.keymap.set("n", "<leader>/", function()
+--     -- You can pass additional configuration to telescope to change theme, layout, etc.
+--     require("telescope.builtin").grep_curbuf(require("telescope.themes").get_dropdown({
+--         winblend = 10,
+--         previewer = false,
+--     }))
+-- end, { desc = "[/] Fuzzily search in current buffer" })
+vim.keymap.set("n", "<leader>/", require("fzf-lua").grep_curbuf, { desc = "[/] Fuzzily search in current buffer" })
+vim.keymap.set("n", "<leader>gf", require("fzf-lua").git_files, { desc = "Search [G]it [F]iles" })
+vim.keymap.set("n", "<leader>sf", require("fzf-lua").files, { desc = "[S]earch [F]iles" })
+vim.keymap.set("n", "<leader>sw", require("fzf-lua").grep_cword, { desc = "[S]earch current [W]ord" })
+vim.keymap.set("n", "<leader>sg", require("fzf-lua").live_grep, { desc = "[S]earch by [G]rep" })
+vim.keymap.set("n", "<leader>sd", require("fzf-lua").diagnostics_workspace, { desc = "[S]earch [D]iagnostics" })
+vim.keymap.set("n", "<leader>sr", require("fzf-lua").resume, { desc = "[S]earch [R]esume" })
 
 -- Mapping to move lines.
 -- ref: https://vim.fandom.com/wiki/Moving_lines_up_or_down#Mappings_to_move_lines
@@ -392,14 +397,9 @@ require("nvim-treesitter.configs").setup({
     ensure_installed = {
         "c",
         "cpp",
-        "go",
         "lua",
-        "wgsl",
         "python",
         "rust",
-        "tsx",
-        "javascript",
-        "typescript",
         "vimdoc",
         "vim",
         "regex",
