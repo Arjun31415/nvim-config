@@ -185,32 +185,34 @@ local function cmp_config()
     -- end
 end
 
-return {
-    -- Autocompletion
-    "hrsh7th/nvim-cmp",
-    event = { "BufReadPost", "BufNewFile" },
-    dependencies = {
-        -- Snippet Engine & its associated nvim-cmp source
-        {
-            "L3MON4D3/LuaSnip",
-            config = function()
-                require("luasnip.loaders.from_snipmate").lazy_load({ paths = { "./luasnip_snippets" } })
-            end,
-        },
-        { "folke/lazydev.nvim", ft = "lua", opts = {} },
-        "saadparwaiz1/cmp_luasnip",
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-path",
-        "hrsh7th/cmp-cmdline",
-        { "onsails/lspkind.nvim", config = lspkind_config },
-        -- Adds LSP completion capabilities
-        "hrsh7th/cmp-nvim-lsp",
-
-        -- Adds a number of user-friendly snippets
-        "rafamadriz/friendly-snippets",
-        "tamago324/nlsp-settings.nvim",
-        -- "zbirenbaum/copilot.lua",
-        -- "zbirenbaum/copilot-cmp",
-    },
-    config = cmp_config,
-}
+-- return {
+--     -- Autocompletion
+--     "hrsh7th/nvim-cmp",
+--     event = { "BufReadPost", "BufNewFile" },
+--     dependencies = {
+--         -- Snippet Engine & its associated nvim-cmp source
+--         {
+--             "L3MON4D3/LuaSnip",
+--             config = function()
+--                 require("luasnip.loaders.from_snipmate").lazy_load({ paths = { "./luasnip_snippets" } })
+--             end,
+--         },
+--         { "folke/lazydev.nvim", ft = "lua", opts = {} },
+--         "saadparwaiz1/cmp_luasnip",
+--         "hrsh7th/cmp-buffer",
+--         "hrsh7th/cmp-path",
+--         "hrsh7th/cmp-cmdline",
+--         "hrsh7th/cmp-nvim-lsp",
+--
+--         { "onsails/lspkind.nvim", config = lspkind_config },
+--         -- Adds LSP completion capabilities
+--
+--         -- Adds a number of user-friendly snippets
+--         "rafamadriz/friendly-snippets",
+--         "tamago324/nlsp-settings.nvim",
+--         -- "zbirenbaum/copilot.lua",
+--         -- "zbirenbaum/copilot-cmp",
+--     },
+--     config = cmp_config,
+-- }
+return {}

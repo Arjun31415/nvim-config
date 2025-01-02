@@ -52,7 +52,6 @@ require("lazy").setup({
     },
     { "APZelos/blamer.nvim", event = "BufEnter" },
     "rhysd/committia.vim",
-    "wakatime/vim-wakatime",
     {
         "RRethy/vim-hexokinase",
         build = "cd  ~/.local/share/nvim/lazy/vim-hexokinase && make hexokinase",
@@ -266,6 +265,8 @@ require("lazy").setup({
         end,
     },
 }, {})
+
+require("config.lsp")
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
