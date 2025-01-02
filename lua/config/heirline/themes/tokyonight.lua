@@ -50,9 +50,10 @@ local onedark = {
     red = "#971717",
 }
 M.colors = colors
+local StatusLine = get_hl("Statusline")
 
 local hl = {
-    StatusLine = get_hl("Statusline"),
+    StatusLine = StatusLine,
 
     ReadOnly = { fg = colors.red },
 
@@ -65,20 +66,24 @@ local hl = {
 
     -- GPS = { fg = colors.comment },
 
-    FileProperties = nil,
+    FileProperties = {
+        dos = { fg = colors.black, bg = colors.red },
+        mac = { fg = colors.black, bg = colors.red },
+        unix = { fg = colors.black, bg = colors.green },
+    },
 
     DapMessages = { fg = get_hl("Debug").fg },
 
     Git = {
-        branch = { fg = colors.purple, bold = true },
-        added = { fg = colors.green, bold = true },
-        changed = { fg = colors.yellow, bold = true },
-        removed = { fg = colors.red, bold = true },
+        branch = { bg = colors.purple, bold = true, fg = StatusLine.bg },
+        added = { bg = colors.green, bold = true, fg = StatusLine.bg },
+        changed = { bg = colors.yellow, bold = true, fg = StatusLine.bg },
+        removed = { bg = colors.red, bold = true, fg = StatusLine.bg },
         dirty = { fg = colors.comment, bold = true },
     },
 
-    LspIndicator = { fg = colors.blue },
-    LspServer = { fg = onedark.blue, bold = true },
+    LspIndicator = { bg = colors.blue, fg = colors.black },
+    LspServer = { bg = onedark.blue, bold = true, fg = colors.black },
 
     Diagnostic = {
         error = { fg = get_hl("DiagnosticSignError").fg },
@@ -87,7 +92,8 @@ local hl = {
         hint = { fg = get_hl("DiagnosticSignHint").fg },
     },
 
-    ScrollBar = { bg = colors.comment, fg = colors.fg_dark },
+    Ruler = { bg = colors.yellow, fg = colors.black, bold = true },
+    ScrollBar = { bg = colors.comment, fg = colors.black },
 
     SearchResults = { fg = colors.black, bg = colors.cyan },
 
@@ -166,8 +172,9 @@ end
 
 M.lsp_colors = {
     lua_ls = "#5EBCF6",
+    nil_ls = "#5EBCF6",
     vimls = "#43BF6C",
-    ansiblels = "#ffffff",
+    ["rust-analyzer"] = colors.red,
 }
 
 return M

@@ -18,7 +18,7 @@ local mode = util.mode
 -- local hydra = prequire('hydra.statusline')
 
 -- local theme, theme_available = prequire('config/heirline/themes/'..(vim.g.colors_name or ''))
-local theme_available, theme = true, require("config/heirline/themes/gruvbox-material")
+local theme_available, theme = true, require("config.heirline.themes.tokyonight")
 if not theme_available then
     return
 end
@@ -226,33 +226,38 @@ local FileProperties = {
 
         local fileformat = bo.fileformat
 
-        -- if fileformat == 'dos' then
-        --    fileformat = ' '
-        -- elseif fileformat == 'mac' then
-        --    fileformat = ' '
-        -- else  -- unix'
-        --    fileformat = ' '
-        --    -- fileformat = nil
-        -- end
-
         if fileformat == "dos" then
-            fileformat = "CRLF"
+            fileformat = " "
         elseif fileformat == "mac" then
-            fileformat = "CR"
-        else -- 'unix'
-            -- fileformat = 'LF'
-            fileformat = nil
+            fileformat = " "
+        else -- unix'
+            fileformat = " "
+            -- fileformat = nil
         end
+
+        -- if fileformat == "dos" then
+        --     fileformat = "CRLF"
+        -- elseif fileformat == "mac" then
+        --     fileformat = "CR"
+        -- else -- 'unix'
+        --     -- fileformat = 'LF'
+        --     fileformat = nil
+        -- end
 
         self.fileformat = fileformat
 
         return self.fileformat or self.encoding
     end,
-    provider = function(self)
-        local sep = (self.fileformat and self.encoding) and " " or ""
-        return table.concat({ " ", self.fileformat or "", sep, self.encoding or "", " " })
-    end,
-    hl = hl.FileProperties,
+
+    heirline.surround({ icons.powerline.left_rounded, icons.powerline.right_rounded }, function(_) -- color
+        return hl.FileProperties[bo.fileformat].bg
+    end, {
+        provider = function(self)
+            local sep = (self.fileformat and self.encoding) and " " or ""
+            return table.concat({ " ", self.fileformat or "", sep, self.encoding or "", " " })
+        end,
+        hl = hl.FileProperties[bo.fileformat],
+    }),
 }
 
 local DapMessages = {
@@ -357,7 +362,12 @@ do
         hl = hl.Git.dirty,
     }
 
-    Git = { GitBranch, GitChanges, Space }
+    Git = heirline.surround({
+        icons.powerline.left_rounded,
+        icons.powerline.right_rounded,
+    }, function(_) -- color
+        return hl.Git.branch.bg
+    end, { GitBranch, GitChanges, Space })
 end
 
 local Lsp
@@ -369,6 +379,7 @@ do
 
     local LspServer = {
         Space,
+
         {
             provider = function(self)
                 local names = self.lsp_names
@@ -389,33 +400,41 @@ do
         condition = conditions.lsp_attached,
         init = function(self)
             local names = {}
-            for _, server in pairs(vim.lsp.get_clients()) do
+            for _, server in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
                 table.insert(names, server.name)
             end
             self.lsp_names = names
-        end,
-        hl = function(self)
-            local color
-            for _, name in ipairs(self.lsp_names) do
-                if lsp_colors[name] then
-                    color = lsp_colors[name]
-                    break
+            self.get_hl = function()
+                local color
+                for _, name in ipairs(self.lsp_names) do
+                    if lsp_colors[name] then
+                        color = lsp_colors[name]
+                        break
+                    end
                 end
-            end
-            if color then
-                return { fg = color, bold = true, force = true }
-            else
-                return hl.LspServer
+                if color then
+                    return { bg = color, bold = true, force = true, fg = hl.LspIndicator.fg }
+                else
+                    return hl.LspIndicator
+                end
             end
         end,
         flexible = priority.Lsp,
 
-        LspServer,
-        LspIndicator,
+        heirline.surround({ icons.powerline.left_rounded, icons.powerline.right_rounded }, function(self) -- color
+            return self.get_hl().bg
+        end, {
+            LspServer,
+            LspIndicator,
+            hl = function(self)
+                return self.get_hl()
+            end,
+        }),
     }
 end
 
 local SearchResults = {
+
     condition = function(self)
         local lines = api.nvim_buf_line_count(0)
         if lines > 50000 then
@@ -446,7 +465,10 @@ local SearchResults = {
         self.count = search_count
         return true
     end,
-    {
+
+    heirline.surround({ icons.powerline.left_rounded, icons.powerline.right_rounded }, function(self) -- color
+        return hl.SearchResults.bg
+    end, {
         provider = function(self)
             return table.concat({
                 -- ' ', self.query, ' ', self.count.current, '/', self.count.total, ' '
@@ -458,7 +480,8 @@ local SearchResults = {
             })
         end,
         hl = hl.SearchResults,
-    },
+    }),
+
     Space,
 }
 
@@ -470,8 +493,14 @@ local Ruler = {
     -- %L  : number of lines in the buffer
     -- %c  : column number
     -- %V  : virtual column number as -{num}.  Not displayed if equal to '%c'.
-    provider = " %9(%l:%L%)  %-3(%c%V%) ",
-    hl = { bold = true },
+    --
+
+    heirline.surround({ icons.powerline.left_rounded, icons.powerline.right_rounded }, function(_) -- color
+        return hl.Ruler.bg
+    end, {
+        provider = "%9(%l:%L%)  %-3(%c%V%) ",
+        hl = hl.Ruler,
+    }),
 }
 
 local ScrollPercentage = {
@@ -479,8 +508,13 @@ local ScrollPercentage = {
         return conditions.width_percent_below(4, 0.035)
     end,
     -- %P  : percentage through file of displayed window
-    provider = " %3(%P%) ",
-    hl = hl.StatusLine,
+
+    heirline.surround({ icons.powerline.left_rounded, icons.powerline.right_rounded }, function(self) -- color
+        return hl.ScrollBar.bg
+    end, {
+        provider = " %3(%P%) ",
+        hl = hl.ScrollBar,
+    }),
 }
 
 --------------------------------------------------------------------------------
@@ -533,7 +567,9 @@ local StatusLines = {
     end,
     hl = hl.StatusLine,
     {
+
         LeftCap,
+        Space,
         Indicator,
         Space,
         {
@@ -547,10 +583,14 @@ local StatusLines = {
         DapMessages,
         Diagnostics,
         Git,
+        Space,
         Lsp,
+        Space,
         FileProperties,
+        Space,
         -- Ruler, ScrollBar, ScrollPercentage
         Ruler,
+        Space,
         ScrollPercentage,
     },
 }
@@ -701,24 +741,24 @@ local InactiveWinBar = {
 
 --------------------------------------------------------------------------------
 
-vim.api.nvim_create_autocmd("User", {
-    pattern = "HeirlineInitWinbar",
-    callback = function(args)
-        local buf = args.buf
-        local buftype = vim.tbl_contains({ "prompt", "nofile", "help", "quickfix" }, bo[buf].buftype)
-        local filetype = vim.tbl_contains({
-            "gitcommit",
-            "fugitive",
-            "markdown",
-            "NeogitStatus",
-            "NeogitPopup",
-            "NeogitCommitMessage",
-        }, bo[buf].filetype)
-        if buftype or filetype then
-            vim.opt_local.winbar = nil
-        end
-    end,
-})
+-- vim.api.nvim_create_autocmd("User", {
+--     pattern = "HeirlineInitWinbar",
+--     callback = function(args)
+--         local buf = args.buf
+--         local buftype = vim.tbl_contains({ "prompt", "nofile", "help", "quickfix" }, bo[buf].buftype)
+--         local filetype = vim.tbl_contains({
+--             "gitcommit",
+--             "fugitive",
+--             "markdown",
+--             "NeogitStatus",
+--             "NeogitPopup",
+--             "NeogitCommitMessage",
+--         }, bo[buf].filetype)
+--         if buftype or filetype then
+--             vim.opt_local.winbar = nil
+--         end
+--     end,
+-- })
 
 local WinBars = {
     init = function(self)
