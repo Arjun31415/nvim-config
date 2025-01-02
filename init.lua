@@ -203,26 +203,6 @@ require("lazy").setup({
     { "numToStr/Comment.nvim", opts = {} },
 
     -- Fuzzy Finder (files, lsp, etc)
-    -- {
-    --     "nvim-telescope/telescope.nvim",
-    --     branch = "0.1.x",
-    --     dependencies = {
-    --         "nvim-lua/plenary.nvim",
-    --         -- Fuzzy Finder Algorithm which requires local dependencies to be built.
-    --         -- Only load if `make` is available. Make sure you have the system
-    --         -- requirements installed.
-    --         {
-    --             "nvim-telescope/telescope-fzf-native.nvim",
-    --             -- NOTE: If you are having trouble with this installation,
-    --             --       refer to the README for telescope-fzf-native for more instructions.
-    --             build = "make",
-    --             cond = function()
-    --                 return vim.fn.executable("make") == 1
-    --             end,
-    --         },
-    --     },
-    -- },
-    --
     {
         "ibhagwan/fzf-lua",
         -- optional for icon support
@@ -376,7 +356,7 @@ vim.keymap.set("n", "<leader>/", require("fzf-lua").grep_curbuf, { desc = "[/] F
 vim.keymap.set("n", "<leader>gf", require("fzf-lua").git_files, { desc = "Search [G]it [F]iles" })
 vim.keymap.set("n", "<leader>sf", require("fzf-lua").files, { desc = "[S]earch [F]iles" })
 vim.keymap.set("n", "<leader>sw", require("fzf-lua").grep_cword, { desc = "[S]earch current [W]ord" })
-vim.keymap.set("n", "<leader>sg", require("fzf-lua").live_grep, { desc = "[S]earch by [G]rep" })
+vim.keymap.set("n", "<leader>sg", require("fzf-lua").live_grep, { desc = "[S]earch by [G]rep (Live grep)" })
 vim.keymap.set("n", "<leader>sd", require("fzf-lua").diagnostics_workspace, { desc = "[S]earch [D]iagnostics" })
 vim.keymap.set("n", "<leader>sr", require("fzf-lua").resume, { desc = "[S]earch [R]esume" })
 
