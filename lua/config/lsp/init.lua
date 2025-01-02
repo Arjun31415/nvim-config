@@ -3,7 +3,7 @@ local lspconfig = require("lspconfig")
 local servers = {
     "pyright",
     "clangd",
-    "tsserver",
+    "ts_ls",
     "cmake",
     "nil_ls",
     -- "nixd",
