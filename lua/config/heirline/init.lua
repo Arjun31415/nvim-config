@@ -219,8 +219,6 @@ end
 
 local FileProperties = {
     condition = function(self)
-        self.filetype = bo.filetype
-
         local encoding = (bo.fileencoding ~= "" and bo.fileencoding) or vim.o.encoding
         self.encoding = (encoding ~= "utf-8") and encoding or nil
 
@@ -244,19 +242,22 @@ local FileProperties = {
         --     fileformat = nil
         -- end
 
-        self.fileformat = fileformat
+        self.fileformat_icon = fileformat
+        self.fileformat = bo.fileformat
 
-        return self.fileformat or self.encoding
+        return self.fileformat_icon or self.encoding
     end,
 
-    heirline.surround({ icons.powerline.left_rounded, icons.powerline.right_rounded }, function(_) -- color
-        return hl.FileProperties[bo.fileformat].bg
+    heirline.surround({ icons.powerline.left_rounded, icons.powerline.right_rounded }, function(self) -- color
+        return hl.FileProperties[self.fileformat].bg
     end, {
         provider = function(self)
-            local sep = (self.fileformat and self.encoding) and " " or ""
-            return table.concat({ " ", self.fileformat or "", sep, self.encoding or "", " " })
+            local sep = (self.fileformat_icon and self.encoding) and " " or ""
+            return table.concat({ " ", self.fileformat_icon or "", sep, self.encoding or "", " " })
         end,
-        hl = hl.FileProperties[bo.fileformat],
+        hl = function(self)
+            return hl.FileProperties[self.fileformat]
+        end,
     }),
 }
 
