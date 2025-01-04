@@ -104,7 +104,7 @@ return {
                     border = border_chars,
                 },
             },
-            list = { selection = "manual" },
+            list = { selection = "auto_insert" },
         },
         signature = { window = { border = border_chars } },
 
