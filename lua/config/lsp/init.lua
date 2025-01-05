@@ -1,7 +1,7 @@
 local configFunctions = require("config.lsp.handlers")
 local lspconfig = require("lspconfig")
 local servers = {
-    "pyright",
+    "basedpyright",
     "clangd",
     "ts_ls",
     "cmake",
