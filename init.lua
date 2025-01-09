@@ -42,7 +42,7 @@ require("lazy").setup({
         },
         dependencies = { "nvim-lua/plenary.nvim" },
     },
-    "tpope/vim-rhubarb",
+    -- "tpope/vim-rhubarb",
     {
         "lervag/vimtex",
         init = function()

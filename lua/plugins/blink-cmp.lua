@@ -53,6 +53,8 @@ return {
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
+
+        snippets = { preset = "luasnip" },
         -- 'default' for mappings similar to built-in completion
         -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
         -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
@@ -86,6 +88,7 @@ return {
 
         completion = {
             menu = {
+                auto_show = true,
                 border = border_chars,
                 draw = {
                     components = {
@@ -93,6 +96,7 @@ return {
                             text = function(ctx)
                                 return require("lspkind").symbolic(ctx.kind, {
                                     mode = "symbol",
+                                    preset = "codicons",
                                 })
                             end,
                         },
@@ -100,33 +104,23 @@ return {
                 },
             },
             documentation = {
+                auto_show = true,
+                auto_show_delay_ms = 0,
                 window = {
                     border = border_chars,
                 },
             },
-            list = { selection = "auto_insert" },
+            list = { selection = { preselect = false, auto_insert = true } },
         },
-        signature = { window = { border = border_chars } },
+        signature = {
+            enabled = true,
+            window = { border = border_chars },
+        },
 
         -- Default list of enabled providers defined so that you can extend it
         -- elsewhere in your config, without redefining it, due to `opts_extend`
         sources = {
-            default = { "lsp", "path", "snippets", "buffer", "luasnip" },
-        },
-        snippets = {
-            expand = function(snippet)
-                require("luasnip").lsp_expand(snippet)
-            end,
-
-            active = function(filter)
-                if filter and filter.direction then
-                    return require("luasnip").jumpable(filter.direction)
-                end
-                return require("luasnip").in_snippet()
-            end,
-            jump = function(direction)
-                require("luasnip").jump(direction)
-            end,
+            default = { "lsp", "path", "snippets", "buffer" },
         },
     },
     opts_extend = { "sources.default" },
