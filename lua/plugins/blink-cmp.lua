@@ -36,15 +36,15 @@ local function lspkind_config()
         },
     })
 end
-
 local border_chars = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
-
 return {
     "saghen/blink.cmp",
     -- optional: provides snippets for the snippet source
 
     -- use a release tag to download pre-built binaries
-    version = "*",
+    -- version = "*",
+    branch = "main",
+    build = "nix run .#build-plugin",
     -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
     -- build = 'cargo build --release',
     -- If you use nix, you can build from source using latest nightly rust with:
@@ -108,6 +108,7 @@ return {
                 auto_show_delay_ms = 0,
                 window = {
                     border = border_chars,
+                    -- border = "rounded",
                 },
             },
             list = { selection = { preselect = false, auto_insert = true } },
