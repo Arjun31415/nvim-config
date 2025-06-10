@@ -264,7 +264,7 @@ require("lazy").setup({
             require("mini.surround").setup()
         end,
     },
-}, {})
+}, { git = { timeout = 300 } })
 
 require("config.lsp")
 
