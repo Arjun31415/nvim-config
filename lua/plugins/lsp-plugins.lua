@@ -3,6 +3,7 @@ return {
         -- LSP Configuration & Plugins
         "neovim/nvim-lspconfig",
     },
+    { "microsoft/python-type-stubs" },
     {
         "folke/trouble.nvim",
         dependencies = "kyazdani42/nvim-web-devicons",
