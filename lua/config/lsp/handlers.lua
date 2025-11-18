@@ -84,9 +84,9 @@ local function lsp_keymaps(bufnr)
     nmap("gr", require("fzf-lua").lsp_references, "[G]oto [R]eferences")
 
     -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
-    -- vim.keymap.set("n", "<space>fb", function()
-    --     vim.lsp.buf.format({ async = true })
-    -- end, opts)
+    vim.keymap.set("n", "<leader>bf", function()
+        require("conform").format({ bufnr = bufnr })
+    end, { desc = "Format buffer" })
 end
 
 M.on_attach = function(client, bufnr)

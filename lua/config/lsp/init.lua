@@ -20,7 +20,8 @@ lspconfig("basedpyright", {
     capabilities = configFunctions.capabilities,
     on_attach = configFunctions.on_attach,
     before_init = function(_, config)
-        config.settings.basedpyright.analysis.stubPath = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy", "python-type-stubs")
+        config.settings.basedpyright.analysis.stubPath =
+            vim.fs.joinpath(vim.fn.stdpath("data"), "lazy", "python-type-stubs")
     end,
 })
 vim.lsp.enable("basedpyright")
@@ -47,6 +48,16 @@ lspconfig("lua_ls", {
         Lua = {
             workspace = { checkThirdParty = false },
         },
+    },
+})
+lspconfig("tinymist", {
+
+    capabilities = configFunctions.capabilities,
+    on_attach = configFunctions.on_attach,
+    settings = {
+        formatterMode = "typstyle",
+        exportPdf = "onType",
+        semanticTokens = "disable",
     },
 })
 vim.lsp.enable("lua_ls")
