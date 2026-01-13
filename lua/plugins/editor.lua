@@ -58,6 +58,7 @@ return {
                 c = { "clang-format" },
                 cpp = { "clang-format" },
                 nix = { "alejandra" },
+                typst = { lsp_format = "first" },
             },
         },
     },

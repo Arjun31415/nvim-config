@@ -69,7 +69,6 @@ local function lsp_keymaps(bufnr)
     nmap("K", vim.lsp.buf.hover, "Hover Documentation")
     nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
     nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-    -- nmap("gr", vim.lsp.buf.references(), "[G]oto [R]eferences")
     nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
     -- dont change this to `nmap` does not work with it, because a argument `border=rounded` nneds to be passsed in
     vim.api.nvim_buf_set_keymap(
@@ -84,9 +83,9 @@ local function lsp_keymaps(bufnr)
     nmap("gr", require("fzf-lua").lsp_references, "[G]oto [R]eferences")
 
     -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
-    vim.keymap.set("n", "<leader>bf", function()
+    nmap("<leader>bf", function()
         require("conform").format({ bufnr = bufnr })
-    end, { desc = "Format buffer" })
+    end, "Format buffer")
 end
 
 M.on_attach = function(client, bufnr)

@@ -60,4 +60,5 @@ lspconfig("tinymist", {
         semanticTokens = "disable",
     },
 })
+vim.lsp.enable("tinymist")
 vim.lsp.enable("lua_ls")
