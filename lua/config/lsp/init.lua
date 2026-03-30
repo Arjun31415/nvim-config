@@ -24,7 +24,12 @@ lspconfig("basedpyright", {
             vim.fs.joinpath(vim.fn.stdpath("data"), "lazy", "python-type-stubs")
     end,
 })
-vim.lsp.enable("basedpyright")
+lspconfig("ty", {
+    capabilities = configFunctions.capabilities,
+    on_attach = configFunctions.on_attach,
+})
+vim.lsp.enable("ty");
+-- vim.lsp.enable("basedpyright")
 local jsonls_opts = require("config.lsp.settings.jsonls")
 local opts = {}
 opts = vim.tbl_deep_extend("force", jsonls_opts, opts)
