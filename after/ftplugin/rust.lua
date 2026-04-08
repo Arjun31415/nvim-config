@@ -9,6 +9,3 @@ end
 local bufnr = vim.api.nvim_get_current_buf()
 
 nmap("<leader>ca", vim.lsp.buf.code_action, bufnr)
-
--- local ft = require("guard.filetype")
--- ft("rust"):fmt("rustfmt")
