@@ -61,7 +61,7 @@ require("lazy").setup({
             main_image = "neovim",
             debounce_timeout = 10,
             enable_line_number = false,
-            buttons = true,
+            buttons = false,
         },
     },
     { "folke/which-key.nvim", opts = {}, event = "VeryLazy" },

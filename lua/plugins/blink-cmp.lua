@@ -43,7 +43,7 @@ return {
 
     -- use a release tag to download pre-built binaries
     -- version = "*",
-    branch = "main",
+    branch = "v1",
     build = "nix run .#build-plugin",
     -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
     -- build = 'cargo build --release',
