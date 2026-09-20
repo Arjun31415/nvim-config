@@ -1,9 +1,11 @@
 return {
     {
-        -- LSP Configuration & Plugins
         "neovim/nvim-lspconfig",
     },
     { "microsoft/python-type-stubs" },
+    -- Teaches lua_ls the nvim API and plugin types; without it every
+    -- vim.* call in this config is an "undefined field" warning.
+    { "folke/lazydev.nvim", ft = "lua", opts = {} },
     {
         "folke/trouble.nvim",
         dependencies = "kyazdani42/nvim-web-devicons",
@@ -18,15 +20,8 @@ return {
         },
     },
     {
-        "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-        config = function()
-            require("lsp_lines").setup()
-        end,
-        event = "BufEnter",
-    },
-    {
         "mrcjkb/rustaceanvim",
-        version = "^3", -- Recommended
+        version = "^9",
         ft = { "rust" },
         dependencies = {
             "mfussenegger/nvim-dap",
@@ -60,12 +55,8 @@ return {
         ft = "typst",
         version = "1.*",
         opts = {
-            open_cmd = "firefox %s -P typst-preview --class typst-preview",
-            debug = true,
-            dependencies_bin = {
-                ["tinymist"] = "/etc/profiles/per-user/prometheus/bin/tinymist",
-                ["websocat"] = nil,
-            },
+            open_cmd = "open %s",
+            dependencies_bin = { ["tinymist"] = "tinymist" },
         },
     },
 }

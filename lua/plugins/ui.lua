@@ -57,12 +57,12 @@ return {
                     },
                     hover = {
                         enabled = true,
-                        silent = false, -- set to true to not show a message if hover is not available
-                        view = nil, -- when nil, use defaults from documentation
+                        silent = false,
+                        view = nil,
                         ---@type NoiceViewOptions
                         opts = {
                             border = "rounded",
-                        }, -- merged with defaults from documentation
+                        },
                     },
                 },
                 presets = {
@@ -71,9 +71,9 @@ return {
                     long_message_to_split = true,
                 },
                 popupmenu = {
-                    enabled = true, -- enables the Noice popupmenu UI
+                    enabled = true,
                     ---@type 'nui'|'cmp'
-                    backend = "cmp", -- backend to use to show regular cmdline completions
+                    backend = "cmp",
                 },
             })
         end,

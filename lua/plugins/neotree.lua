@@ -1,9 +1,6 @@
--- Unless you are still migrating, remove the deprecated commands from v1.x
 vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
 local function copy_path(state)
     print("Hiiii")
-    -- NeoTree is based on [NuiTree](https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/tree)
-    -- The node is based on [NuiNode](https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/tree#nuitreenode)
     local node = state.tree:get_node()
     local filepath = node:get_id()
     local filename = node.name
@@ -47,7 +44,7 @@ return {
     branch = "main",
     dependencies = {
         "nvim-lua/plenary.nvim",
-        "kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
+        "kyazdani42/nvim-web-devicons",
         "MunifTanjim/nui.nvim",
     },
     opts = {
@@ -58,7 +55,6 @@ return {
 
         follow_current_file = { enabled = true },
         window = {
-            -- position = "float",
             mapping_options = {
                 noremap = true,
                 nowait = true,
@@ -81,12 +77,10 @@ return {
         },
         git_status = {
             symbols = {
-                -- Change type
                 added = "✚",
                 deleted = "✖",
                 modified = "",
                 renamed = "",
-                -- Status type
                 untracked = "",
                 ignored = "",
                 unstaged = "",

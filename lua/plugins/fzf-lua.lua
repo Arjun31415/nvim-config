@@ -1,8 +1,6 @@
 return {
     {
-        -- Fuzzy Finder (files, lsp, etc)
         "ibhagwan/fzf-lua",
-        -- optional for icon support
         dependencies = { "nvim-tree/nvim-web-devicons" },
         opts = {},
         keys = {

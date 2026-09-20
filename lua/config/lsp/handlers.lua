@@ -1,122 +1,78 @@
 local M = {}
--- local navic_attach = require("config.lsp.settings.nvim-navic").navic_attach
-M.setup = function()
-    -- local signs = {
-    --     { name = "DiagnosticSignError", text = "" },
-    --     { name = "DiagnosticSignWarn", text = "" },
-    --     { name = "DiagnosticSignHint", text = "" },
-    --     { name = "DiagnosticSignInfo", text = "" },
-    -- }
-    --
-    -- for _, sign in ipairs(signs) do
-    --     vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
-    -- end
 
-    local config = {
-        -- disable virtual text
+M.setup = function()
+    vim.diagnostic.config({
         virtual_text = false,
         virtual_lines = true,
-        -- show signs
-        signs = { active = signs },
+        signs = true,
         update_in_insert = false,
         underline = true,
         severity_sort = true,
         float = {
             focusable = false,
             style = "minimal",
-            border = "rounded",
-            source = "always",
+            source = true,
             header = "",
             prefix = "",
         },
-    }
-
-    vim.diagnostic.config(config)
-    -- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
-    -- vim.lsp.handlers["textDocument/signatureHelp"] =
-    --     vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
-    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(require("noise.lsp.hover").on_hover, { border = "rounded" })
-    vim.lsp.handlers["textDocument/signatureHelp"] =
-        vim.lsp.with(require("noice.lsp.signature_help"), { border = "rounded" })
+    })
 end
 
-local function lsp_highlight_document(client)
-    -- Set autocommands conditional on server_capabilities
-    if client.server_capabilities.documentHighlightProvider then
-        vim.api.nvim_exec2(
-            [[
-      augroup lsp_document_highlight
-        autocmd! * <buffer>
-        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-      augroup END
-    ]],
-            { output = false }
-        )
+local function lsp_highlight_document(client, bufnr)
+    if not client:supports_method("textDocument/documentHighlight") then
+        return
     end
+    local group = vim.api.nvim_create_augroup("lsp_document_highlight_" .. bufnr, { clear = true })
+    vim.api.nvim_create_autocmd("CursorHold", {
+        group = group,
+        buffer = bufnr,
+        callback = vim.lsp.buf.document_highlight,
+    })
+    vim.api.nvim_create_autocmd("CursorMoved", {
+        group = group,
+        buffer = bufnr,
+        callback = vim.lsp.buf.clear_references,
+    })
 end
 
 local function lsp_keymaps(bufnr)
+    -- Core already provides K, grn, gra, grr, gri, gO. Only additions here.
     local nmap = function(keys, func, desc)
-        if desc then
-            desc = "LSP: " .. desc
-        end
-
-        vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
+        vim.keymap.set("n", keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
     end
+
     nmap("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
     nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-    nmap("K", vim.lsp.buf.hover, "Hover Documentation")
-    nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
     nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
     nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
-    -- dont change this to `nmap` does not work with it, because a argument `border=rounded` nneds to be passsed in
-    vim.api.nvim_buf_set_keymap(
-        bufnr,
-        "n",
-        "gl",
-        "<cmd>lua vim.diagnostic.open_float({ border = 'rounded' })<CR>",
-        { silent = true, noremap = true, desc = "LSP: show diagnostics" }
-    )
+    nmap("gl", vim.diagnostic.open_float, "Show diagnostics")
 
-    nmap("gI", require("fzf-lua").lsp_implementations, "[G]oto [I]mplementation")
-    nmap("gr", require("fzf-lua").lsp_references, "[G]oto [R]eferences")
+    nmap("gI", function()
+        require("fzf-lua").lsp_implementations()
+    end, "[G]oto [I]mplementation")
+    nmap("gR", function()
+        require("fzf-lua").lsp_references()
+    end, "[G]oto [R]eferences")
 
-    -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
     nmap("<leader>bf", function()
         require("conform").format({ bufnr = bufnr })
     end, "Format buffer")
 end
 
 M.on_attach = function(client, bufnr)
-    -- vim.pretty_print(client.server_capabilities)
     if client.name == "ts_ls" then
         client.server_capabilities.documentHighlightProvider = false
     end
 
-    if client.server_capabilities.inlayHintProvider then
-        vim.lsp.inlay_hint.enable(true)
+    if client:supports_method("textDocument/inlayHint") then
+        vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
     end
 
     lsp_keymaps(bufnr)
-    lsp_highlight_document(client)
-    -- if client.server_capabilities.documentSymbolProvider and client.name ~= "html" then
-    --     navic_attach(client, bufnr)
-    -- end
+    lsp_highlight_document(client, bufnr)
 end
 
-M.capabilities = {}
-local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-if not status_ok then
-    return M
-end
-
+-- blink.cmp registers its own capabilities via vim.lsp.config("*").
 M.capabilities = vim.lsp.protocol.make_client_capabilities()
-M.capabilities.textDocument.completion.completionItem.snippetSupport = true
--- M.capabilities.textDocument.foldingRange = {
---     dynamicRegistration = false,
---     lineFoldingOnly = true,
--- }
-M.capabilities = cmp_nvim_lsp.default_capabilities(M.capabilities)
 
 return M

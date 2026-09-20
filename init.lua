@@ -1,12 +1,22 @@
--- Set ',' as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
+-- Must be set before lazy.setup(), or plugins capture the wrong leader.
 vim.g.mapleader = ","
-vim.g.maplocalleader = ","
 vim.o.cmdheight = 0
 
+-- Unused providers: skips their startup probes and silences :checkhealth.
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_node_provider = 0
+
+-- On a remote --remote-ui server the clipboard belongs to the server host,
+-- and $SSH_TTY is unset so OSC 52 is not auto-detected. Ghostty defaults to
+-- clipboard-write = allow, so copy works; paste prompts (clipboard-read = ask).
+if vim.fn.has("mac") == 0 then
+    vim.g.clipboard = "osc52"
+end
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
     vim.fn.system({
         "git",
         "clone",
@@ -22,7 +32,6 @@ if vim.g.neovide then
     require("config.neovide")
 end
 
--- Diagnostic Signs
 vim.fn.sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticSignError" })
 vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticSignWarn" })
 vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSignInfo" })
@@ -31,39 +40,25 @@ vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSig
 require("lazy").setup({
     { import = "plugins" },
 
-    -- Git related plugins
     "tpope/vim-fugitive",
     {
         "folke/todo-comments.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
         opts = {},
     },
-    {
-        "lervag/vimtex",
-        init = function()
-            vim.g.vimtex_view_method = "zathura"
-        end,
-    },
-    { "APZelos/blamer.nvim", event = "BufEnter" },
     "rhysd/committia.vim",
+    -- vim-hexokinase replaced: it needs a Go toolchain and hardcoded lazy's
+    -- install path in its build step. This one is pure Lua.
     {
-        "RRethy/vim-hexokinase",
-        build = "cd  ~/.local/share/nvim/lazy/vim-hexokinase && make hexokinase",
-        event = "VimEnter",
+        "brenoprata10/nvim-highlight-colors",
+        -- NOT BufReadPre: lazy loads the plugin from inside that autocmd, and
+        -- setting up highlights there changes the current buffer, which Vim
+        -- forbids during a read (E201). Neo-tree's :edit made it fire.
+        event = { "BufReadPost", "BufNewFile" },
+        opts = { render = "background", enable_named_colors = true },
     },
 
     "tpope/vim-sleuth",
-    {
-        "andweeb/presence.nvim",
-        opts = {
-            auto_update = true,
-            neovim_image_text = "The Only Editor I need",
-            main_image = "neovim",
-            debounce_timeout = 10,
-            enable_line_number = false,
-            buttons = false,
-        },
-    },
     { "folke/which-key.nvim", opts = {}, event = "VeryLazy" },
     {
         "lewis6991/gitsigns.nvim",
@@ -142,7 +137,6 @@ require("lazy").setup({
 
 require("config.lsp")
 
--- [[ Setting options ]]
 vim.o.hlsearch = false
 vim.wo.number = true
 vim.o.mouse = "a"
@@ -157,22 +151,32 @@ vim.o.timeoutlen = 300
 vim.o.completeopt = "menuone,noselect"
 vim.o.termguicolors = true
 
--- [[ Basic Keymaps ]]
-vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
+-- One global border, instead of repeating `border = "rounded"` in every
+-- plugin's float config.
+vim.o.winborder = "rounded"
+
+vim.o.splitbelow = true
+vim.o.splitright = true
+vim.o.scrolloff = 4
+vim.o.confirm = true
+vim.o.inccommand = "split"
+
 vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
--- [[ Highlight on yank ]]
+-- Diagnostics. ]d and [d are core defaults in 0.11+, so only the list map
+-- is needed here.
+vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
+
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function()
-        vim.highlight.on_yank()
+        vim.hl.on_yank()
     end,
     group = highlight_group,
     pattern = "*",
 })
 
--- [[ Line movement keymaps ]]
 vim.keymap.set("n", "<A-j>", "<cmd>m .+1<CR>==", { noremap = true })
 vim.keymap.set("n", "<A-k>", "<cmd>m .-2<CR>==", { noremap = true })
 vim.keymap.set("i", "<A-j>", "<Esc>:m .+1<CR>==gi", { noremap = true })
@@ -180,5 +184,7 @@ vim.keymap.set("i", "<A-k>", "<Esc>:m .-2<CR>==gi", { noremap = true })
 vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { noremap = true })
 vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { noremap = true })
 
-vim.cmd("let g:Hexokinase_highlighters = ['backgroundfull']")
+vim.keymap.set("n", "<leader>tv", "<cmd>vsplit | term<cr>i", { desc = "Terminal in vsplit" })
+vim.keymap.set("n", "<leader>ts", "<cmd>split | term<cr>i", { desc = "Terminal in split" })
+vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Leave terminal mode" })
 vim.cmd("highlight LspInlayHint guibg=none")

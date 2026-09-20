@@ -10,14 +10,11 @@ local bo = vim.bo
 local conditions = require("heirline.conditions")
 local heirline = require("heirline.utils")
 local devicons = prequire("nvim-web-devicons")
--- local dap_available, dap = pcall(require, 'dap')
 local dap = prequire("dap")
 local util = require("config.heirline.util")
 local icons = util.icons
 local mode = util.mode
--- local hydra = prequire('hydra.statusline')
 
--- local theme, theme_available = prequire('config/heirline/themes/'..(vim.g.colors_name or ''))
 local theme_available, theme = true, require("config.heirline.themes.tokyonight")
 if not theme_available then
     return
@@ -28,7 +25,6 @@ local lsp_colors = theme.lsp_colors
 
 vim.o.showmode = false
 
--- Flexible components priorities
 local priority = {
     CurrentPath = 60,
     Git = 40,
@@ -59,7 +55,6 @@ end
 
 local LeftCap = {
     provider = "▌",
-    -- provider = '',
     hl = hl.Mode.normal,
 }
 
@@ -76,7 +71,6 @@ do
                     provider = icons.circle,
                     hl = function()
                         if bo.modified then
-                            -- return { fg = hl.Mode.insert.bg }
                             return { fg = colors.blue2 }
                         else
                             return hl.Mode.normal
@@ -88,9 +82,6 @@ do
         }
 
         local ActiveModeIndicator = {
-            -- condition = function(self)
-            --     return self.mode ~= "normal"
-            -- end,
             hl = { bg = hl.StatusLine.bg },
             heirline.surround({ icons.powerline.left_rounded, icons.powerline.right_rounded }, function(self) -- color
                 return hl.Mode[self.mode].bg
@@ -132,11 +123,6 @@ do
         VimMode,
     }
 end
-
--- local HydraHint = {
---    condition = function() return hydra.get_hint() end,
---    provider = hydra.get_hint,
--- }
 
 local FileNameBlock, CurrentPath, FileName
 do
@@ -210,12 +196,10 @@ do
 
     FileNameBlock = {
         { FileIcon, WorkDir, CurrentPath, FileName },
-        -- This means that the statusline is cut here when there's not enough space.
+        -- %< : truncate the statusline here when it does not fit.
         { provider = "%<" },
     }
 end
-
---------------------------------------------------------------------------------
 
 local FileProperties = {
     condition = function(self)
@@ -228,19 +212,9 @@ local FileProperties = {
             fileformat = " "
         elseif fileformat == "mac" then
             fileformat = " "
-        else -- unix'
+        else -- unix
             fileformat = " "
-            -- fileformat = nil
         end
-
-        -- if fileformat == "dos" then
-        --     fileformat = "CRLF"
-        -- elseif fileformat == "mac" then
-        --     fileformat = "CR"
-        -- else -- 'unix'
-        --     -- fileformat = 'LF'
-        --     fileformat = nil
-        -- end
 
         self.fileformat_icon = fileformat
         self.fileformat = bo.fileformat
@@ -264,7 +238,6 @@ local FileProperties = {
 local DapMessages = {
     -- display the dap messages only on the debugged file
     condition = function()
-        -- local session = dap_available and dap.session()
         local session = dap.session()
         if session then
             local filename = api.nvim_buf_get_name(0)
@@ -284,7 +257,6 @@ local DapMessages = {
 local Diagnostics = {
     condition = conditions.has_diagnostics,
     static = {
-        -- error_icon = '󰂭 ',
         error_icon = fn.sign_getdefined("DiagnosticSignError")[1].text,
         warn_icon = fn.sign_getdefined("DiagnosticSignWarn")[1].text,
         info_icon = fn.sign_getdefined("DiagnosticSignInfo")[1].text,
@@ -298,7 +270,6 @@ local Diagnostics = {
     end,
     {
         provider = function(self)
-            -- 0 is just another output, we can decide to print it or not!
             if self.errors > 0 then
                 return table.concat({ self.error_icon, self.errors, " " })
             end
@@ -356,10 +327,6 @@ do
             end
         end,
         provider = "  ",
-        -- hl = hl.Git.branch
-        -- hl = hl.Git.changed
-        -- hl = hl.Git.added
-        -- hl = hl.Git.removed
         hl = hl.Git.dirty,
     }
 
@@ -387,7 +354,6 @@ do
                 if #names == 1 then
                     names = names[1]
                 else
-                    -- names = table.concat(vim.tbl_flatten({ '[', names, ']' }), ' ')
                     names = table.concat(names, ", ")
                 end
                 return names
@@ -451,13 +417,6 @@ local SearchResults = {
             return
         end
         local search_count = fn.searchcount({ recompute = 1, maxcount = -1 })
-        -- local active = false
-        -- if vim.v.hlsearch and vim.v.hlsearch == 1 and search_count.total > 0 then
-        --     active = true
-        -- end
-        -- if not active then
-        --     return
-        -- end
 
         query = query:gsub([[^\V]], "")
         query = query:gsub([[\<]], ""):gsub([[\>]], "")
@@ -472,7 +431,6 @@ local SearchResults = {
     end, {
         provider = function(self)
             return table.concat({
-                -- ' ', self.query, ' ', self.count.current, '/', self.count.total, ' '
                 " ",
                 self.count.current,
                 "/",
@@ -487,14 +445,7 @@ local SearchResults = {
 }
 
 local Ruler = {
-    -- :help 'statusline'
-    -- ------------------
-    -- %-2 : make item takes at least 2 cells and be left justified
-    -- %l  : current line number
-    -- %L  : number of lines in the buffer
-    -- %c  : column number
-    -- %V  : virtual column number as -{num}.  Not displayed if equal to '%c'.
-    --
+    -- %l:%L is line/total, %c%V column/virtual column. :help 'statusline'
 
     heirline.surround({ icons.powerline.left_rounded, icons.powerline.right_rounded }, function(_) -- color
         return hl.Ruler.bg
@@ -508,7 +459,7 @@ local ScrollPercentage = {
     condition = function()
         return conditions.width_percent_below(4, 0.035)
     end,
-    -- %P  : percentage through file of displayed window
+    -- %P : percentage through the file.
 
     heirline.surround({ icons.powerline.left_rounded, icons.powerline.right_rounded }, function(self) -- color
         return hl.ScrollBar.bg
@@ -517,8 +468,6 @@ local ScrollPercentage = {
         hl = hl.ScrollBar,
     }),
 }
-
---------------------------------------------------------------------------------
 
 local HelpBufferStatusline = {
     condition = function()
@@ -539,7 +488,7 @@ local HelpBufferStatusline = {
 
 local StatusLines = {
     init = function(self)
-        local pwd = fn.getcwd(0) -- Present working directory.
+        local pwd = fn.getcwd(0)
         local current_path = api.nvim_buf_get_name(0)
         local filename
 
@@ -563,7 +512,7 @@ local StatusLines = {
         end
 
         self.pwd = pwd
-        self.current_path = current_path -- The opened file path relevant to pwd.
+        self.current_path = current_path
         self.filename = filename
     end,
     hl = hl.StatusLine,
@@ -575,11 +524,9 @@ local StatusLines = {
         Space,
         {
             fallthrough = false,
-            -- HydraHint,
             { SearchResults, FileNameBlock },
         },
         Space(4),
-        -- GPS,
         Align,
         DapMessages,
         Diagnostics,
@@ -589,14 +536,11 @@ local StatusLines = {
         Space,
         FileProperties,
         Space,
-        -- Ruler, ScrollBar, ScrollPercentage
         Ruler,
         Space,
         ScrollPercentage,
     },
 }
-
---------------------------------------------------------------------------------
 
 local WinBarActiveLeftIcon = {
     {
@@ -647,7 +591,6 @@ local WinBarModifiedIndicator = {
 
 local Navic = {
     static = {
-        -- create a type highlight map
         type_hl = {
             File = "Directory",
             Module = "Include",
@@ -688,7 +631,6 @@ local Navic = {
         end
 
         local children = {}
-        -- create a child for each level
         for i, d in ipairs(data) do
             local child = {
                 {
@@ -697,11 +639,8 @@ local Navic = {
                 },
                 {
                     provider = d.name,
-                    -- highlight icon only or location name as well
-                    -- hl = self.type_hl[d.type],
                 },
             }
-            -- add a separator only if needed
             if 1 < #data and i < #data then
                 table.insert(child, {
                     provider = " > ",
@@ -726,9 +665,6 @@ local ActiveWinBar = {
 }
 
 local InactiveWinBar = {
-    -- condition = function()
-    --    return not conditions.is_active()
-    -- end,
     WinBarInactiveLeftIcon,
     Space,
     Align,
@@ -740,30 +676,9 @@ local InactiveWinBar = {
     WinBarRightIcon,
 }
 
---------------------------------------------------------------------------------
-
--- vim.api.nvim_create_autocmd("User", {
---     pattern = "HeirlineInitWinbar",
---     callback = function(args)
---         local buf = args.buf
---         local buftype = vim.tbl_contains({ "prompt", "nofile", "help", "quickfix" }, bo[buf].buftype)
---         local filetype = vim.tbl_contains({
---             "gitcommit",
---             "fugitive",
---             "markdown",
---             "NeogitStatus",
---             "NeogitPopup",
---             "NeogitCommitMessage",
---         }, bo[buf].filetype)
---         if buftype or filetype then
---             vim.opt_local.winbar = nil
---         end
---     end,
--- })
-
 local WinBars = {
     init = function(self)
-        local pwd = fn.getcwd(0) -- Present working directory.
+        local pwd = fn.getcwd(0)
         local current_path = api.nvim_buf_get_name(0)
         local filename
 
@@ -787,41 +702,18 @@ local WinBars = {
         end
 
         self.pwd = pwd
-        self.current_path = current_path -- The opened file path relevant to pwd.
+        self.current_path = current_path
         self.filename = filename
     end,
     fallthrough = false,
-    -- { -- Hide the winbar for special buffers
-    --    condition = function()
-    --       return conditions.buffer_matches({
-    --          buftype = { 'nofile', 'prompt', 'help', 'quickfix' },
-    --          filetype = { '^git.*', 'fugitive', 'hydra_hint' },
-    --       })
-    --    end,
-    --    init = function() vim.opt_local.winbar = nil end
-    -- },
     ActiveWinBar,
     InactiveWinBar,
-    -- {   -- A special winbar for terminals
-    --    condition = function()
-    --       return conditions.buffer_matches({ buftype = { "terminal" } })
-    --    end,
-    --    heirline.surround({ "", "" }, "dark_red", {
-    --       FileType,
-    --       Space,
-    --       TerminalName,
-    --    }),
-    -- },
     hl = hl.WinBar,
 }
-
---------------------------------------------------------------------------------
 
 require("heirline").setup({
     statusline = StatusLines,
     -- winbar = WinBars,
-    -- tabline = ...,
-    -- statuscolumn = ...
 })
 
 -- vim: fml=2

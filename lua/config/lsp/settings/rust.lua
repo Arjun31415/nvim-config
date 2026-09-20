@@ -1,17 +1,12 @@
 local configFunctions = require("config.lsp.handlers")
 
--- Assuming codelldb is in the path (common on Nix)
--- Otherwise, you might need to provide the full path to the codelldb binary and liblldb.
--- On NixOS, you can use:
--- local codelldb_path = "/run/current-system/sw/bin/codelldb"
--- local liblldb_path = "/run/current-system/sw/lib/libcodelldb.so"
-
 vim.g.rustaceanvim = {
     server = {
         on_attach = function(client, bufnr)
             configFunctions.on_attach(client, bufnr)
-            -- Add rust-specific keybindings here if needed
-            vim.keymap.set("n", "<leader>dr", function()
+            -- Was <leader>dr, which shadowed dap.lua's "Toggle REPL" in
+            -- exactly the buffers where you want a REPL.
+            vim.keymap.set("n", "<leader>dR", function()
                 vim.cmd.RustLsp("debuggables")
             end, { buffer = bufnr, desc = "Rust Debuggables" })
             vim.keymap.set("n", "<leader>ca", function()
@@ -25,8 +20,10 @@ vim.g.rustaceanvim = {
                     loadOutDirsFromCheck = true,
                     runBuildScripts = true,
                 },
-                -- Add clippy lints for Rust if you want
-                checkOnSave = {
+                -- checkOnSave is a boolean now; the old table form makes the
+                -- server refuse to start ("invalid type: map, expected a boolean").
+                checkOnSave = true,
+                check = {
                     allFeatures = true,
                     command = "clippy",
                     extraArgs = { "--no-deps" },
@@ -40,11 +37,5 @@ vim.g.rustaceanvim = {
                 },
             },
         },
-    },
-    -- DAP configuration
-    dap = {
-        -- If codelldb is in your path, rustaceanvim should find it automatically.
-        -- If not, uncomment and set the paths below:
-        -- adapter = require('rustaceanvim.config').get_codelldb_adapter(codelldb_path, liblldb_path)
     },
 }
