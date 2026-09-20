@@ -42,6 +42,28 @@ require("lazy").setup({
 
     "tpope/vim-fugitive",
     {
+        -- Commit graph on top of fugitive's buffers. `ri` starts an
+        -- interactive rebase at the commit under the cursor, which is the
+        -- part fugitive alone has no navigable UI for.
+        "rbong/vim-flog",
+        dependencies = { "tpope/vim-fugitive" },
+        cmd = { "Flog", "Flogsplit", "Floggit" },
+        keys = {
+            { "<leader>gl", "<cmd>Flog<cr>", desc = "Git log graph" },
+            { "<leader>gL", "<cmd>Flog -all<cr>", desc = "Git log graph (all refs)" },
+            {
+                "<leader>gl",
+                ':Flog -raw-args=-L<C-r>=line("v")<cr>,<C-r>=line(".")<cr>:%<cr>',
+                mode = "v",
+                desc = "Git log for selection",
+            },
+        },
+        init = function()
+            vim.g.flog_default_opts = { max_count = 2000 }
+            vim.g.flog_permanent_default_opts = { date = "short" }
+        end,
+    },
+    {
         "folke/todo-comments.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
         opts = {},
@@ -72,26 +94,63 @@ require("lazy").setup({
                 changedelete = { text = "~" },
             },
             on_attach = function(bufnr)
-                local gs = package.loaded.gitsigns
-                vim.keymap.set("n", "<leader>hp", gs.preview_hunk, { buffer = bufnr, desc = "Preview git hunk" })
-                vim.keymap.set({ "n", "v" }, "]c", function()
-                    if vim.wo.diff then
-                        return "]c"
-                    end
-                    vim.schedule(function()
-                        gs.next_hunk()
-                    end)
-                    return "<Ignore>"
-                end, { expr = true, buffer = bufnr, desc = "Jump to next hunk" })
-                vim.keymap.set({ "n", "v" }, "[c", function()
-                    if vim.wo.diff then
-                        return "[c"
-                    end
-                    vim.schedule(function()
-                        gs.prev_hunk()
-                    end)
-                    return "<Ignore>"
-                end, { expr = true, buffer = bufnr, desc = "Jump to previous hunk" })
+                local gs = require("gitsigns")
+
+                local function map(mode, lhs, rhs, desc, opts)
+                    opts = vim.tbl_extend("error", { buffer = bufnr, desc = desc }, opts or {})
+                    vim.keymap.set(mode, lhs, rhs, opts)
+                end
+
+                -- In diff mode ]c/[c are the builtin change motions; gitsigns
+                -- would otherwise navigate the wrong side of the diff.
+                local function nav(key, direction)
+                    map({ "n", "v" }, key, function()
+                        if vim.wo.diff then
+                            return key
+                        end
+                        vim.schedule(function()
+                            gs.nav_hunk(direction)
+                        end)
+                        return "<Ignore>"
+                    end, "Jump to " .. direction .. " hunk", { expr = true })
+                end
+                nav("]c", "next")
+                nav("[c", "prev")
+
+                -- Visual range gives partial-hunk staging, i.e. git add -p
+                -- without leaving the buffer. stage_hunk toggles on a staged
+                -- sign, so there is no separate unstage map.
+                local function selected()
+                    return { vim.fn.line("."), vim.fn.line("v") }
+                end
+                map("n", "<leader>hs", gs.stage_hunk, "Stage hunk")
+                map("v", "<leader>hs", function()
+                    gs.stage_hunk(selected())
+                end, "Stage selected lines")
+                map("n", "<leader>hr", gs.reset_hunk, "Reset hunk")
+                map("v", "<leader>hr", function()
+                    gs.reset_hunk(selected())
+                end, "Reset selected lines")
+                map("n", "<leader>hS", gs.stage_buffer, "Stage buffer")
+                map("n", "<leader>hR", gs.reset_buffer, "Reset buffer")
+
+                map("n", "<leader>hp", gs.preview_hunk, "Preview hunk")
+                map("n", "<leader>hi", gs.preview_hunk_inline, "Preview hunk inline")
+                map("n", "<leader>hd", gs.diffthis, "Diff against index")
+                map("n", "<leader>hD", function()
+                    gs.diffthis("~")
+                end, "Diff against last commit")
+
+                map("n", "<leader>hb", function()
+                    gs.blame_line({ full = true })
+                end, "Blame line")
+                map("n", "<leader>hB", gs.blame, "Blame file")
+                map("n", "<leader>hx", gs.toggle_current_line_blame, "Toggle inline blame")
+
+                map("n", "<leader>hq", gs.setqflist, "Hunks to quickfix")
+                map("n", "<leader>gd", gs.diff, "Git diff panel")
+
+                map({ "o", "x" }, "ih", gs.select_hunk, "Select hunk")
             end,
         },
     },
