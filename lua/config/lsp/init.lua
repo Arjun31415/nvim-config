@@ -3,6 +3,11 @@ local lspconfig = vim.lsp.config
 
 configFunctions.setup()
 
+vim.api.nvim_create_user_command("LspInfo", "checkhealth vim.lsp", { desc = "Alias to `:checkhealth vim.lsp`" })
+vim.api.nvim_create_user_command("LspLog", function()
+    vim.cmd.tabnew(vim.lsp.log.get_filename())
+end, { desc = "Open the Nvim LSP client log" })
+
 local defaults = {
     capabilities = configFunctions.capabilities,
     on_attach = configFunctions.on_attach,
@@ -13,9 +18,11 @@ local function server(name, opts)
     vim.lsp.enable(name)
 end
 
-for _, name in ipairs({ "clangd", "ts_ls", "cmake", "ty" }) do
+for _, name in ipairs({ "ts_ls", "cmake", "ty" }) do
     server(name)
 end
+
+server("clangd", require("config.lsp.settings.clangd"))
 
 server("lua_ls", {
     settings = { Lua = { workspace = { checkThirdParty = false } } },

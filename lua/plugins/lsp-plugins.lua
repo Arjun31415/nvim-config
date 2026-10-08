@@ -6,6 +6,16 @@ return {
     -- Teaches lua_ls the nvim API and plugin types; without it every
     -- vim.* call in this config is an "undefined field" warning.
     { "folke/lazydev.nvim", ft = "lua", opts = {} },
+    -- Commands for clangd's off-spec extensions; keymaps are in
+    -- config/lsp/settings/clangd.lua.
+    {
+        "p00f/clangd_extensions.nvim",
+        ft = { "c", "cpp", "objc", "objcpp", "cuda" },
+        opts = {
+            memory_usage = { border = "rounded" },
+            symbol_info = { border = "rounded" },
+        },
+    },
     {
         "folke/trouble.nvim",
         dependencies = "kyazdani42/nvim-web-devicons",
