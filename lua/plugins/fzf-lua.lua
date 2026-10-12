@@ -2,7 +2,14 @@ return {
     {
         "ibhagwan/fzf-lua",
         dependencies = { "nvim-tree/nvim-web-devicons" },
-        opts = {},
+        init = function()
+            ---@diagnostic disable-next-line: duplicate-set-field
+            vim.ui.select = function(...)
+                require("lazy").load({ plugins = { "fzf-lua" } })
+                return vim.ui.select(...)
+            end
+        end,
+        opts = { ui_select = {} },
         keys = {
             {
                 "<leader>?",
