@@ -54,8 +54,7 @@ return {
                 fish = { "fish" },
                 ["*"] = { "codespell" },
                 python = { "ruff" },
-                -- c/cpp clang-tidy is run by config.clang_tidy, which caps
-                -- how many processes run at once.
+                -- c/cpp clang-tidy runs inside clangd.
                 lua = { "selene" },
             },
         },
@@ -72,7 +71,6 @@ return {
             })
             local ns = require("lint").get_namespace("ruff")
             vim.diagnostic.config({ virtual_text = true }, ns)
-            require("config.clang_tidy").setup()
         end,
     },
     {
