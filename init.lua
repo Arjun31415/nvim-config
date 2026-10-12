@@ -195,6 +195,7 @@ require("lazy").setup({
 }, { git = { timeout = 300 } })
 
 require("config.lsp")
+require("config.asm").setup()
 
 vim.o.hlsearch = false
 vim.wo.number = true
