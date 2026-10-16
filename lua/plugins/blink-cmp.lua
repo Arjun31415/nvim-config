@@ -49,8 +49,8 @@ return {
 
         snippets = { preset = "luasnip" },
         keymap = {
-            ["<Tab>"] = { "select_next", "fallback" },
-            ["<S-Tab>"] = { "select_prev", "fallback" },
+            ["<Tab>"] = { "snippet_forward", "select_next", "fallback" },
+            ["<S-Tab>"] = { "snippet_backward", "select_prev", "fallback" },
             ["<Up>"] = { "select_prev", "fallback" },
             ["<Down>"] = { "select_next", "fallback" },
             ["<CR>"] = { "accept", "fallback" },
@@ -113,6 +113,12 @@ return {
         {
             "L3MON4D3/LuaSnip",
             config = function()
+                -- Without these, a snippet left half-filled stays jumpable and
+                -- a later <Tab> elsewhere jumps back into it.
+                require("luasnip").setup({
+                    region_check_events = "CursorMoved,InsertEnter",
+                    delete_check_events = "TextChanged,InsertLeave",
+                })
                 -- Was "./luasnip_snippets", relative to cwd, so the snippets
                 -- only loaded when nvim was started from the config dir.
                 local snippets = vim.fn.stdpath("config") .. "/luasnip_snippets"
