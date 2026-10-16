@@ -29,6 +29,11 @@ local DATA_DIRECTIVES = {
 }
 local SKIPPED_SECTIONS = { "debug", "DWARF", "eh_frame", "llvm_addrsig", "note", "comment", "compact_unwind", "__LD" }
 
+local DEFAULT_FLAGS = {
+    c = { "-std=c17", "-O2" },
+    cpp = { "-std=c++20", "-O2" },
+}
+
 local CLANG_REMARK_FLAGS = {
     "-Rpass=loop-vectorize",
     "-Rpass-missed=loop-vectorize",
@@ -43,6 +48,7 @@ local is_darwin = vim.fn.has("mac") == 1
 ---@field directory string
 ---@field file_real string
 ---@field args string[] compiler invocation without output/dependency flags
+---@field label? string winbar summary when not from compile_commands.json
 
 ---@class asm.State
 ---@field src_buf integer
@@ -142,11 +148,46 @@ local function strip_output_flags(raw_args)
     return args
 end
 
+local function read_compile_flags(src_path)
+    local flags_path = vim.fs.find("compile_flags.txt", { path = vim.fs.dirname(src_path), upward = true })[1]
+    if not flags_path then
+        return nil
+    end
+    local flags = {}
+    for line in io.lines(flags_path) do
+        line = vim.trim(line)
+        if line ~= "" then
+            table.insert(flags, line)
+        end
+    end
+    return flags, flags_path
+end
+
+---@return asm.Entry
+local function standalone_entry(src_path, filetype)
+    local target = realpath(src_path)
+    local compiler = filetype == "c" and (vim.env.CC or "cc") or (vim.env.CXX or "c++")
+    local flags, flags_path = read_compile_flags(src_path)
+    local label
+    if flags then
+        label = ("%s (%s)"):format(compiler, vim.fn.fnamemodify(flags_path, ":~:."))
+    else
+        flags = DEFAULT_FLAGS[filetype] or DEFAULT_FLAGS.cpp
+        label = compiler .. " " .. table.concat(flags, " ")
+    end
+    local args = vim.list_extend({ compiler }, strip_output_flags(flags))
+    table.insert(args, target)
+    return { directory = vim.fs.dirname(target), file_real = target, args = args, label = label }
+end
+
 ---@return asm.Entry?, string? error
-local function resolve_entry(src_path)
+local function resolve_entry(src_path, filetype)
+    if src_path == "" or not vim.uv.fs_stat(src_path) then
+        return nil, "Save the buffer to a file first"
+    end
     local db_path = find_compile_db(src_path)
     if not db_path then
-        return nil, "No compile_commands.json found above " .. src_path
+        return standalone_entry(src_path, filetype)
     end
     local target = realpath(src_path)
     local name = vim.fs.basename(target)
@@ -334,7 +375,8 @@ end
 local function set_winbar(state, status)
     if state.win and vim.api.nvim_win_is_valid(state.win) then
         local flags = #state.extra > 0 and (" " .. table.concat(state.extra, " ")) or ""
-        vim.wo[state.win].winbar = ("%%#Comment# %s%s  %s"):format(vim.fs.basename(state.entry.args[1]), flags, status)
+        local compiler = state.entry.label or vim.fs.basename(state.entry.args[1])
+        vim.wo[state.win].winbar = ("%%#Comment# %s%s  %s"):format(compiler, flags, status)
     end
 end
 
@@ -500,7 +542,7 @@ function M.open(extra)
     local src_buf = vim.api.nvim_get_current_buf()
     local state = states[src_buf]
     if not state then
-        local entry, err = resolve_entry(vim.api.nvim_buf_get_name(src_buf))
+        local entry, err = resolve_entry(vim.api.nvim_buf_get_name(src_buf), vim.bo[src_buf].filetype)
         if not entry then
             return vim.notify(err, vim.log.levels.WARN)
         end
@@ -527,7 +569,7 @@ end
 
 function M.remarks(extra)
     local src_buf = vim.api.nvim_get_current_buf()
-    local entry, err = resolve_entry(vim.api.nvim_buf_get_name(src_buf))
+    local entry, err = resolve_entry(vim.api.nvim_buf_get_name(src_buf), vim.bo[src_buf].filetype)
     if not entry then
         return vim.notify(err, vim.log.levels.WARN)
     end
@@ -580,7 +622,10 @@ function M.setup()
 
     vim.api.nvim_create_user_command("Asm", function(opts)
         M.open(opts.fargs)
-    end, { nargs = "*", desc = "Show assembly for this file using its compile_commands.json flags" })
+    end, {
+        nargs = "*",
+        desc = "Show assembly for this file (compile_commands.json, compile_flags.txt, or defaults)",
+    })
 
     vim.api.nvim_create_user_command("AsmRemarks", function(opts)
         if opts.bang then
