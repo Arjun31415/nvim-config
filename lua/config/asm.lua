@@ -42,6 +42,11 @@ local CLANG_REMARK_FLAGS = {
 }
 local GCC_REMARK_FLAGS = { "-fopt-info-vec-optimized-missed" }
 
+local BAZEL_ROOT_MARKERS = { "MODULE.bazel", "WORKSPACE.bazel", "WORKSPACE", "REPO.bazel" }
+local BUILD_FILES = { "BUILD.bazel", "BUILD" }
+local BAZEL_QUIET = { "--color=no", "--curses=no", "--noshow_progress" }
+local NO_CONFIG = "(no --config)"
+
 local is_darwin = vim.fn.has("mac") == 1
 
 ---@class asm.Entry
@@ -49,12 +54,14 @@ local is_darwin = vim.fn.has("mac") == 1
 ---@field file_real string
 ---@field args string[] compiler invocation without output/dependency flags
 ---@field label? string winbar summary when not from compile_commands.json
+---@field env? table<string, string>
+---@field rel_path? string workspace-relative, for prefix-mapped `.file` paths
 
 ---@class asm.State
 ---@field src_buf integer
 ---@field asm_buf integer
 ---@field win? integer
----@field entry asm.Entry
+---@field entry? asm.Entry
 ---@field extra string[]
 ---@field job? vim.SystemObj
 ---@field asm_to_src table<integer, integer>
@@ -66,6 +73,10 @@ local db_cache = {}
 local clang_by_compiler = {}
 ---@type table<integer, asm.State>
 local states = {}
+---@type table<string, string[]> bazel flags per workspace, kept for the session
+local bazel_flags = {}
+---@type table<string, string>
+local execroots = {}
 
 local function realpath(path)
     return vim.uv.fs_realpath(path) or vim.fs.normalize(path)
@@ -182,9 +193,6 @@ end
 
 ---@return asm.Entry?, string? error
 local function resolve_entry(src_path, filetype)
-    if src_path == "" or not vim.uv.fs_stat(src_path) then
-        return nil, "Save the buffer to a file first"
-    end
     local db_path = find_compile_db(src_path)
     if not db_path then
         return standalone_entry(src_path, filetype)
@@ -205,6 +213,211 @@ local function resolve_entry(src_path, filetype)
             vim.fn.fnamemodify(src_path, ":~:."),
             vim.fn.fnamemodify(db_path, ":~:.")
         )
+end
+
+-- Checks the type so a `build/` or `workspace/` directory on a case-insensitive
+-- filesystem doesn't count as a BUILD or WORKSPACE file.
+local function find_upward(path, names, stop)
+    for dir in vim.fs.parents(path) do
+        for _, name in ipairs(names) do
+            local stat = vim.uv.fs_stat(vim.fs.joinpath(dir, name))
+            if stat and stat.type == "file" then
+                return dir
+            end
+        end
+        if dir == stop then
+            return nil
+        end
+    end
+end
+
+local function bazelrc_configs(root)
+    local names, seen = {}, {}
+    local function read(path)
+        if seen[path] then
+            return
+        end
+        seen[path] = true
+        local file = io.open(path, "r")
+        if not file then
+            return
+        end
+        for line in file:lines() do
+            local import = line:match("^%s*try%-import%s+(%S+)") or line:match("^%s*import%s+(%S+)")
+            if import then
+                read((import:gsub("%%workspace%%", root)))
+            else
+                local command, name = line:match("^%s*(%a+):([%w_.%-]+)")
+                if (command == "build" or command == "common") and not vim.list_contains(names, name) then
+                    table.insert(names, name)
+                end
+            end
+        end
+        file:close()
+    end
+    read(vim.fs.joinpath(root, ".bazelrc"))
+    read(vim.fs.normalize("~/.bazelrc"))
+    table.sort(names)
+    return names
+end
+
+---@param callback fun(stdout?: string, err?: string)
+local function run_bazel(root, args, callback)
+    local ok, err = pcall(
+        vim.system,
+        vim.list_extend({ "bazel" }, args),
+        { cwd = root, text = true },
+        vim.schedule_wrap(function(result)
+            if result.code == 0 then
+                return callback(result.stdout or "")
+            end
+            local lines = vim.split(result.stderr or "", "\n", { plain = true })
+            callback(nil, table.concat(vim.list_slice(lines, math.max(1, #lines - MAX_ERROR_LINES)), "\n"))
+        end)
+    )
+    if not ok then
+        callback(nil, tostring(err))
+    end
+end
+
+local function java_regex_escape(text)
+    return (text:gsub("[%^%$%(%)%.%[%]%*%+%?{}|\\]", "\\%0"))
+end
+
+---@return { args: string[], env: table<string, string>, label: string }?
+local function pick_compile_action(aquery_json, rel_path)
+    local ok, result = pcall(vim.json.decode, aquery_json)
+    if not ok or type(result) ~= "table" then
+        return nil
+    end
+    local labels = {}
+    for _, target in ipairs(result.targets or {}) do
+        labels[target.id] = target.label
+    end
+    for _, action in ipairs(result.actions or {}) do
+        if vim.list_contains(action.arguments or {}, rel_path) then
+            local env = {}
+            for _, var in ipairs(action.environmentVariables or {}) do
+                env[var.key] = var.value
+            end
+            return { args = action.arguments, env = env, label = labels[action.targetId] }
+        end
+    end
+end
+
+-- Only the target's headers are built; the file itself is compiled directly.
+---@param on_status fun(status: string)
+---@param callback fun(entry?: asm.Entry, err?: string)
+local function bazel_entry(root, file, flags, on_status, callback)
+    local rel_path = vim.fs.relpath(root, file)
+    local pkg_dir = find_upward(file, BUILD_FILES, root)
+    if not rel_path or not pkg_dir then
+        return callback(nil, ("No BUILD file for %s under %s"):format(file, root))
+    end
+    local pkg = vim.fs.relpath(root, pkg_dir)
+    pkg = pkg == "." and "" or pkg
+    local query = ('mnemonic("CppCompile", inputs("%s", //%s:all))'):format(java_regex_escape(rel_path), pkg)
+
+    local function finish(action)
+        local entry = {
+            directory = execroots[root],
+            file_real = file,
+            rel_path = rel_path,
+            env = action.env,
+            args = strip_output_flags(action.args),
+            label = table.concat(vim.list_extend({ "bazel" }, flags), " "),
+        }
+        callback(entry)
+    end
+
+    on_status("bazel aquery…")
+    run_bazel(
+        root,
+        vim.list_extend({ "aquery", query, "--output=jsonproto" }, vim.list_extend(vim.deepcopy(flags), BAZEL_QUIET)),
+        function(stdout, err)
+            if not stdout then
+                return callback(nil, err)
+            end
+            local action = pick_compile_action(stdout, rel_path)
+            if not action then
+                return callback(
+                    nil,
+                    ("No compile action for %s in //%s (headers have none; use a .cc that includes it)"):format(
+                        rel_path,
+                        pkg
+                    )
+                )
+            end
+            on_status(("bazel build %s (headers)…"):format(action.label))
+            local build = vim.list_extend({ "build", "--output_groups=compilation_prerequisites_INTERNAL_" }, flags)
+            run_bazel(
+                root,
+                vim.list_extend(vim.list_extend(build, BAZEL_QUIET), { "--", action.label }),
+                function(built, build_err)
+                    if not built then
+                        return callback(nil, build_err)
+                    end
+                    if execroots[root] then
+                        return finish(action)
+                    end
+                    run_bazel(root, { "info", "execution_root" }, function(info, info_err)
+                        if not info then
+                            return callback(nil, info_err)
+                        end
+                        execroots[root] = vim.trim(info)
+                        finish(action)
+                    end)
+                end
+            )
+        end
+    )
+end
+
+-- Arguments starting with `--` go to bazel, the rest to the compiler.
+---@param callback fun(flags: string[], extra: string[])
+local function choose_bazel_flags(root, fargs, reselect, callback)
+    local flags, extra = {}, {}
+    for _, arg in ipairs(fargs) do
+        table.insert(vim.startswith(arg, "--") and flags or extra, arg)
+    end
+    if #flags > 0 then
+        bazel_flags[root] = flags
+    end
+    if bazel_flags[root] and not reselect then
+        return callback(bazel_flags[root], extra)
+    end
+    local configs = bazelrc_configs(root)
+    if #configs == 0 then
+        bazel_flags[root] = {}
+        return callback({}, extra)
+    end
+    vim.ui.select(vim.list_extend({ NO_CONFIG }, configs), { prompt = "Bazel config" }, function(choice)
+        if not choice then
+            return
+        end
+        bazel_flags[root] = choice == NO_CONFIG and {} or { "--config=" .. choice }
+        callback(bazel_flags[root], extra)
+    end)
+end
+
+---@param on_status fun(status: string) only called for bazel workspaces
+---@param callback fun(entry?: asm.Entry, extra?: string[], err?: string)
+local function resolve(src_buf, fargs, reselect, on_status, callback)
+    local src_path = vim.api.nvim_buf_get_name(src_buf)
+    if src_path == "" or not vim.uv.fs_stat(src_path) then
+        return callback(nil, nil, "Save the buffer to a file first")
+    end
+    local file = realpath(src_path)
+    local root = find_upward(file, BAZEL_ROOT_MARKERS)
+    if not root then
+        local entry, err = resolve_entry(src_path, vim.bo[src_buf].filetype)
+        return callback(entry, fargs, err)
+    end
+    choose_bazel_flags(root, fargs, reselect, function(flags, extra)
+        bazel_entry(root, file, flags, on_status, function(entry, err)
+            callback(entry, extra, err)
+        end)
+    end)
 end
 
 local function is_clang(entry)
@@ -301,6 +514,7 @@ local function parse_asm(text, entry)
                 local path = absolute(absolute(entry.directory, dir), name)
                 parser.file_realpaths[path] = parser.file_realpaths[path] or realpath(path)
                 parser.main_file_ids[id] = parser.file_realpaths[path] == entry.file_real
+                    or (entry.rel_path ~= nil and vim.endswith(path, "/" .. entry.rel_path))
             end
         elseif directive == "loc" then
             local id, src_line = rest:match("^(%d+)%s+(%d+)")
@@ -375,7 +589,7 @@ end
 local function set_winbar(state, status)
     if state.win and vim.api.nvim_win_is_valid(state.win) then
         local flags = #state.extra > 0 and (" " .. table.concat(state.extra, " ")) or ""
-        local compiler = state.entry.label or vim.fs.basename(state.entry.args[1])
+        local compiler = state.entry and (state.entry.label or vim.fs.basename(state.entry.args[1])) or "bazel"
         vim.wo[state.win].winbar = ("%%#Comment# %s%s  %s"):format(compiler, flags, status)
     end
 end
@@ -412,7 +626,16 @@ local function highlight_from_source(state)
     end
 end
 
+local function show_failure(state, text, status)
+    set_lines(state.asm_buf, vim.list_slice(vim.split(text, "\n", { plain = true }), 1, MAX_ERROR_LINES))
+    state.asm_to_src, state.src_to_asm = {}, {}
+    set_winbar(state, status)
+end
+
 local function compile(state)
+    if not state.entry then
+        return
+    end
     if state.job then
         state.job:kill("sigterm")
     end
@@ -421,18 +644,14 @@ local function compile(state)
     local ok, err = pcall(function()
         job = vim.system(
             asm_command(state.entry, state.extra),
-            { cwd = state.entry.directory, text = true },
+            { cwd = state.entry.directory, env = state.entry.env, text = true },
             vim.schedule_wrap(function(result)
                 if states[state.src_buf] ~= state or state.job ~= job then
                     return
                 end
                 state.job = nil
                 if result.code ~= 0 then
-                    local errors = vim.split(result.stderr or "", "\n", { plain = true })
-                    set_lines(state.asm_buf, vim.list_slice(errors, 1, MAX_ERROR_LINES))
-                    state.asm_to_src, state.src_to_asm = {}, {}
-                    set_winbar(state, "compile failed")
-                    return
+                    return show_failure(state, result.stderr or "", "compile failed")
                 end
                 local lines, asm_to_src, src_to_asm = parse_asm(result.stdout, state.entry)
                 demangle(lines, function(demangled)
@@ -448,9 +667,7 @@ local function compile(state)
         )
     end)
     if not ok then
-        set_lines(state.asm_buf, vim.split(tostring(err), "\n", { plain = true }))
-        set_winbar(state, "compile failed")
-        return
+        return show_failure(state, tostring(err), "compile failed")
     end
     state.job = job
 end
@@ -473,15 +690,18 @@ local function teardown(src_buf)
     end
 end
 
-local function create_state(src_buf, entry)
+local function create_state(src_buf)
     local asm_buf = vim.api.nvim_create_buf(false, true)
     vim.bo[asm_buf].bufhidden = "wipe"
     vim.bo[asm_buf].filetype = "asm"
     vim.bo[asm_buf].modifiable = false
-    vim.api.nvim_buf_set_name(asm_buf, ("asm://%d/%s"):format(src_buf, vim.fs.basename(entry.file_real)))
+    vim.api.nvim_buf_set_name(
+        asm_buf,
+        ("asm://%d/%s"):format(src_buf, vim.fs.basename(vim.api.nvim_buf_get_name(src_buf)))
+    )
 
     ---@type asm.State
-    local state = { src_buf = src_buf, asm_buf = asm_buf, entry = entry, extra = {}, asm_to_src = {}, src_to_asm = {} }
+    local state = { src_buf = src_buf, asm_buf = asm_buf, extra = {}, asm_to_src = {}, src_to_asm = {} }
 
     local opts = { buffer = asm_buf, nowait = true }
     vim.keymap.set("n", "q", "<cmd>close<cr>", vim.tbl_extend("force", opts, { desc = "Close assembly view" }))
@@ -512,13 +732,6 @@ local function create_state(src_buf, entry)
             highlight(state, vim.api.nvim_win_get_cursor(0)[1], false)
         end,
     })
-    vim.api.nvim_create_autocmd("BufWritePost", {
-        group = group,
-        buffer = src_buf,
-        callback = function()
-            compile(state)
-        end,
-    })
     vim.api.nvim_create_autocmd("BufWipeout", {
         group = group,
         buffer = asm_buf,
@@ -538,18 +751,12 @@ local function create_state(src_buf, entry)
     return state
 end
 
-function M.open(extra)
-    local src_buf = vim.api.nvim_get_current_buf()
+local function show(src_buf)
     local state = states[src_buf]
     if not state then
-        local entry, err = resolve_entry(vim.api.nvim_buf_get_name(src_buf), vim.bo[src_buf].filetype)
-        if not entry then
-            return vim.notify(err, vim.log.levels.WARN)
-        end
-        state = create_state(src_buf, entry)
+        state = create_state(src_buf)
         states[src_buf] = state
     end
-    state.extra = extra
     if
         not (
             state.win
@@ -557,25 +764,45 @@ function M.open(extra)
             and vim.api.nvim_win_get_buf(state.win) == state.asm_buf
         )
     then
-        state.win = vim.api.nvim_open_win(state.asm_buf, false, { split = "right", win = 0 })
+        local src_win = vim.fn.bufwinid(src_buf)
+        state.win =
+            vim.api.nvim_open_win(state.asm_buf, false, { split = "right", win = src_win ~= -1 and src_win or 0 })
         vim.wo[state.win].wrap = false
         vim.wo[state.win].number = false
         vim.wo[state.win].relativenumber = false
         vim.wo[state.win].signcolumn = "no"
         vim.wo[state.win].list = false
     end
-    compile(state)
+    return state
 end
 
-function M.remarks(extra)
+---@param reselect boolean ask for the bazel config again
+function M.open(fargs, reselect)
     local src_buf = vim.api.nvim_get_current_buf()
-    local entry, err = resolve_entry(vim.api.nvim_buf_get_name(src_buf), vim.bo[src_buf].filetype)
-    if not entry then
-        return vim.notify(err, vim.log.levels.WARN)
-    end
+    local state
+    resolve(src_buf, fargs, reselect, function(status)
+        state = show(src_buf)
+        set_winbar(state, status)
+    end, function(entry, extra, err)
+        if state and states[src_buf] ~= state then
+            return
+        end
+        if not entry then
+            if state then
+                return show_failure(state, err or "", "failed")
+            end
+            return vim.notify(err or "", vim.log.levels.WARN)
+        end
+        state = show(src_buf)
+        state.entry, state.extra = entry, extra or {}
+        compile(state)
+    end)
+end
+
+local function run_remarks(src_buf, entry, extra)
     vim.system(
         remarks_command(entry, extra),
-        { cwd = entry.directory, text = true },
+        { cwd = entry.directory, env = entry.env, text = true },
         vim.schedule_wrap(function(result)
             if not vim.api.nvim_buf_is_valid(src_buf) then
                 return
@@ -617,14 +844,44 @@ function M.remarks(extra)
     )
 end
 
+function M.remarks(fargs)
+    local src_buf = vim.api.nvim_get_current_buf()
+    resolve(src_buf, fargs, false, vim.notify, function(entry, extra, err)
+        if not entry then
+            return vim.notify(err or "", vim.log.levels.WARN)
+        end
+        if vim.api.nvim_buf_is_valid(src_buf) then
+            run_remarks(src_buf, entry, extra or {})
+        end
+    end)
+end
+
+local function complete_bazel_config(arglead)
+    if not vim.startswith(arglead, "--") then
+        return {}
+    end
+    local root = find_upward(realpath(vim.api.nvim_buf_get_name(0)), BAZEL_ROOT_MARKERS)
+    if not root then
+        return {}
+    end
+    local candidates = vim.tbl_map(function(name)
+        return "--config=" .. name
+    end, bazelrc_configs(root))
+    return vim.tbl_filter(function(candidate)
+        return vim.startswith(candidate, arglead)
+    end, candidates)
+end
+
 function M.setup()
     vim.diagnostic.config({ virtual_lines = false, virtual_text = true }, remarks_ns)
 
     vim.api.nvim_create_user_command("Asm", function(opts)
-        M.open(opts.fargs)
+        M.open(opts.fargs, opts.bang)
     end, {
         nargs = "*",
-        desc = "Show assembly for this file (compile_commands.json, compile_flags.txt, or defaults)",
+        bang = true,
+        complete = complete_bazel_config,
+        desc = "Show assembly for this file (bazel aquery, compile_commands.json, compile_flags.txt, or defaults); ! picks the bazel config again",
     })
 
     vim.api.nvim_create_user_command("AsmRemarks", function(opts)
@@ -632,7 +889,12 @@ function M.setup()
             return vim.diagnostic.reset(remarks_ns, 0)
         end
         M.remarks(opts.fargs)
-    end, { nargs = "*", bang = true, desc = "Show optimisation remarks; ! clears them" })
+    end, {
+        nargs = "*",
+        bang = true,
+        complete = complete_bazel_config,
+        desc = "Show optimisation remarks; ! clears them",
+    })
 
     vim.api.nvim_create_autocmd("FileType", {
         group = vim.api.nvim_create_augroup("asm_view_keymaps", { clear = true }),
