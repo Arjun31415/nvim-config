@@ -197,6 +197,7 @@ require("lazy").setup({
 require("config.lsp")
 require("config.asm").setup()
 require("config.term_bg").setup()
+require("config.diff_scroll").setup()
 
 vim.o.hlsearch = false
 vim.wo.number = true

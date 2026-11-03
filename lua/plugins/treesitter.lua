@@ -115,7 +115,7 @@ return {
                     local lang = vim.treesitter.language.get_lang(event.match) or event.match
                     local buf = event.buf
 
-                    if parsers_failed[lang] then
+                    if parsers_failed[lang] or not require("nvim-treesitter.parsers")[lang] then
                         return
                     end
 
