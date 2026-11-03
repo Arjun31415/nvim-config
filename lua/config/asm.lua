@@ -446,10 +446,14 @@ local function asm_command(entry, extra)
     return vim.list_extend(cmd, extra)
 end
 
+local function remark_flags(entry)
+    return is_clang(entry) and CLANG_REMARK_FLAGS or GCC_REMARK_FLAGS
+end
+
 local function remarks_command(entry, extra)
     local cmd = vim.list_extend(vim.deepcopy(entry.args), { "-S", "-o", "/dev/null" })
     vim.list_extend(cmd, common_flags(entry))
-    vim.list_extend(cmd, is_clang(entry) and CLANG_REMARK_FLAGS or GCC_REMARK_FLAGS)
+    vim.list_extend(cmd, remark_flags(entry))
     return vim.list_extend(cmd, extra)
 end
 
@@ -520,6 +524,11 @@ local function parse_asm(text, entry)
             local id, src_line = rest:match("^(%d+)%s+(%d+)")
             src_line = tonumber(src_line)
             parser.current_src = (parser.main_file_ids[id] and src_line ~= 0) and src_line or nil
+            -- The first `.loc` after a function label is its definition line.
+            if parser.current_src and parser.open_label then
+                parser.open_label.entry_src = parser.current_src
+                parser.open_label = nil
+            end
         elseif DATA_DIRECTIVES[directive] and not parser.skipping_section then
             mark_references(rest, parser.referenced)
             table.insert(parser.rows, { text = format_instruction(trimmed) })
@@ -539,8 +548,10 @@ local function parse_asm(text, entry)
             return
         end
         if label then
-            table.insert(parser.rows, { text = label .. ":", label = label })
+            parser.open_label = { text = label .. ":", label = label }
+            table.insert(parser.rows, parser.open_label)
         else
+            parser.open_label = nil
             mark_references(trimmed:match("^%S+%s+(.*)$") or "", parser.referenced)
             table.insert(parser.rows, { text = format_instruction(trimmed), src = parser.current_src })
         end
@@ -551,10 +562,11 @@ local function parse_asm(text, entry)
     end
 
     local rows, referenced = parser.rows, parser.referenced
-    local lines, asm_to_src, src_to_asm = {}, {}, {}
+    local lines, asm_to_src, src_to_asm, label_to_src = {}, {}, {}, {}
     for _, row in ipairs(rows) do
         if not (row.label and is_local_label(row.label) and not referenced[row.label]) then
             table.insert(lines, row.text)
+            label_to_src[#lines] = row.entry_src
             if row.src then
                 asm_to_src[#lines] = row.src
                 src_to_asm[row.src] = src_to_asm[row.src] or {}
@@ -562,7 +574,7 @@ local function parse_asm(text, entry)
             end
         end
     end
-    return lines, asm_to_src, src_to_asm
+    return lines, asm_to_src, src_to_asm, label_to_src
 end
 
 local function demangle(lines, callback)
@@ -799,6 +811,40 @@ function M.open(fargs, reselect)
     end)
 end
 
+---@return vim.Diagnostic.Set[]
+local function parse_remarks(stderr, entry)
+    local diagnostics, path_cache = {}, {}
+    for line in vim.gsplit(stderr, "\n", { plain = true }) do
+        local file, lnum, col, kind, message = line:match("^(.-):(%d+):(%d+): (%a+): (.*)$")
+        if file and (kind == "remark" or kind == "optimized" or kind == "missed") then
+            path_cache[file] = path_cache[file] or realpath(absolute(entry.directory, file))
+            if path_cache[file] == entry.file_real then
+                local passed = kind == "optimized" or message:find("[-Rpass=", 1, true) ~= nil
+                table.insert(diagnostics, {
+                    lnum = tonumber(lnum) - 1,
+                    col = tonumber(col) - 1,
+                    severity = passed and vim.diagnostic.severity.INFO or vim.diagnostic.severity.WARN,
+                    message = (message:gsub("%s*%[%-R[^%]]*%]$", "")),
+                    source = "opt-remarks",
+                })
+            end
+        end
+    end
+    return diagnostics
+end
+
+local function demangle_messages(diagnostics, callback)
+    local messages = vim.tbl_map(function(diagnostic)
+        return diagnostic.message
+    end, diagnostics)
+    demangle(messages, function(demangled)
+        for i, diagnostic in ipairs(diagnostics) do
+            diagnostic.message = demangled[i]
+        end
+        callback()
+    end)
+end
+
 local function run_remarks(src_buf, entry, extra)
     vim.system(
         remarks_command(entry, extra),
@@ -811,30 +857,8 @@ local function run_remarks(src_buf, entry, extra)
             if result.code ~= 0 then
                 return vim.notify("Compile failed:\n" .. stderr:sub(1, 2000), vim.log.levels.ERROR)
             end
-            local diagnostics, path_cache = {}, {}
-            for line in vim.gsplit(stderr, "\n", { plain = true }) do
-                local file, lnum, col, kind, message = line:match("^(.-):(%d+):(%d+): (%a+): (.*)$")
-                if file and (kind == "remark" or kind == "optimized" or kind == "missed") then
-                    path_cache[file] = path_cache[file] or realpath(absolute(entry.directory, file))
-                    if path_cache[file] == entry.file_real then
-                        local passed = kind == "optimized" or message:find("[-Rpass=", 1, true) ~= nil
-                        table.insert(diagnostics, {
-                            lnum = tonumber(lnum) - 1,
-                            col = tonumber(col) - 1,
-                            severity = passed and vim.diagnostic.severity.INFO or vim.diagnostic.severity.WARN,
-                            message = (message:gsub("%s*%[%-R[^%]]*%]$", "")),
-                            source = "opt-remarks",
-                        })
-                    end
-                end
-            end
-            local messages = vim.tbl_map(function(diagnostic)
-                return diagnostic.message
-            end, diagnostics)
-            demangle(messages, function(demangled)
-                for i, diagnostic in ipairs(diagnostics) do
-                    diagnostic.message = demangled[i]
-                end
+            local diagnostics = parse_remarks(stderr, entry)
+            demangle_messages(diagnostics, function()
                 if vim.api.nvim_buf_is_valid(src_buf) then
                     vim.diagnostic.set(remarks_ns, src_buf, diagnostics)
                     vim.notify(("%d optimisation remarks"):format(#diagnostics))
@@ -856,7 +880,90 @@ function M.remarks(fargs)
     end)
 end
 
-local function complete_bazel_config(arglead)
+local function is_instruction(row)
+    return row:match("^%s+[^%s.]") ~= nil
+end
+
+---@class asm.Function
+---@field name string
+---@field line integer definition line if the line table has it, else its first mapped line
+---@field lines integer[] source lines its instructions map to
+---@field instrs integer
+
+---@class asm.Analysis
+---@field lines string[] demangled assembly
+---@field src_to_asm table<integer, integer[]>
+---@field instrs table<integer, integer> instructions per source line
+---@field functions asm.Function[]
+---@field remarks vim.Diagnostic.Set[]
+
+local function summarize(raw, lines, asm_to_src, src_to_asm, label_to_src, remarks)
+    local functions, current = {}, nil
+    for i, row in ipairs(raw) do
+        local label = row:match("^(%S+):$")
+        if label and not is_local_label(label) then
+            current = { name = lines[i]:sub(1, -2), instrs = 0, line = label_to_src[i], lines = {} }
+            table.insert(functions, current)
+        elseif current and is_instruction(row) then
+            current.instrs = current.instrs + 1
+            local src_line = asm_to_src[i]
+            if src_line and not vim.list_contains(current.lines, src_line) then
+                table.insert(current.lines, src_line)
+            end
+        end
+    end
+    local instrs = {}
+    for src_line, asm_lines in pairs(src_to_asm) do
+        instrs[src_line] = #vim.tbl_filter(function(i)
+            return is_instruction(raw[i])
+        end, asm_lines)
+    end
+    return {
+        lines = lines,
+        src_to_asm = src_to_asm,
+        instrs = instrs,
+        functions = vim.tbl_filter(function(fn)
+            fn.line = fn.line or fn.lines[1]
+            return fn.line ~= nil
+        end, functions),
+        remarks = remarks,
+    }
+end
+
+-- One compile gives the assembly on stdout and the remarks on stderr.
+---@param on_status fun(status: string)
+---@param callback fun(analysis?: asm.Analysis, err?: string)
+function M.analyze(src_buf, fargs, on_status, callback)
+    resolve(src_buf, fargs, false, on_status, function(entry, extra, err)
+        if not entry then
+            return callback(nil, err)
+        end
+        on_status("compiling…")
+        local cmd = vim.list_extend(asm_command(entry, extra or {}), remark_flags(entry))
+        local ok, spawn_err = pcall(
+            vim.system,
+            cmd,
+            { cwd = entry.directory, env = entry.env, text = true },
+            vim.schedule_wrap(function(result)
+                if result.code ~= 0 then
+                    return callback(nil, result.stderr or "")
+                end
+                local raw, asm_to_src, src_to_asm, label_to_src = parse_asm(result.stdout, entry)
+                local remarks = parse_remarks(result.stderr or "", entry)
+                demangle(raw, function(lines)
+                    demangle_messages(remarks, function()
+                        callback(summarize(raw, lines, asm_to_src, src_to_asm, label_to_src, remarks))
+                    end)
+                end)
+            end)
+        )
+        if not ok then
+            callback(nil, tostring(spawn_err))
+        end
+    end)
+end
+
+function M.complete(arglead)
     if not vim.startswith(arglead, "--") then
         return {}
     end
@@ -880,7 +987,7 @@ function M.setup()
     end, {
         nargs = "*",
         bang = true,
-        complete = complete_bazel_config,
+        complete = M.complete,
         desc = "Show assembly for this file (bazel aquery, compile_commands.json, compile_flags.txt, or defaults); ! picks the bazel config again",
     })
 
@@ -892,7 +999,7 @@ function M.setup()
     end, {
         nargs = "*",
         bang = true,
-        complete = complete_bazel_config,
+        complete = M.complete,
         desc = "Show optimisation remarks; ! clears them",
     })
 

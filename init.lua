@@ -196,6 +196,7 @@ require("lazy").setup({
 
 require("config.lsp")
 require("config.asm").setup()
+require("config.asm_hints").setup()
 require("config.term_bg").setup()
 require("config.diff_scroll").setup()
 
